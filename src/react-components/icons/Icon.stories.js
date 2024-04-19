@@ -1,10 +1,10 @@
 import React from "react";
-import { withDesign } from "storybook-addon-designs";
 import { ReactComponent as AudioIcon } from "./Audio.svg";
 import { ReactComponent as AvatarIcon } from "./Avatar.svg";
 import { ReactComponent as CameraIcon } from "./Camera.svg";
 import { ReactComponent as CaretDownIcon } from "./CaretDown.svg";
 import { ReactComponent as ChatIcon } from "./Chat.svg";
+import { ReactComponent as ChatOffIcon } from "./ChatOff.svg";
 import { ReactComponent as ChevronBackIcon } from "./ChevronBack.svg";
 import { ReactComponent as CloseIcon } from "./Close.svg";
 import { ReactComponent as DeleteIcon } from "./Delete.svg";
@@ -47,7 +47,6 @@ import { ReactComponent as HmcLogo } from "./HmcLogo.svg";
 
 export default {
   title: "Icon",
-  decorators: [withDesign],
   argTypes: {
     color: { control: "color" }
   }
@@ -60,6 +59,7 @@ export const AllIcons = args => (
     <CameraIcon {...args} />
     <CaretDownIcon {...args} />
     <ChatIcon {...args} />
+    <ChatOffIcon {...args} />
     <ChevronBackIcon {...args} />
     <CloseIcon {...args} />
     <DeleteIcon {...args} />

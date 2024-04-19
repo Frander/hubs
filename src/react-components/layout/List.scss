@@ -25,11 +25,11 @@
   width: 100%;
 
   &:hover {
-    background-color: theme.$list-bg-color-hover;
+    background-color: theme.$basic-color-hover;
   }
 
   &:active {
-    background-color: theme.$list-bg-color-pressed;
+    background-color: theme.$basic-color-pressed;
   }
 
   :global(body.keyboard-user) &:focus {
@@ -41,19 +41,13 @@
     background-color: theme.$active-color;
 
     svg {
-      *[stroke=\#000] {
-        stroke: theme.$active-text-color;
-      }
-  
-      *[fill=\#000] {
-        fill: theme.$active-text-color;
-      }
+      color: theme.$active-text-color;
     }
 
     &:hover {
       background-color: theme.$active-color-hover;
     }
-  
+
     &:active {
       background-color: theme.$active-color-pressed;
     }

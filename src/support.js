@@ -9,7 +9,7 @@ and polyfilling.
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import copy from "copy-to-clipboard";
 import { detectOS } from "detect-browser";
 import "./react-components/styles/global.scss";
@@ -123,12 +123,14 @@ class Support extends React.Component {
           {this.state.showDetails && (
             <table className={styles.details}>
               <tbody>
-                {platformSupport.sort((a, b) => (a.supported && !b.supported ? 1 : -1)).map(s => (
-                  <tr key={s.name}>
-                    <td>{s.name}</td>
-                    <td>{s.supported ? "supported" : "unsupported"}</td>
-                  </tr>
-                ))}
+                {platformSupport
+                  .sort((a, b) => (a.supported && !b.supported ? 1 : -1))
+                  .map(s => (
+                    <tr key={s.name}>
+                      <td>{s.name}</td>
+                      <td>{s.supported ? "supported" : "unsupported"}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           )}
@@ -139,5 +141,7 @@ class Support extends React.Component {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(<Support />, document.getElementById("support-root"));
+  const container = document.getElementById("support-root");
+  const root = createRoot(container);
+  root.render(<Support />);
 });

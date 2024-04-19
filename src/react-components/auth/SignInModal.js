@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { CloseButton } from "../input/CloseButton";
 import { Modal } from "../modal/Modal";
 import { FormattedMessage, useIntl, defineMessages } from "react-intl";
-import { CancelButton, NextButton,NextButton2, ContinueButton } from "../input/Button";
+import { CancelButton, NextButton, ContinueButton } from "../input/Button";
 import { TextInputField } from "../input/TextInputField";
 import { Column } from "../layout/Column";
 import { LegalMessage } from "./LegalMessage";
@@ -98,13 +98,12 @@ export function SubmitEmail({ onSubmitEmail, initialEmail, privacyUrl, termsUrl,
   );
 
   return (
-    <Column left padding as="form" onSubmit={onSubmitForm}>
+    <Column center padding as="form" onSubmit={onSubmitForm}>
       <p>
         {message ? (
           intl.formatMessage(message)
         ) : (
-          // <FormattedMessage id="sign-in-modal.prompt" defaultMessage="Please Sign In" />
-          <p></p>
+          <FormattedMessage id="sign-in-modal.prompt" defaultMessage="Please Sign In" />
         )}
       </p>
       <TextInputField
@@ -120,8 +119,7 @@ export function SubmitEmail({ onSubmitEmail, initialEmail, privacyUrl, termsUrl,
           <LegalMessage termsUrl={termsUrl} privacyUrl={privacyUrl} />
         </small>
       </p>
-      {/* <NextButton type="submit" /> */}
-      <NextButton2 />
+      <NextButton type="submit" />
     </Column>
   );
 }
@@ -131,7 +129,7 @@ SubmitEmail.defaultProps = {
 };
 
 SubmitEmail.propTypes = {
-  message: PropTypes.string,
+  message: PropTypes.object,
   termsUrl: PropTypes.string,
   privacyUrl: PropTypes.string,
   initialEmail: PropTypes.string,
@@ -192,16 +190,15 @@ export function SignInComplete({ message, onContinue }) {
 }
 
 SignInComplete.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
   onContinue: PropTypes.func.isRequired
 };
 
 export function SignInModal({ closeable, onClose, children, ...rest }) {
   return (
-    <Modal className="sing-in"
+    <Modal
       title={<FormattedMessage id="sign-in-modal.title" defaultMessage="Sign In" />}
       beforeTitle={closeable && <CloseButton onClick={onClose} />}
-      afterTitle={<p id="sign-in-modal.second">Welcome onboard with us!</p>}
       {...rest}
     >
       {children}

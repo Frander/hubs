@@ -2,12 +2,15 @@ import {
   getCurrentHubId,
   updateVRHudPresenceCount,
   updateSceneCopresentState,
-  createHubChannelParams
+  createHubChannelParams,
+  isLockedDownDemoRoom
 } from "./utils/hub-utils";
 import "./utils/debug-log";
 import configs from "./utils/configs";
 import "./utils/theme";
-import "@babel/polyfill";
+
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 console.log(
   `App version: ${
@@ -29,16 +32,13 @@ import "./utils/aframe-overrides";
 // But we don't want to use THREE.Cache because
 // web browser cache should work well.
 // So we disable it here.
+import * as THREE from "three";
 THREE.Cache.enabled = false;
+THREE.Object3D.DefaultMatrixAutoUpdate = false;
 
 import "./utils/logging";
 import { patchWebGLRenderingContext } from "./utils/webgl";
 patchWebGLRenderingContext();
-
-// It seems we need to use require to import modules
-// under the three/examples/js to avoid tree shaking
-// in webpack production mode.
-require("three/examples/js/loaders/GLTFLoader");
 
 import "networked-aframe/src/index";
 import "webrtc-adapter";
@@ -59,7 +59,7 @@ import "./phoenix-adapter";
 import nextTick from "./utils/next-tick";
 import { addAnimationComponents } from "./utils/animation";
 import Cookies from "js-cookie";
-import { DialogAdapter, DIALOG_CONNECTION_ERROR_FATAL, DIALOG_CONNECTION_CONNECTED } from "./naf-dialog-adapter";
+import { DIALOG_CONNECTION_ERROR_FATAL, DIALOG_CONNECTION_CONNECTED } from "./naf-dialog-adapter";
 import "./change-hub";
 
 import "./components/scene-components";
@@ -107,12 +107,9 @@ import "./components/pin-networked-object-button";
 import "./components/mirror-media-button";
 import "./components/close-mirrored-media-button";
 import "./components/drop-object-button";
-import "./components/remove-networked-object-button";
 import "./components/camera-focus-button";
 import "./components/unmute-video-button";
-import "./components/destroy-at-extreme-distances";
 import "./components/visible-to-owner";
-import "./components/camera-tool";
 import "./components/emit-state-change";
 import "./components/action-to-event";
 import "./components/action-to-remove";
@@ -120,6 +117,7 @@ import "./components/emit-scene-event-on-remove";
 import "./components/follow-in-fov";
 import "./components/clone-media-button";
 import "./components/open-media-button";
+import "./components/change-hub-when-near";
 import "./components/refresh-media-button";
 import "./components/tweet-media-button";
 import "./components/remix-avatar-button";
@@ -142,8 +140,8 @@ import "./components/avatar-inspect-collider";
 import "./components/video-texture-target";
 import "./components/mirror";
 
-import ReactDOM from "react-dom";
 import React from "react";
+import { createRoot } from "react-dom/client";
 import { Router, Route } from "react-router-dom";
 import { createBrowserHistory, createMemoryHistory } from "history";
 import { pushHistoryState } from "./utils/history";
@@ -161,6 +159,7 @@ import MessageDispatch from "./message-dispatch";
 import SceneEntryManager from "./scene-entry-manager";
 import Subscriptions from "./subscriptions";
 import { createInWorldLogMessage } from "./react-components/chat-message";
+import { fetchRandomDefaultAvatarId } from "./utils/identity.js";
 
 import "./systems/nav";
 import "./systems/frame-scheduler";
@@ -170,7 +169,6 @@ import "./systems/permissions";
 import "./systems/exit-on-blur";
 import "./systems/auto-pixel-ratio";
 import "./systems/idle-detector";
-import "./systems/camera-tools";
 import "./systems/pen-tools";
 import "./systems/userinput/userinput";
 import "./systems/userinput/userinput-debug";
@@ -183,22 +181,43 @@ import "./systems/listed-media";
 import "./systems/linked-media";
 import "./systems/audio-debug-system";
 import "./systems/audio-gain-system";
-
 import "./gltf-component-mappings";
 
-import { App } from "./App";
+import { App, getScene } from "./app";
 import MediaDevicesManager from "./utils/media-devices-manager";
 import PinningHelper from "./utils/pinning-helper";
 import { sleep } from "./utils/async-utils";
 import { platformUnsupported } from "./support";
+import { renderAsEntity } from "./utils/jsx-entity";
+import { VideoMenuPrefab, loadVideoMenuButtonIcons } from "./prefabs/video-menu";
+import { loadObjectMenuButtonIcons, ObjectMenuPrefab } from "./prefabs/object-menu";
+import { loadMirrorMenuButtonIcons, MirrorMenuPrefab } from "./prefabs/mirror-menu";
+import { loadPDFMenuButtonIcons } from "./prefabs/pdf-menu";
+import { LinkHoverMenuPrefab } from "./prefabs/link-hover-menu";
+import { PDFMenuPrefab } from "./prefabs/pdf-menu";
+import { loadWaypointPreviewModel, WaypointPreview } from "./prefabs/waypoint-preview";
+import { preload } from "./utils/preload";
 
 window.APP = new App();
-window.APP.dialog = new DialogAdapter();
-window.APP.RENDER_ORDER = {
-  HUD_BACKGROUND: 1,
-  HUD_ICONS: 2,
-  CURSOR: 3
-};
+function addToScene(entityDef, visible) {
+  return getScene().then(scene => {
+    const eid = renderAsEntity(APP.world, entityDef);
+    const obj = APP.world.eid2obj.get(eid);
+    scene.add(obj);
+    obj.visible = !!visible;
+  });
+}
+preload(loadPDFMenuButtonIcons().then(() => addToScene(PDFMenuPrefab(), false)));
+preload(loadObjectMenuButtonIcons().then(() => addToScene(ObjectMenuPrefab(), false)));
+preload(loadMirrorMenuButtonIcons().then(() => addToScene(MirrorMenuPrefab(), false)));
+preload(addToScene(LinkHoverMenuPrefab(), false));
+preload(loadWaypointPreviewModel().then(() => addToScene(WaypointPreview(), false)));
+preload(
+  loadVideoMenuButtonIcons().then(() => {
+    addToScene(VideoMenuPrefab(), false);
+    addToScene(VideoMenuPrefab(), false);
+  })
+);
 
 const store = window.APP.store;
 store.update({ preferences: { shouldPromptForRefresh: false } }); // Clear flag that prompts for refresh from preference screen
@@ -214,8 +233,6 @@ if (isEmbed && !qs.get("embed_token")) {
   // Should be covered by X-Frame-Options, but just in case.
   throw new Error("no embed token");
 }
-
-THREE.Object3D.DefaultMatrixAutoUpdate = false;
 
 import "./components/owned-object-limiter";
 import "./components/owned-object-cleanup-timeout";
@@ -248,6 +265,14 @@ import { OAuthScreenContainer } from "./react-components/auth/OAuthScreenContain
 import { SignInMessages } from "./react-components/auth/SignInModal";
 import { ThemeProvider } from "./react-components/styles/theme";
 import { LogMessageType } from "./react-components/room/ChatSidebar";
+import "./load-media-on-paste-or-drop";
+import { swapActiveScene } from "./bit-systems/scene-loading";
+import { localClientID, setLocalClientID } from "./bit-systems/networking";
+import { listenForNetworkMessages } from "./utils/listen-for-network-messages";
+import { exposeBitECSDebugHelpers } from "./bitecs-debug-helpers";
+import { loadLegacyRoomObjects } from "./utils/load-legacy-room-objects";
+import { loadSavedEntityStates } from "./utils/entity-state-utils";
+import { shouldUseNewLoader } from "./utils/bit-utils";
 
 const PHOENIX_RELIABLE_NAF = "phx-reliable";
 NAF.options.firstSyncSource = PHOENIX_RELIABLE_NAF;
@@ -271,6 +296,8 @@ const isBotMode = qsTruthy("bot");
 const isTelemetryDisabled = qsTruthy("disable_telemetry");
 const isDebug = qsTruthy("debug");
 
+let root;
+
 if (!isBotMode && !isTelemetryDisabled) {
   registerTelemetry("/hub", "Room Landing Page");
 }
@@ -279,6 +306,10 @@ disableiOSZoom();
 
 if (!isOAuthModal) {
   detectConcurrentLoad();
+}
+
+if (qsTruthy("ecsDebug")) {
+  exposeBitECSDebugHelpers();
 }
 
 function setupLobbyCamera() {
@@ -304,10 +335,7 @@ function setupLobbyCamera() {
 let uiProps = {};
 
 // Hub ID and slug are the basename
-let routerBaseName = document.location.pathname
-  .split("/")
-  .slice(0, 2)
-  .join("/");
+let routerBaseName = document.location.pathname.split("/").slice(0, 2).join("/");
 
 if (document.location.pathname.includes("hub.html")) {
   routerBaseName = "/";
@@ -325,7 +353,7 @@ function mountUI(props = {}) {
     qsTruthy("allow_idle") || (process.env.NODE_ENV === "development" && !qs.get("idle_timeout"));
   const forcedVREntryType = qsVREntryType;
 
-  ReactDOM.render(
+  root.render(
     <WrappedIntlProvider>
       <ThemeProvider store={store}>
         <Router history={history}>
@@ -353,8 +381,7 @@ function mountUI(props = {}) {
           />
         </Router>
       </ThemeProvider>
-    </WrappedIntlProvider>,
-    document.getElementById("ui-root")
+    </WrappedIntlProvider>
   );
 }
 
@@ -386,10 +413,15 @@ export async function getSceneUrlForHub(hub) {
     sceneUrl = document.querySelector("a-scene").is("entered") ? sceneUrl : loadingEnvironment;
   } else if (isLegacyBundle) {
     // Deprecated
-    const res = await fetch(sceneUrl);
-    const data = await res.json();
-    const baseURL = new URL(THREE.LoaderUtils.extractUrlBase(sceneUrl), window.location.href);
-    sceneUrl = new URL(data.assets[0].src, baseURL).href;
+    try {
+      const res = await fetch(sceneUrl);
+      const data = await res.json();
+      const baseURL = new URL(THREE.LoaderUtils.extractUrlBase(sceneUrl), window.location.href);
+      sceneUrl = new URL(data.assets[0].src, baseURL).href;
+    } catch (e) {
+      sceneUrl = loadingEnvironment;
+      console.error("Error fetching the scene: ", e);
+    }
   } else {
     sceneUrl = proxiedUrlFor(sceneUrl);
   }
@@ -399,6 +431,12 @@ export async function getSceneUrlForHub(hub) {
 export async function updateEnvironmentForHub(hub, entryManager) {
   console.log("Updating environment for hub");
   const sceneUrl = await getSceneUrlForHub(hub);
+
+  if (shouldUseNewLoader()) {
+    console.log("Using new loading path for scenes.");
+    swapActiveScene(APP.world, sceneUrl);
+    return;
+  }
 
   const sceneErrorHandler = () => {
     remountUI({ roomUnavailableReason: ExitReason.sceneError });
@@ -478,6 +516,11 @@ export async function updateEnvironmentForHub(hub, entryManager) {
           { once: true }
         );
 
+        // If we had a loop-animation component on the environment, we need to remove it
+        // before loading a new model with gltf-model-plus, or else the component won't
+        // find and play animations in the new scene.
+        environmentEl.removeAttribute("loop-animation");
+
         sceneEl.emit("leaving_loading_environment");
         if (environmentEl.components["gltf-model-plus"].data.src === sceneUrl) {
           console.warn("Updating environment to the same url.");
@@ -500,8 +543,8 @@ export async function updateEnvironmentForHub(hub, entryManager) {
   }
 }
 
-export async function updateUIForHub(hub, hubChannel) {
-  remountUI({ hub, entryDisallowed: !hubChannel.canEnterRoom(hub) });
+export async function updateUIForHub(hub, hubChannel, showBitECSBasedClientRefreshPrompt = false) {
+  remountUI({ hub, entryDisallowed: !hubChannel.canEnterRoom(hub), showBitECSBasedClientRefreshPrompt });
 }
 
 function onConnectionError(entryManager, connectError) {
@@ -515,7 +558,7 @@ function onConnectionError(entryManager, connectError) {
 // TODO: Find a home for this
 // TODO: Naming. Is this an "event bus"?
 const events = emitter();
-function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data, permsToken) {
+function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data) {
   const scene = document.querySelector("a-scene");
   const isRejoin = NAF.connection.isConnected();
 
@@ -541,27 +584,24 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data,
   }
 
   const hub = data.hubs[0];
-  let embedToken = hub.embed_token;
-
-  if (!embedToken) {
-    const embedTokenEntry = store.state.embedTokens && store.state.embedTokens.find(t => t.hubId === hub.hub_id);
-
-    if (embedTokenEntry) {
-      embedToken = embedTokenEntry.embedToken;
-    }
-  }
 
   console.log(`Dialog host: ${hub.host}:${hub.port}`);
 
+  // Mute media until the scene has been fully loaded.
+  // We intentionally want voice to be unmuted.
+  const audioSystem = scene.systems["hubs-systems"].audioSystem;
+  audioSystem.setMediaGainOverride(0);
   remountUI({
     messageDispatch: messageDispatch,
     onSendMessage: messageDispatch.dispatch,
-    onLoaded: () => store.executeOnLoadActions(scene),
+    onLoaded: () => {
+      audioSystem.setMediaGainOverride(1);
+      store.executeOnLoadActions(scene);
+    },
     onMediaSearchResultEntrySelected: (entry, selectAction) =>
       scene.emit("action_selected_media_result_entry", { entry, selectAction }),
     onMediaSearchCancelled: entry => scene.emit("action_media_search_cancelled", entry),
-    onAvatarSaved: entry => scene.emit("action_avatar_saved", entry),
-    embedToken: embedToken
+    onAvatarSaved: entry => scene.emit("action_avatar_saved", entry)
   });
 
   scene.addEventListener("action_selected_media_result_entry", e => {
@@ -586,15 +626,19 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data,
   scene.addEventListener(
     "didConnectToNetworkedScene",
     () => {
-      // Append objects once we are in the NAF room since ownership may be taken.
-      const objectsScene = document.querySelector("#objects-scene");
-      const objectsUrl = getReticulumFetchUrl(`/${hub.hub_id}/objects.gltf`);
-      const objectsEl = document.createElement("a-entity");
+      if (shouldUseNewLoader()) {
+        loadSavedEntityStates(APP.hubChannel);
+        loadLegacyRoomObjects(hub.hub_id);
+      } else {
+        // Append objects once we are in the NAF room since ownership may be taken.
+        const objectsScene = document.querySelector("#objects-scene");
+        const objectsUrl = getReticulumFetchUrl(`/${hub.hub_id}/objects.gltf`);
+        const objectsEl = document.createElement("a-entity");
+        objectsEl.setAttribute("gltf-model-plus", { src: objectsUrl, useCache: false, inflate: true });
 
-      objectsEl.setAttribute("gltf-model-plus", { src: objectsUrl, useCache: false, inflate: true });
-
-      if (!isBotMode) {
-        objectsScene.appendChild(objectsEl);
+        if (!isBotMode) {
+          objectsScene.appendChild(objectsEl);
+        }
       }
     },
     { once: true }
@@ -620,7 +664,6 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data,
       APP.dialog.connect({
         serverUrl: `wss://${hub.host}:${hub.port}`,
         roomId: hub.hub_id,
-        joinToken: permsToken,
         serverParams: { host: hub.host, port: hub.port, turn: hub.turn },
         scene,
         clientId: data.session_id,
@@ -685,6 +728,11 @@ async function runBotMode(scene, entryManager) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  if (!root) {
+    const container = document.getElementById("ui-root");
+    root = createRoot(container);
+  }
+
   if (isOAuthModal) {
     return;
   }
@@ -702,7 +750,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const browser = detect();
   // HACK - it seems if we don't initialize the mic track up-front, voices can drop out on iOS
   // safari when initializing it later.
-  if (["iOS", "Mac OS"].includes(detectedOS) && ["safari", "ios"].includes(browser.name)) {
+  // Seems to be working for Safari >= 16.4. We should revisit this in the future and remove it completely.
+  if (["iOS", "Mac OS"].includes(detectedOS) && ["safari", "ios"].includes(browser.name) && browser.version < "16.4") {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (e) {
@@ -730,7 +779,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   subscriptions.register();
 
   const scene = document.querySelector("a-scene");
-  window.APP.scene = scene;
 
   const onSceneLoaded = () => {
     const physicsSystem = scene.systems["hubs-systems"].physicsSystem;
@@ -777,7 +825,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       showSignInDialog: true,
       signInMessage,
       onContinueAfterSignIn: async () => {
-        remountUI({ showSignInDialog: false });
+        remountUI({ showSignInDialog: false, onContinueAfterSignIn: null });
         let actionError = null;
         if (predicate()) {
           try {
@@ -791,13 +839,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (actionError && onFailure) onFailure(actionError);
         exit2DInterstitialAndEnterVR();
-      },
-      onSignInDialogVisibilityChanged: visible => {
-        if (visible) {
-          remountUI({ showSignInDialog: true });
-        } else {
-          remountUI({ showSignInDialog: false, onContinueAfterSignIn: null });
-        }
       }
     });
   };
@@ -820,6 +861,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       () => hubChannel.updateScene(sceneInfo),
       SignInMessages.changeScene
     );
+  });
+
+  scene.addEventListener("hub_updated", async () => {
+    if (isLockedDownDemoRoom()) {
+      const avatarRig = document.querySelector("#avatar-rig");
+      const avatarId = await fetchRandomDefaultAvatarId();
+      avatarRig.setAttribute("player-info", { avatarSrc: await getAvatarSrc(avatarId) });
+    } else {
+      if (scene.is("entered")) {
+        entryManager._setPlayerInfoFromProfile(true);
+      }
+    }
   });
 
   remountUI({
@@ -1020,9 +1073,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     remountUI({ environmentSceneLoaded: true });
     scene.emit("environment-scene-loaded", model);
 
-    // Re-bind the teleporter controls collision meshes in case the scene changed.
-    document.querySelectorAll("a-entity[teleporter]").forEach(x => x.components["teleporter"].queryCollisionEntities());
-
     for (const modelEl of environmentScene.children) {
       addAnimationComponents(modelEl);
     }
@@ -1096,13 +1146,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("[reconnect] Reconnection successful.");
   };
 
-  const onRetDeploy = (function() {
+  const onRetDeploy = (function () {
     let pendingNotification = null;
-    const hasPendingNotification = function() {
+    const hasPendingNotification = function () {
       return !!pendingNotification;
     };
 
-    const handleNextMessage = (function() {
+    const handleNextMessage = (function () {
       let isLocked = false;
       return async function handleNextMessage() {
         if (isLocked || !pendingNotification) return;
@@ -1259,9 +1309,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
+  listenForNetworkMessages(hubPhxChannel, events);
   hubPhxChannel
     .join()
     .receive("ok", async data => {
+      setLocalClientID(APP.getSid(data.session_id));
       APP.hideHubPresenceEvents = true;
       presenceSync.promise = new Promise(resolve => {
         presenceSync.resolve = resolve;
@@ -1282,7 +1334,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       await presenceSync.promise;
-      handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data, permsToken, hubChannel, events);
+      handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data);
     })
     .receive("error", res => {
       if (res.reason === "closed") {
@@ -1335,8 +1387,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const userInfo = hubChannel.presence.state[session_id];
     const displayName = (userInfo && userInfo.metas[0].profile.displayName) || "API";
 
+    let showBitECSBasedClientRefreshPrompt = false;
+
+    if (!!hub.user_data?.hubs_use_bitecs_based_client !== !!window.APP.hub.user_data?.hubs_use_bitecs_based_client) {
+      showBitECSBasedClientRefreshPrompt = true;
+      setTimeout(() => {
+        document.location.reload();
+      }, 5000);
+    }
+
     window.APP.hub = hub;
-    updateUIForHub(hub, hubChannel);
+    updateUIForHub(hub, hubChannel, showBitECSBasedClientRefreshPrompt);
 
     if (
       stale_fields.includes("scene") ||
@@ -1350,10 +1411,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateEnvironmentForHub(hub, entryManager);
       });
 
+      const sceneName = hub.scene ? hub.scene.name : "a custom URL";
+
+      console.log(`Entering new scene: ${sceneName}`);
+
       messageDispatch.receive({
         type: "scene_changed",
         name: displayName,
-        sceneName: hub.scene ? hub.scene.name : "a custom URL"
+        sceneName
       });
     }
 
@@ -1386,6 +1451,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     scene.emit("hub_updated", { hub });
+  });
+
+  hubPhxChannel.on("host_changed", ({ host, port, turn }) => {
+    console.log("Dialog host changed. Disconnecting from current host and connecting to the new one.", {
+      hub_id: APP.hub.hub_id,
+      host,
+      port,
+      turn
+    });
+
+    APP.dialog.disconnect();
+    APP.dialog.connect({
+      serverUrl: `wss://${host}:${port}`,
+      roomId: APP.hub.hub_id,
+      serverParams: { host, port, turn },
+      scene,
+      clientId: APP.getString(localClientID),
+      forceTcp: qs.get("force_tcp"),
+      forceTurn: qs.get("force_turn"),
+      iceTransportPolicy: qs.get("force_tcp") || qs.get("force_turn") ? "relay" : "all"
+    });
   });
 
   hubPhxChannel.on("permissions_updated", () => hubChannel.fetchPermissions());

@@ -5,12 +5,25 @@ import styles from "./MoreMenuPopover.scss";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as MoreIcon } from "../icons/More.svg";
-import  MoreIconBtn from "../../assets/newSkin/dotBtn.svg";
-
 import { useIntl, defineMessage } from "react-intl";
 
 function MoreMenuItem({ item, closePopover }) {
   const Icon = item.icon;
+  const imageAlt =
+    Icon?.alt &&
+    defineMessage({
+      id: "{label}.{alt}",
+      defaultMessage: "{alt}"
+    });
+  const intl = useIntl();
+  const imageAltText = imageAlt && intl.formatMessage(imageAlt, { label: item.label, alt: Icon.alt });
+
+  const Row = (
+    <>
+      {Icon?.src ? <img src={Icon.src} alt={imageAltText} /> : <Icon />}
+      <span>{item.label}</span>
+    </>
+  );
 
   return (
     <li onClick={closePopover}>
@@ -21,13 +34,11 @@ function MoreMenuItem({ item, closePopover }) {
           target={item.target || "_blank"}
           rel="noopener noreferrer"
         >
-          <Icon />
-          <span>{item.label}</span>
+          {Row}
         </a>
       ) : (
         <button className={styles.moreMenuItemTarget} onClick={event => item.onClick(item, event)}>
-          <Icon />
-          <span>{item.label}</span>
+          {Row}
         </button>
       )}
     </li>
@@ -38,7 +49,10 @@ MoreMenuItem.propTypes = {
   item: PropTypes.shape({
     href: PropTypes.string,
     target: PropTypes.string,
-    icon: PropTypes.elementType.isRequired,
+    icon: PropTypes.oneOfType([
+      PropTypes.elementType,
+      PropTypes.shape({ src: PropTypes.oneOfType([PropTypes.string, PropTypes.node]), alt: PropTypes.string })
+    ]).isRequired,
     label: PropTypes.node.isRequired,
     onClick: PropTypes.func
   }).isRequired,
@@ -50,7 +64,9 @@ function MoreMenuGroup({ group, closePopover }) {
     <li>
       <h1 className={styles.moreMenuGroupLabel}>{group.label}</h1>
       <ul className={styles.moreMenuItemList}>
-        {group.items.map(item => <MoreMenuItem key={item.id} item={item} closePopover={closePopover} />)}
+        {group.items.map(item => (
+          <MoreMenuItem key={item.id} item={item} closePopover={closePopover} />
+        ))}
       </ul>
     </li>
   );
@@ -64,7 +80,11 @@ MoreMenuGroup.propTypes = {
 function MoreMenuPopoverContent({ menu, closePopover }) {
   return (
     <div className={styles.moreMenuPopover}>
-      <ul>{menu.map(group => <MoreMenuGroup key={group.id} group={group} closePopover={closePopover} />)}</ul>
+      <ul>
+        {menu.map(group => (
+          <MoreMenuGroup key={group.id} group={group} closePopover={closePopover} />
+        ))}
+      </ul>
     </div>
   );
 }
@@ -110,11 +130,10 @@ export function MoreMenuPopoverButton({ menu }) {
       {({ togglePopover, popoverVisible, triggerRef }) => (
         <ToolbarButton
           ref={triggerRef}
-          icon={<img src={MoreIconBtn} width="100%"/>}
-          // icon={<MoreIcon />}
+          icon={<MoreIcon />}
           selected={popoverVisible}
           onClick={togglePopover}
-          // label={title}
+          label={title}
         />
       )}
     </Popover>
@@ -143,8 +162,7 @@ export function CompactMoreMenuButton({ className, ...rest }) {
       }}
       {...rest}
     >
-      <img src={MoreIconBtn} width="100%"/>
-      {/* <MoreIcon /> */}
+      <MoreIcon />
     </button>
   );
 }

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { LoadingScreenLayout } from "../layout/LoadingScreenLayout";
 import { Spinner } from "../misc/Spinner";
-import { useRandomMessageTransition } from "./useRandomMessageTransition";
+import { useRandomMessageTransition } from "./hooks/useRandomMessageTransition";
 export function LoadingScreen({ message, infoMessages }) {
   const infoMessage = useRandomMessageTransition(infoMessages);
   return (
@@ -15,8 +15,8 @@ export function LoadingScreen({ message, infoMessages }) {
       }
       bottom={
         <>
-          {/* <h3>{infoMessage.heading}</h3>
-          <p>{infoMessage.message}</p> */}
+          <h3>{infoMessage.heading}</h3>
+          <p>{infoMessage.message}</p>
         </>
       }
     />

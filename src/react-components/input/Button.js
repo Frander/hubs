@@ -5,8 +5,6 @@ import styles from "./Button.scss";
 import textInputStyles from "./TextInput.scss";
 import { FormattedMessage } from "react-intl";
 
-import NextBtn from "../../assets/newSkin/next.svg";
-
 export const presets = [
   "transparent",
   "basic",
@@ -20,9 +18,11 @@ export const presets = [
   "accent5",
   "accent6",
   "landing",
-  "signin"
+  "signin",
+  "text"
 ];
 
+/* eslint-disable-next-line react/display-name */
 export const Button = memo(
   forwardRef(({ as, sm, lg, xl, thin, thick, preset, className, children, ...rest }, ref) => {
     const ButtonComponent = as;
@@ -58,7 +58,11 @@ Button.propTypes = {
   preset: PropTypes.oneOf(presets),
   className: PropTypes.string,
   children: PropTypes.node,
-  sm: PropTypes.bool
+  sm: PropTypes.bool,
+  lg: PropTypes.bool,
+  xl: PropTypes.bool,
+  thin: PropTypes.bool,
+  thick: PropTypes.bool
 };
 
 Button.defaultProps = {
@@ -71,16 +75,6 @@ export function NextButton(props) {
     <Button preset="accept" {...props}>
       <FormattedMessage id="button.next" defaultMessage="Next" />
     </Button>
-  );
-}
-
-export function NextButton2() {
-  return (
-    // <button><img src={NextBtn} alt="Main Image" width="220px"/></button>
-    // <img src={NextBtn} alt="Main Image" width="220px"/>
-    // <input type="image" src={NextBtn} style="border: double;" width="220"/> 
-    <input type="image" src={NextBtn} border="0" alt="Submit" width="180"/>
-
   );
 }
 
@@ -103,7 +97,7 @@ export function ContinueButton(props) {
 export function AcceptButton(props) {
   return (
     <Button preset="accept" {...props}>
-      <FormattedMessage id="button.accept" defaultMessage="Aceptar" />
+      <FormattedMessage id="button.accept" defaultMessage="Accept" />
     </Button>
   );
 }

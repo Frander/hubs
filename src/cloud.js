@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import React from "react";
 import "./utils/configs";
 import "./react-components/styles/global.scss";
@@ -7,9 +7,9 @@ import classNames from "classnames";
 import { WrappedIntlProvider } from "./react-components/wrapped-intl-provider";
 import { PageContainer } from "./react-components/layout/PageContainer";
 import { AuthContextProvider } from "./react-components/auth/AuthContext";
-import Store from "./storage/store";
 import { Container } from "./react-components/layout/Container";
 import { Button } from "./react-components/input/Button";
+import { store } from "./utils/store-instance";
 
 import registerTelemetry from "./telemetry";
 import { FormattedMessage } from "react-intl";
@@ -117,10 +117,9 @@ function HubsCloudPage() {
   );
 }
 
-const store = new Store();
 window.APP = { store };
 
-function Root() {
+function CloudRoot() {
   return (
     <WrappedIntlProvider>
       <ThemeProvider store={store}>
@@ -133,5 +132,8 @@ function Root() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(<Root />, document.getElementById("ui-root"));
+  const container = document.getElementById("ui-root");
+
+  const root = createRoot(container);
+  root.render(<CloudRoot />);
 });

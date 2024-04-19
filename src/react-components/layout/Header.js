@@ -5,15 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
 import maskEmail from "../../utils/mask-email";
 import styles from "./Header.scss";
-// import { Container } from "./Container";
-import { Container, Row, Col } from "react-bootstrap";
-import ReactLogo from '../../assets/newSkin/logo.svg';
-// import { SocialBar } from "../home/SocialBar";
-// import { SignInButton } from "../home/SignInButton";
+import { Container } from "./Container";
+import { SocialBar } from "../home/SocialBar";
+import { SignInButton } from "../home/SignInButton";
+import { AppLogo } from "../misc/AppLogo";
 
 export function Header({
-  appName,
-  appLogo,
   showCloud,
   enableSpoke,
   editorName,
@@ -30,43 +27,12 @@ export function Header({
 }) {
   return (
     <header>
-      <Container className="head2">
-      <Row>
-      <Col sm={3}> <a href="/"><img src={ReactLogo} alt="React Logo" /></a></Col>
-      <Col sm={8}>
-        <ul>
-          <li><a  href="/">HOME</a></li>
-          <li><a>CREATE AVATAR</a></li>
-          <li><a>OUR SCENES</a></li>
-          <li><a>OUR COMMUNITY</a></li>
-        </ul>
-      </Col>
-      <Col sm={1}>
-      {isSignedIn ? 
-      (<div>
-          <a href="/admin" rel="noreferrer noopener">
-            <i>
-            <FontAwesomeIcon icon={faCog} />
-            </i>
-            Admin
-          </a> | 
-          <a href="#" onClick={onSignOut}>
-            <FormattedMessage id="header.sign-out" defaultMessage="Sign Out" />
-          </a>
-       </div>) : (
-            <a  href="/signin">
-            <button className="main-btn">SIGN IN / SIGN UP</button>
-            </a>
-          )}
-    
-      </Col>
-      </Row>
-</Container>
-        {/* <nav>
+      <Container as="div" className={styles.container}>
+        <nav>
           <ul>
             <li>
               <a href="/" className={styles.homeLink}>
-                <img alt={appName} src={appLogo} />
+                <AppLogo />
               </a>
             </li>
             {enableSpoke && (
@@ -123,6 +89,7 @@ export function Header({
               </li>
             )}
           </ul>
+        </nav>
         <div className={styles.signIn}>
           {isSignedIn ? (
             <div>
@@ -142,15 +109,12 @@ export function Header({
           )}
         </div>
         {isHmc ? <SocialBar mobile /> : null}
-        </nav> */}
+      </Container>
     </header>
-
   );
 }
 
 Header.propTypes = {
-  appName: PropTypes.string,
-  appLogo: PropTypes.string,
   showCloud: PropTypes.bool,
   enableSpoke: PropTypes.bool,
   editorName: PropTypes.string,

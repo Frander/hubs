@@ -4,6 +4,7 @@ import "./Page.scss";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { MobileNav } from "./MobileNav";
+import Banner from "../banner/Banner";
 
 export function Page({
   showCloud,
@@ -34,6 +35,7 @@ export function Page({
 }) {
   return (
     <>
+      {isHmc ? <Banner /> : null}
       <Header
         showCloud={showCloud}
         enableSpoke={enableSpoke}
@@ -61,7 +63,7 @@ export function Page({
         />
         {children}
       </main>
-      {/* <Footer
+      <Footer
         hidePoweredBy={hidePoweredBy}
         showWhatsNewLink={showWhatsNewLink}
         showTerms={showTerms}
@@ -73,7 +75,7 @@ export function Page({
         showDiscordBotLink={showDiscordBotLink}
         appName={appName}
         isHmc={isHmc}
-      /> */}
+      />
     </>
   );
 }

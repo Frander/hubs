@@ -2,22 +2,14 @@
 
 :local(.spinner) {
   animation: rotate 3s infinite linear;
-
-  *[stroke=\#000] {
-    stroke: #fbd604;
-  }
-
-  *[fill=\#000] {
-    fill: #fbd604;
-  }
+  color: theme.$primary-color;
 
   @keyframes rotate {
     0% {
-      transform: rotate(0deg);
+        transform: rotate(0deg);
     }
-
     100% {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
   }
 }

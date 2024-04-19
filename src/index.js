@@ -1,22 +1,19 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { WrappedIntlProvider } from "./react-components/wrapped-intl-provider";
 import registerTelemetry from "./telemetry";
-import Store from "./storage/store";
 import "./utils/theme";
 import { HomePage } from "./react-components/home/HomePage";
 import { AuthContextProvider } from "./react-components/auth/AuthContext";
 import "./react-components/styles/global.scss";
 import { ThemeProvider } from "./react-components/styles/theme";
+import { store } from "./utils/store-instance";
 
 registerTelemetry("/home", "Hubs Home Page");
-import "bootstrap/dist/css/bootstrap.min.css";
-// import "./assets/Aquire 400.otf";
 
-const store = new Store();
 window.APP = { store };
 
-function Root() {
+function HomeRoot() {
   return (
     <WrappedIntlProvider>
       <ThemeProvider store={store}>
@@ -28,4 +25,6 @@ function Root() {
   );
 }
 
-ReactDOM.render(<Root />, document.getElementById("home-root"));
+const container = document.getElementById("home-root");
+const root = createRoot(container);
+root.render(<HomeRoot />);

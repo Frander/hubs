@@ -11,8 +11,9 @@
   border-radius: 12px;
   pointer-events: auto;
   padding: 4px;
+  color: theme.$text1-color;
 
-  @media(min-width: theme.$breakpoint-lg) {
+  @media (min-width: theme.$breakpoint-lg) {
     top: 24px;
     right: 24px;
   }
@@ -29,7 +30,7 @@
   align-items: center;
   padding: 8px 10px;
 
-  &>* {
+  & > * {
     margin-right: 8px;
 
     &:last-child {
@@ -46,13 +47,7 @@
   }
 
   svg {
-    *[stroke=\#000] {
-      stroke: #fbd604;
-    }
-
-    *[fill=\#000] {
-      fill: #fbd604;
-    }
+    color: theme.$text1-color;
   }
 }
 
@@ -61,13 +56,7 @@
   background-color: theme.$active-color;
 
   svg {
-    *[stroke=\#000] {
-      stroke: theme.$text5-color;
-    }
-
-    *[fill=\#000] {
-      fill: theme.$text5-color;
-    }
+    color: theme.$text5-color;
   }
 
   &:hover {
@@ -83,4 +72,9 @@
   width: 1px;
   margin: 0 8px;
   background-color: theme.$border1-color;
+}
+
+:local(.disabled) {
+  pointer-events: none;
+  background-color: theme.$transparent;
 }
