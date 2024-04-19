@@ -11,7 +11,7 @@ import { Slider } from "../input/Slider";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as VolumeHigh } from "../icons/VolumeHigh.svg";
 import { ReactComponent as VolumeMuted } from "../icons/VolumeMuted.svg";
-import useAvatarVolume from "./hooks/useAvatarVolume";
+import useAvatarVolume from "./useAvatarVolume";
 import { calcLevel, calcGainMultiplier, MAX_VOLUME_LABELS } from "../../utils/avatar-volume-utils";
 
 const MIN = 0;
@@ -21,7 +21,6 @@ export function UserProfileSidebar({
   className,
   userId,
   displayName,
-  pronouns,
   identityName,
   avatarPreview,
   hasMicPresence,
@@ -51,16 +50,14 @@ export function UserProfileSidebar({
     [updateMultiplier]
   );
   const newLevel = calcLevel(multiplier);
-
   return (
     <Sidebar
+      title={identityName ? `${displayName} (${identityName})` : displayName}
       beforeTitle={showBackButton ? <BackButton onClick={onBack} /> : <CloseButton onClick={onClose} />}
       className={className}
       {...rest}
     >
       <Column center padding>
-        <h2 className={styles.displayName}>{identityName ? `${displayName} (${identityName})` : displayName}</h2>
-        {pronouns && <span className={styles.pronouns}>{pronouns}</span>}
         <div className={styles.avatarPreviewContainer}>{avatarPreview || <div />}</div>
         {hasMicPresence && (
           <div className={styles.sliderContainer}>
@@ -151,7 +148,6 @@ UserProfileSidebar.propTypes = {
   className: PropTypes.string,
   userId: PropTypes.string,
   displayName: PropTypes.string,
-  pronouns: PropTypes.string,
   identityName: PropTypes.string,
   avatarPreview: PropTypes.node,
   hasMicPresence: PropTypes.bool,

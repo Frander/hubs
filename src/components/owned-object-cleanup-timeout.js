@@ -1,3 +1,4 @@
+/* global performance */
 AFRAME.registerComponent("owned-object-cleanup-timeout", {
   schema: {
     ttl: { default: 0 }

@@ -2,7 +2,6 @@
   position: absolute;
   height: 20vh;
   bottom: 96px;
-  z-index: 1;
 
   /* Orientation selector fails here when keyboard pops up on shorter screens */
   @media(min-aspect-ratio: 15/9) {
@@ -11,11 +10,13 @@
 }
 
 :local(.touchZone.left) {
-  left: 80px;
+  left: 0;
+  right: 55%;
 }
 
 :local(.touchZone.right) {
-  right: 80px;
+  left: 55%;
+  right: 0;
 }
 
 :local(.mockJoystickContainer) {

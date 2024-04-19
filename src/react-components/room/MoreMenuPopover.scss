@@ -31,7 +31,7 @@
   font-size: theme.$font-size-sm;
   font-weight: theme.$font-weight-medium;
 
-  & > * {
+  &>* {
     margin-right: 16px;
 
     &:last-child {
@@ -40,14 +40,22 @@
   }
 
   svg {
-    color: theme.$text1-color;
+    *[stroke=\#000] {
+      stroke: #fbd604;
+    }
+
+    *[fill=\#000] {
+      fill: #fbd604;
+    }
   }
 
   // Hack to make hover styles overlap popover border and look correct.
   @media(min-width: theme.$breakpoint-lg) and (min-height: theme.$breakpoint-vr) {
     width: calc(100% + 2px);
 
-    &:hover, &:active, :global(body.keyboard-user) &:focus {
+    &:hover,
+    &:active,
+    :global(body.keyboard-user) &:focus {
       margin-left: -1px;
       margin-right: -1px;
       padding-left: 17px;
@@ -55,16 +63,25 @@
     }
   }
 
-  &:hover, &:active, :global(body.keyboard-user) &:focus {
+  &:hover,
+  &:active,
+  :global(body.keyboard-user) &:focus {
     color: theme.$active-text-color;
     font-weight: theme.$font-weight-bold;
 
     svg {
-      color: theme.$active-text-color;
+      *[stroke=\#000] {
+        stroke: #fbd604;
+      }
+
+      *[fill=\#000] {
+        fill: #fbd604;
+      }
     }
   }
 
-  &:hover, :global(body.keyboard-user) &:focus {
+  &:hover,
+  :global(body.keyboard-user) &:focus {
     background-color: theme.$active-color-hover;
   }
 
@@ -79,7 +96,7 @@
 
 button:local(.more-menu-item-target) {
   background: transparent;
-  border: none; 
+  border: none;
 }
 
 :local(.compact-button) {
@@ -106,7 +123,13 @@ button:local(.more-menu-item-target) {
   }
 
   svg {
-    color: theme.$text1-color;
+    *[stroke=\#000] {
+      stroke: #fbd604;
+    }
+
+    *[fill=\#000] {
+      fill: #fbd604;
+    }
   }
 
   @media(min-width: theme.$breakpoint-lg) {

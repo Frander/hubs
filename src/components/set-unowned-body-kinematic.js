@@ -1,4 +1,5 @@
-import { COLLISION_LAYERS } from "../constants";
+/* global NAF */
+const COLLISION_LAYERS = require("../constants").COLLISION_LAYERS;
 
 AFRAME.registerComponent("set-unowned-body-kinematic", {
   init() {
@@ -24,5 +25,8 @@ AFRAME.registerComponent("set-unowned-body-kinematic", {
       type: "kinematic",
       collisionFilterMask: COLLISION_LAYERS.UNOWNED_INTERACTABLE
     });
+    if (this.el.components["floaty-object"]) {
+      this.el.components["floaty-object"].locked = true;
+    }
   }
 });

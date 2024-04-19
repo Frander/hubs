@@ -1,4 +1,4 @@
-import { COLLISION_LAYERS } from "../constants";
+const COLLISION_LAYERS = require("../constants").COLLISION_LAYERS;
 
 AFRAME.registerComponent("drop-object-button", {
   init() {

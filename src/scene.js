@@ -1,127 +1,172 @@
-import jwtDecode from "jwt-decode";
-import React from "react";
-import { createRoot } from "react-dom/client";
-import "./assets/stylesheets/scene.scss";
-import SceneUI from "./react-components/scene-ui";
-import "./react-components/styles/global.scss";
-import { ThemeProvider } from "./react-components/styles/theme";
-import { WrappedIntlProvider } from "./react-components/wrapped-intl-provider";
-import registerTelemetry from "./telemetry";
-import { disableiOSZoom } from "./utils/disable-ios-zoom";
-import { connectToReticulum, fetchReticulumAuthenticatedWithToken } from "./utils/phoenix-utils";
 import "./utils/theme";
-import { store } from "./utils/store-instance";
+import "./utils/configs";
 
-function mountUI(props = {}) {
-  const container = document.getElementById("ui-root");
+console.log(`Hubs version: ${process.env.BUILD_VERSION || "?"}`);
 
-  const root = createRoot(container);
-  root.render(
+import "./react-components/styles/global.scss";
+import "./assets/stylesheets/scene.scss";
+
+import "aframe";
+import "./utils/logging";
+import { patchWebGLRenderingContext } from "./utils/webgl";
+patchWebGLRenderingContext();
+
+// It seems we need to use require to import modules
+// under the three/examples/js to avoid tree shaking
+// in webpack production mode.
+require("three/examples/js/loaders/GLTFLoader");
+
+import "./components/scene-components";
+import "./components/debug";
+import "./systems/nav";
+
+import { connectToReticulum, fetchReticulumAuthenticated } from "./utils/phoenix-utils";
+
+import ReactDOM from "react-dom";
+import React from "react";
+import jwtDecode from "jwt-decode";
+import SceneUI from "./react-components/scene-ui";
+import { disableiOSZoom } from "./utils/disable-ios-zoom";
+
+import "./systems/scene-systems";
+import "./gltf-component-mappings";
+import { EnvironmentSystem } from "./systems/environment-system";
+
+import { App } from "./App";
+
+window.APP = new App();
+
+const qs = new URLSearchParams(location.search);
+
+import "./components/event-repeater";
+
+import registerTelemetry from "./telemetry";
+import { WrappedIntlProvider } from "./react-components/wrapped-intl-provider";
+import { ThemeProvider } from "./react-components/styles/theme";
+
+disableiOSZoom();
+
+function mountUI(scene, props = {}) {
+  ReactDOM.render(
     <WrappedIntlProvider>
-      <ThemeProvider store={props.store}>
-        <SceneUI {...props} />
+      <ThemeProvider store={window.APP.store}>
+        <SceneUI
+          {...{
+            scene,
+            store: window.APP.store,
+            ...props
+          }}
+        />
       </ThemeProvider>
-    </WrappedIntlProvider>
+    </WrappedIntlProvider>,
+    document.getElementById("ui-root")
   );
 }
 
-const remountUI = (function () {
-  let props;
-  return function remountUI(newProps) {
-    props = { ...props, ...newProps };
-    mountUI(props);
-  };
-})();
+const onReady = async () => {
+  console.log("Scene is ready");
 
-async function shouldShowCreateRoom(joinToken) {
-  const socket = await connectToReticulum();
+  const scene = document.querySelector("a-scene");
+  window.APP.scene = scene;
 
-  const joinParams = {
-    hub_id: "scene"
-  };
-  if (joinToken) {
-    // Reticulum rejects a join with { token: null }, so don't add it to joinParams if we don't have it.
-    // TODO: (In reticulum) Treat { token: null } the same as not sending a token
-    joinParams.token = joinToken;
-  }
-  const retPhxChannel = socket.channel("ret", joinParams);
-
-  try {
-    await new Promise((resolve, reject) => {
-      retPhxChannel.join().receive("ok", resolve).receive("error", reject).receive("timeout", reject);
-    });
-
-    const token = await new Promise((resolve, reject) => {
-      retPhxChannel
-        .push("refresh_perms_token")
-        .receive("ok", ({ perms_token }) => {
-          resolve(perms_token);
-        })
-        .receive("error", reject)
-        .receive("timeout", reject);
-    });
-
-    const perms = jwtDecode(token);
-    retPhxChannel.leave();
-    socket.disconnect();
-
-    return !!perms.create_hub;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
-}
-
-async function fetchSceneInfo(token, sceneId) {
-  const response = await fetchReticulumAuthenticatedWithToken(token, `/api/v1/scenes/${sceneId}`);
-  return response.scenes[0];
-}
-
-function parseSceneId() {
-  return (
-    new URLSearchParams(document.location.search).get("scene_id") ||
-    document.location.pathname.substring(1).split("/")[1]
-  );
-}
-
-function onReady() {
-  console.log(`Hubs version: ${process.env.BUILD_VERSION || "?"}`);
-
-  disableiOSZoom();
-
-  const sceneId = parseSceneId(document.location);
+  const sceneId = qs.get("scene_id") || document.location.pathname.substring(1).split("/")[1];
   console.log(`Scene ID: ${sceneId}`);
-  remountUI({ sceneId, store });
 
-  shouldShowCreateRoom(store.state.credentials.token).then(showCreateRoom => {
-    remountUI({ showCreateRoom });
-  });
+  let uiProps = { sceneId: sceneId };
 
-  fetchSceneInfo(store.state.credentials.token, sceneId).then(async sceneInfo => {
-    console.log(`Scene Info:`, sceneInfo);
-    if (!sceneInfo) {
-      // Scene is delisted or removed
-      remountUI({ unavailable: true });
-    } else {
-      if (sceneInfo.allow_promotion) {
-        registerTelemetry(`/scene/${sceneId}`, `Hubs Scene: ${sceneInfo.title}`);
-      } else {
-        registerTelemetry("/scene", "Hubs Non-Promotable Scene Page");
-      }
-      remountUI({
-        sceneName: sceneInfo.name,
-        sceneDescription: sceneInfo.description,
-        sceneAttributions: sceneInfo.attributions,
-        sceneScreenshotURL: sceneInfo.screenshot_url,
-        sceneId: sceneInfo.scene_id,
-        sceneProjectId: sceneInfo.project_id,
-        sceneAllowRemixing: sceneInfo.allow_remixing,
-        isOwner: sceneInfo.account_id && sceneInfo.account_id === store.credentialsAccountId,
-        parentScene:
-          sceneInfo.parent_scene_id && (await fetchSceneInfo(store.state.credentials.token, sceneInfo.parent_scene_id))
-      });
+  mountUI(scene);
+
+  const remountUI = props => {
+    uiProps = { ...uiProps, ...props };
+    mountUI(scene, uiProps);
+  };
+
+  const sceneRoot = document.querySelector("#scene-root");
+  const sceneModelEntity = document.createElement("a-entity");
+  const gltfEl = document.createElement("a-entity");
+  const camera = document.getElementById("camera");
+
+  connectToReticulum().then(socket => {
+    const joinParams = { hub_id: "scene" };
+
+    if (window.APP.store.state.credentials && window.APP.store.state.credentials.token) {
+      joinParams.token = window.APP.store.state.credentials.token;
     }
+
+    const retPhxChannel = socket.channel("ret", joinParams);
+
+    retPhxChannel.join().receive("ok", () => {
+      retPhxChannel.push("refresh_perms_token").receive("ok", ({ perms_token }) => {
+        const perms = jwtDecode(perms_token);
+        remountUI({ showCreateRoom: !!perms.create_hub });
+
+        retPhxChannel.leave();
+        socket.disconnect();
+      });
+    });
   });
-}
+
+  const envSystem = new EnvironmentSystem(scene);
+
+  sceneModelEntity.addEventListener("environment-scene-loaded", () => {
+    remountUI({ sceneLoaded: true });
+    const previewCamera = gltfEl.object3D.getObjectByName("scene-preview-camera");
+
+    if (previewCamera) {
+      console.log("Setting up preview camera");
+      camera.object3D.position.copy(previewCamera.position);
+      camera.object3D.rotation.copy(previewCamera.rotation);
+      camera.object3D.matrixNeedsUpdate = true;
+    } else {
+      console.warn("No preview camera found");
+    }
+
+    camera.setAttribute("scene-preview-camera", "");
+
+    const environmentEl = sceneModelEntity.childNodes[0];
+    envSystem.updateEnvironment(environmentEl);
+  });
+
+  const res = await fetchReticulumAuthenticated(`/api/v1/scenes/${sceneId}`);
+  const sceneInfo = res.scenes[0];
+
+  // Delisted/Removed
+  if (!sceneInfo) {
+    remountUI({ unavailable: true });
+    return;
+  }
+
+  if (sceneInfo.allow_promotion) {
+    registerTelemetry(`/scene/${sceneId}`, `Hubs Scene: ${sceneInfo.title}`);
+  } else {
+    registerTelemetry("/scene", "Hubs Non-Promotable Scene Page");
+  }
+
+  const modelUrl = sceneInfo.model_url;
+  console.log(`Scene Model URL: ${modelUrl}`);
+
+  gltfEl.setAttribute("gltf-model-plus", { src: modelUrl, useCache: false, inflate: true });
+  gltfEl.addEventListener("model-loaded", ({ detail: { model } }) =>
+    sceneModelEntity.emit("environment-scene-loaded", model)
+  );
+  sceneModelEntity.appendChild(gltfEl);
+  sceneRoot.appendChild(sceneModelEntity);
+
+  const parentScene =
+    sceneInfo.parent_scene_id &&
+    (await fetchReticulumAuthenticated(`/api/v1/scenes/${sceneInfo.parent_scene_id}`)).scenes[0];
+
+  remountUI({
+    sceneName: sceneInfo.name,
+    sceneDescription: sceneInfo.description,
+    sceneAttributions: sceneInfo.attributions,
+    sceneScreenshotURL: sceneInfo.screenshot_url,
+    sceneId: sceneInfo.scene_id,
+    sceneProjectId: sceneInfo.project_id,
+    sceneAllowRemixing: sceneInfo.allow_remixing,
+    isOwner: sceneInfo.account_id && sceneInfo.account_id === window.APP.store.credentialsAccountId,
+    parentScene: parentScene
+  });
+};
 
 document.addEventListener("DOMContentLoaded", onReady);

@@ -1,5 +1,7 @@
-import { SOUND_TELEPORT_END, SOUND_TELEPORT_START } from "../systems/sound-effects-system";
 import { cylinderTextureSrc } from "./cylinder-texture";
+import { SOUND_TELEPORT_START, SOUND_TELEPORT_END } from "../systems/sound-effects-system";
+import { getMeshes } from "../utils/aframe-utils";
+
 import { textureLoader } from "../utils/media-utils";
 
 const CYLINDER_TEXTURE = textureLoader.load(cylinderTextureSrc);
@@ -52,13 +54,13 @@ class RayCurve extends THREE.Mesh {
     this.width = width;
   }
 
-  setPoint = (function () {
+  setPoint = (function() {
     const A = new THREE.Vector3();
     const B = new THREE.Vector3();
     const C = new THREE.Vector3();
     const D = new THREE.Vector3();
 
-    return function (i, P) {
+    return function(i, P) {
       let idx = 3 * 6 * i;
 
       A.copy(P).add(this.direction);
@@ -125,10 +127,10 @@ function parabolicCurve(p0, v0, t, out) {
 
 function isValidNormalsAngle(collisionNormal, referenceNormal, landingMaxAngle) {
   const angleNormals = referenceNormal.angleTo(collisionNormal);
-  return THREE.MathUtils.RAD2DEG * angleNormals <= landingMaxAngle;
+  return THREE.Math.RAD2DEG * angleNormals <= landingMaxAngle;
 }
 
-const checkLineIntersection = (function () {
+const checkLineIntersection = (function() {
   const direction = new THREE.Vector3();
   return function checkLineIntersection(start, end, meshes, raycaster, referenceNormal, landingMaxAngle, hitPoint) {
     direction.copy(end).sub(start);
@@ -162,6 +164,7 @@ AFRAME.registerComponent("teleporter", {
     start: { type: "string" },
     confirm: { type: "string" },
     speed: { default: 12 },
+    collisionEntities: { default: "" },
     hitCylinderColor: { type: "color", default: "#99ff99" },
     hitCylinderRadius: { default: 0.25, min: 0 },
     outerRadius: { default: 0.6, min: 0 },
@@ -180,6 +183,7 @@ AFRAME.registerComponent("teleporter", {
     this.parabola = Array.from(new Array(this.rayCurve.numPoints), () => new THREE.Vector3());
     this.hit = false;
     this.hitPoint = new THREE.Vector3();
+    this.meshes = [];
     this.raycaster = new THREE.Raycaster();
     this.rigWorldPosition = new THREE.Vector3();
     this.newRigWorldPosition = new THREE.Vector3();
@@ -195,6 +199,12 @@ AFRAME.registerComponent("teleporter", {
     this.hitEntity = this.createHitEntity();
     this.hitEntity.visible = false;
     this.el.sceneEl.object3D.add(this.hitEntity);
+    this.queryCollisionEntities();
+  },
+
+  queryCollisionEntities: function() {
+    this.collisionEntities = [].slice.call(this.el.sceneEl.querySelectorAll(this.data.collisionEntities));
+    this.meshes = getMeshes(this.collisionEntities);
   },
 
   remove() {
@@ -268,7 +278,10 @@ AFRAME.registerComponent("teleporter", {
     this.timeTeleporting += dt;
     object3D.updateMatrixWorld();
     object3D.matrixWorld.decompose(this.p0, q, vecHelper);
-    this.direction.copy(FORWARD).applyQuaternion(q).normalize();
+    this.direction
+      .copy(FORWARD)
+      .applyQuaternion(q)
+      .normalize();
     this.rayCurve.setDirection(this.direction);
     this.el.object3D.updateMatrices();
     const playerScale = v.setFromMatrixColumn(this.characterController.avatarPOV.object3D.matrixWorld, 1).length();
@@ -279,31 +292,25 @@ AFRAME.registerComponent("teleporter", {
     this.hit = false;
     this.parabola[0].copy(this.p0);
     const timeSegment = 1 / (this.rayCurve.numPoints - 1);
-    const navMesh = AFRAME?.scenes[0]?.systems?.nav?.mesh;
     for (let i = 1; i < this.rayCurve.numPoints; i++) {
       const t = i * timeSegment;
       parabolicCurve(this.p0, this.v0, t, vecHelper);
       this.parabola[i].copy(vecHelper);
 
-      if (navMesh) {
-        // HACK TODO Fix navmesh visibility + raycasting
-        const visible = navMesh.visible;
-        navMesh.visible = true;
-        const result = checkLineIntersection(
+      if (
+        checkLineIntersection(
           this.parabola[i - 1],
           this.parabola[i],
-          [navMesh],
+          this.meshes,
           this.raycaster,
           LANDING_NORMAL,
           MAX_LANDING_ANGLE,
           this.hitPoint
-        );
-        navMesh.visible = visible;
-        if (result) {
-          this.hit = true;
-          collidedIndex = i;
-          break;
-        }
+        )
+      ) {
+        this.hit = true;
+        collidedIndex = i;
+        break;
       }
     }
     if (this.characterController.isTeleportingDisabled) {
@@ -350,7 +357,7 @@ AFRAME.registerComponent("teleporter", {
 
     // Torus.
     this.torus = new THREE.Mesh(
-      new THREE.TorusBufferGeometry(data.hitCylinderRadius, 0.01, 16, 18, 360 * THREE.MathUtils.DEG2RAD),
+      new THREE.TorusBufferGeometry(data.hitCylinderRadius, 0.01, 16, 18, 360 * THREE.Math.DEG2RAD),
       new THREE.MeshBasicMaterial({
         color: data.hitCylinderColor,
         side: THREE.DoubleSide,
@@ -359,7 +366,7 @@ AFRAME.registerComponent("teleporter", {
         depthTest: false
       })
     );
-    this.torus.rotation.x = 90 * THREE.MathUtils.DEG2RAD;
+    this.torus.rotation.x = 90 * THREE.Math.DEG2RAD;
     hitEntity.add(this.torus);
 
     // Cylinder.
@@ -384,13 +391,13 @@ AFRAME.registerComponent("teleporter", {
     this.cylinder.position.y = data.hitCylinderHeight / 2;
     // UV's for THREE Geometries assume flipY
     if (!CYLINDER_TEXTURE.flipY) {
-      this.cylinder.rotation.z = 180 * THREE.MathUtils.DEG2RAD;
+      this.cylinder.rotation.z = 180 * THREE.Math.DEG2RAD;
     }
     hitEntity.add(this.cylinder);
 
     // create another torus for animating when the hit destination is ready to go
     this.outerTorus = new THREE.Mesh(
-      new THREE.TorusBufferGeometry(data.outerRadius, 0.01, 16, 18, 360 * THREE.MathUtils.DEG2RAD),
+      new THREE.TorusBufferGeometry(data.outerRadius, 0.01, 16, 18, 360 * THREE.Math.DEG2RAD),
       new THREE.MeshBasicMaterial({
         color: data.hitCylinderColor,
         side: THREE.DoubleSide,
@@ -399,7 +406,7 @@ AFRAME.registerComponent("teleporter", {
         depthTest: false
       })
     );
-    this.outerTorus.rotation.x = 90 * THREE.MathUtils.DEG2RAD;
+    this.outerTorus.rotation.x = 90 * THREE.Math.DEG2RAD;
     hitEntity.add(this.outerTorus);
 
     return hitEntity;

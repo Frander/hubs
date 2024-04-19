@@ -1,10 +1,8 @@
-import { addComponent, removeComponent } from "bitecs";
 import { CONSTANTS } from "three-ammo";
-import { Rigidbody } from "../bit-components";
 const ACTIVATION_STATE = CONSTANTS.ACTIVATION_STATE,
   TYPE = CONSTANTS.TYPE;
 
-export const ACTIVATION_STATES = [
+const ACTIVATION_STATES = [
   ACTIVATION_STATE.ACTIVE_TAG,
   ACTIVATION_STATE.ISLAND_SLEEPING,
   ACTIVATION_STATE.WANTS_DEACTIVATION,
@@ -34,27 +32,28 @@ AFRAME.registerComponent("body-helper", {
     scaleAutoUpdate: { default: true }
   },
 
-  init: function () {
+  init: function() {
     this.system = this.el.sceneEl.systems["hubs-systems"].physicsSystem;
     this.alive = true;
-    this.el.object3D.updateMatrices();
-    this.uuid = this.system.addBody(this.el.object3D, this.data);
-    const eid = this.el.object3D.eid;
-    addComponent(APP.world, Rigidbody, eid);
-    Rigidbody.bodyId[eid] = this.uuid; //uuid is a lie, it's actually an int
+    this.uuid = -1;
+    this.system.registerBodyHelper(this);
   },
 
-  update: function (prevData) {
-    if (prevData) {
-      const eid = this.el.object3D.eid;
-      this.system.updateRigidBody(eid, this.data);
+  init2: function() {
+    this.el.object3D.updateMatrices();
+    this.uuid = this.system.addBody(this.el.object3D, this.data);
+  },
+
+  update: function(prevData) {
+    if (prevData !== null && this.uuid !== -1) {
+      this.system.updateBody(this.uuid, this.data);
     }
   },
 
-  remove: function () {
-    this.system.removeBody(this.uuid);
-    const eid = this.el.object3D.eid;
-    removeComponent(APP.world, Rigidbody, eid);
+  remove: function() {
+    if (this.uuid !== -1) {
+      this.system.removeBody(this.uuid);
+    }
     this.alive = false;
   }
 });

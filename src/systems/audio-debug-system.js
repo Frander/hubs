@@ -1,3 +1,4 @@
+import { THREE } from "aframe";
 import audioDebugVert from "./audio-debug.vert";
 import audioDebugFrag from "./audio-debug.frag";
 import { DistanceModelType } from "../components/audio-params";
@@ -107,7 +108,7 @@ AFRAME.registerSystem("audio-debug", {
   tick: (() => {
     const sourcePos = new THREE.Vector3();
     const sourceDir = new THREE.Vector3();
-    return function (time) {
+    return function(time) {
       if (!this.data.enabled) {
         return;
       }
@@ -119,8 +120,8 @@ AFRAME.registerSystem("audio-debug", {
 
         audio.getWorldPosition(sourcePos);
         audio.getWorldDirection(sourceDir);
-        this.sourcePositions[sourceNum] = sourcePos; // TODO: Use Vector3 pool
-        this.sourceOrientations[sourceNum] = sourceDir;
+        this.sourcePositions[sourceNum] = this.navMeshObject.worldToLocal(sourcePos).clone(); // TODO: Use Vector3 pool
+        this.sourceOrientations[sourceNum] = this.navMeshObject.worldToLocal(sourceDir).clone();
 
         const panner = audio.panner || fakePanner;
 

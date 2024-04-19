@@ -1,5 +1,9 @@
-import { hasComponent } from "bitecs";
-import { GLTFModel, MediaImage, MediaInfo, MediaPDF, MediaVideo } from "../bit-components";
+import { faVideo } from "@fortawesome/free-solid-svg-icons/faVideo";
+import { faMusic } from "@fortawesome/free-solid-svg-icons/faMusic";
+import { faImage } from "@fortawesome/free-solid-svg-icons/faImage";
+import { faNewspaper } from "@fortawesome/free-solid-svg-icons/faNewspaper";
+import { faQuestion } from "@fortawesome/free-solid-svg-icons/faQuestion";
+import { faCube } from "@fortawesome/free-solid-svg-icons/faCube";
 
 export const SORT_ORDER_VIDEO = 0;
 export const SORT_ORDER_AUDIO = 1;
@@ -8,24 +12,7 @@ export const SORT_ORDER_PDF = 3;
 export const SORT_ORDER_MODEL = 4;
 export const SORT_ORDER_UNIDENTIFIED = 5;
 
-function mediaSortOrder(eid) {
-  if (hasComponent(APP.world, MediaVideo, eid)) {
-    if (hasComponent(APP.world, MediaInfo, eid)) {
-      const contentTypeSid = MediaInfo.contentType[eid];
-      const contentType = APP.getString(contentTypeSid);
-      if (contentType.startsWith("audio/")) {
-        return SORT_ORDER_AUDIO;
-      }
-    }
-    return SORT_ORDER_VIDEO;
-  }
-  if (hasComponent(APP.world, MediaImage, eid)) return SORT_ORDER_IMAGE;
-  if (hasComponent(APP.world, MediaPDF, eid)) return SORT_ORDER_PDF;
-  if (hasComponent(APP.world, GLTFModel, eid)) return SORT_ORDER_MODEL;
-  return SORT_ORDER_UNIDENTIFIED;
-}
-
-function mediaSortOrderAframe(el) {
+export function mediaSortOrder(el) {
   if (el.components["media-video"] && el.components["media-video"].data.contentType.startsWith("audio/")) {
     return SORT_ORDER_AUDIO;
   }
@@ -36,13 +23,18 @@ function mediaSortOrderAframe(el) {
   return SORT_ORDER_UNIDENTIFIED;
 }
 
-export function mediaSort(eid1, eid2) {
-  return mediaSortOrder(eid1) - mediaSortOrder(eid2);
+export function mediaSort(el1, el2) {
+  return mediaSortOrder(el1) - mediaSortOrder(el2);
 }
 
-export function mediaSortAframe(el1, el2) {
-  return mediaSortOrderAframe(el1) - mediaSortOrderAframe(el2);
-}
+export const DISPLAY_IMAGE = new Map([
+  [SORT_ORDER_VIDEO, faVideo],
+  [SORT_ORDER_AUDIO, faMusic],
+  [SORT_ORDER_IMAGE, faImage],
+  [SORT_ORDER_PDF, faNewspaper],
+  [SORT_ORDER_UNIDENTIFIED, faQuestion],
+  [SORT_ORDER_MODEL, faCube]
+]);
 
 const SORT_ORDER_TO_TYPE = {
   [SORT_ORDER_VIDEO]: "video",
@@ -52,12 +44,7 @@ const SORT_ORDER_TO_TYPE = {
   [SORT_ORDER_MODEL]: "model"
 };
 
-export function getMediaType(eid) {
-  const order = mediaSortOrder(eid);
-  return SORT_ORDER_TO_TYPE[order];
-}
-
-export function getMediaTypeAframe(el) {
-  const order = mediaSortOrderAframe(el);
+export function getMediaType(el) {
+  const order = mediaSortOrder(el);
   return SORT_ORDER_TO_TYPE[order];
 }

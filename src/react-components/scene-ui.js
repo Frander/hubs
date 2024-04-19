@@ -1,20 +1,29 @@
-import classNames from "classnames";
+import React, { Component, useRef } from "react";
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import classNames from "classnames";
 import { FormattedMessage, injectIntl } from "react-intl";
-import styles from "../assets/stylesheets/scene-ui.scss";
 import configs from "../utils/configs";
+import IfFeature from "./if-feature";
+import styles from "../assets/stylesheets/scene-ui.scss";
 import { createAndRedirectToNewHub, getReticulumFetchUrl } from "../utils/phoenix-utils";
+import { ReactComponent as Twitter } from "./icons/Twitter.svg";
 import { ReactComponent as CodeBranch } from "./icons/CodeBranch.svg";
 import { ReactComponent as Pen } from "./icons/Pen.svg";
-import { ReactComponent as Twitter } from "./icons/Twitter.svg";
-import IfFeature from "./if-feature";
 import { AppLogo } from "./misc/AppLogo";
+
+import { useResizeViewport } from "./room/useResizeViewport";
+function ResizeHookWrapper({ store, scene }) {
+  const viewportRef = useRef(document.body);
+  useResizeViewport(viewportRef, store, scene);
+  return <></>;
+}
 
 class SceneUI extends Component {
   static propTypes = {
     intl: PropTypes.object,
+    scene: PropTypes.object,
     store: PropTypes.object,
+    sceneLoaded: PropTypes.bool,
     sceneId: PropTypes.string,
     sceneName: PropTypes.string,
     sceneDescription: PropTypes.string,
@@ -28,8 +37,27 @@ class SceneUI extends Component {
     parentScene: PropTypes.object
   };
 
+  state = {
+    showScreenshot: false
+  };
+
   constructor(props) {
     super(props);
+
+    // Show screenshot if scene isn't loaded in 5 seconds
+    setTimeout(() => {
+      if (!this.props.sceneLoaded) {
+        this.setState({ showScreenshot: true });
+      }
+    }, 5000);
+  }
+
+  componentDidMount() {
+    this.props.scene.addEventListener("loaded", this.onSceneLoaded);
+  }
+
+  componentWillUnmount() {
+    this.props.scene.removeEventListener("loaded", this.onSceneLoaded);
   }
 
   createRoom = () => {
@@ -185,10 +213,11 @@ class SceneUI extends Component {
       <div className={styles.ui}>
         <div
           className={classNames({
-            [styles.screenshot]: true
+            [styles.screenshot]: true,
+            [styles.screenshotHidden]: this.props.sceneLoaded
           })}
         >
-          {<img src={this.props.sceneScreenshotURL} />}
+          {this.state.showScreenshot && <img src={this.props.sceneScreenshotURL} />}
         </div>
         <div className={styles.grid}>
           <div className={styles.mainPanel}>
@@ -248,6 +277,7 @@ class SceneUI extends Component {
             <div className={styles.attribution}>{attributions}</div>
           </div>
         </div>
+        <ResizeHookWrapper store={this.props.store} scene={this.props.scene} />
       </div>
     );
   }

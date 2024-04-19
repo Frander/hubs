@@ -1,7 +1,4 @@
-import { addComponent, removeComponent } from "bitecs";
 import { waitForDOMContentLoaded } from "../utils/async-utils";
-import { Pen, PenActive } from "../bit-components";
-import { anyEntityWith } from "../utils/bit-utils";
 
 // Used for tracking and managing pen tools in the scene
 AFRAME.registerSystem("pen-tools", {
@@ -35,12 +32,7 @@ AFRAME.registerSystem("pen-tools", {
 
     if (this.myPen) {
       this.sceneEl.addState("pen");
-      addComponent(APP.world, PenActive, this.myPen.eid);
     } else {
-      const pen = anyEntityWith(APP.world, Pen);
-      if (pen) {
-        removeComponent(APP.world, PenActive, pen);
-      }
       this.sceneEl.removeState("pen");
     }
   }

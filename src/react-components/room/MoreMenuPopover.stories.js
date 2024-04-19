@@ -11,7 +11,6 @@ import { ReactComponent as TextDocumentIcon } from "../icons/TextDocument.svg";
 import { ReactComponent as SupportIcon } from "../icons/Support.svg";
 import { ReactComponent as ShieldIcon } from "../icons/Shield.svg";
 import { CompactMoreMenuButton, MoreMenuContextProvider, MoreMenuPopoverButton } from "./MoreMenuPopover";
-import { TERMS, PRIVACY } from "../../constants";
 
 export default {
   title: "Room/MoreMenuPopover",
@@ -25,18 +24,18 @@ const menu = [
     id: "user",
     label: "You",
     items: [
-      { id: "user-profile", label: "Change Name & Avatar", icon: AvatarIcon },
-      { id: "favorite-room", label: "Favorite Room", icon: StarOutlineIcon },
-      { id: "preferences", label: "Preferences", icon: SettingsIcon }
+      { id: "user-profile", label: "Cambiar nombre y Avatar", icon: AvatarIcon },
+      { id: "favorite-room", label: "Salas favoritas", icon: StarOutlineIcon },
+      { id: "preferences", label: "Preferencias", icon: SettingsIcon }
     ]
   },
   {
     id: "room",
     label: "Room",
     items: [
-      { id: "room-settings", label: "Room Settings", icon: HomeIcon },
-      { id: "change-scene", label: "Change Scene", icon: SceneIcon },
-      { id: "camera-mode", label: "Enter Camera Mode", icon: CameraIcon }
+      { id: "room-settings", label: "Ajustes de sala", icon: HomeIcon },
+      { id: "change-scene", label: "Cambiar escena", icon: SceneIcon },
+      { id: "camera-mode", label: "Entrar en modo cámara", icon: CameraIcon }
     ]
   },
   {
@@ -45,27 +44,27 @@ const menu = [
     items: [
       {
         id: "report-issue",
-        label: "Report Issue",
+        label: "Reportar un problema",
         icon: WarningCircleIcon,
         href: "https://github.com/mozilla/hubs/issues/new/choose"
       },
       {
         id: "help",
-        label: "Help",
+        label: "Ayuda",
         icon: SupportIcon,
         href: "https://hubs.mozilla.com/docs"
       },
       {
         id: "tos",
-        label: "Terms of Service",
+        label: "Términos de servicio",
         icon: TextDocumentIcon,
-        href: TERMS
+        href: "https://github.com/mozilla/hubs/blob/master/TERMS.md"
       },
       {
         id: "privacy",
-        label: "Privacy Notice",
+        label: "Aviso de privacidad",
         icon: ShieldIcon,
-        href: PRIVACY
+        href: "https://github.com/mozilla/hubs/blob/master/PRIVACY.md"
       }
     ]
   }

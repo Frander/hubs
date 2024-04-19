@@ -11,12 +11,18 @@
   right: 0;
   bottom: 0;
   top: 0;
-  background: theme.$loading-screen-background;
-  color: theme.$text1-color;
+  // background: theme.$loading-screen-background;
 
-  font-size: theme.$font-size-sm;
+  // font-size: theme.$font-size-sm;
 
-  @media (min-width: theme.$breakpoint-lg) and (min-height: theme.$breakpoint-vr) {
+  background: #42405B;
+  opacity: 0.8;
+  backdrop-filter: blur(60px);
+  border: 1px solid #fff !important;
+  font-family: "Aquire" !important;
+  color: white !important;
+
+  @media(min-width: theme.$breakpoint-lg) and (min-height: theme.$breakpoint-vr) {
     font-size: theme.$font-size-md;
   }
 }

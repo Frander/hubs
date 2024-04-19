@@ -33,9 +33,14 @@ AFRAME.registerComponent("shape-helper", {
 
   multiple: true,
 
-  init: function () {
+  init: function() {
     this.system = this.el.sceneEl.systems["hubs-systems"].physicsSystem;
+    this.alive = true;
     this.uuid = -1;
+    this.system.registerShapeHelper(this);
+  },
+
+  init2: function() {
     this.mesh = null;
 
     let bodyEl = this.el;
@@ -47,7 +52,7 @@ AFRAME.registerComponent("shape-helper", {
       }
     }
     if (!this.bodyHelper || this.bodyHelper.uuid === null || this.bodyHelper.uuid === undefined) {
-      console.error("body not found");
+      console.warn("body not found");
       return;
     }
     if (this.data.fit === FIT.ALL) {
@@ -62,10 +67,10 @@ AFRAME.registerComponent("shape-helper", {
     this.uuid = this.system.addShapes(this.bodyHelper.uuid, this.mesh, this.data);
   },
 
-  remove: function () {
-    // Removing a body already cleans up it's shapes
-    if (this.uuid !== -1 && this.bodyHelper.alive) {
+  remove: function() {
+    if (this.uuid !== -1) {
       this.system.removeShapes(this.bodyHelper.uuid, this.uuid);
     }
+    this.alive = false;
   }
 });

@@ -18,6 +18,5 @@ export function SpinWhileTrue({ isSpinning, children }) {
 }
 
 SpinWhileTrue.propTypes = {
-  isSpinning: PropTypes.bool.isRequired,
-  children: PropTypes.node
+  isSpinning: PropTypes.bool.isRequired
 };

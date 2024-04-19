@@ -32,9 +32,7 @@ const VALID_PERMISSIONS = HUB_CREATOR_PERMISSIONS.concat([
   "spawn_and_move_media",
   "pin_objects",
   "spawn_emoji",
-  "fly",
-  "voice_chat",
-  "text_chat"
+  "fly"
 ]);
 
 export default class HubChannel extends EventTarget {
@@ -57,16 +55,6 @@ export default class HubChannel extends EventTarget {
   can(permission) {
     if (!VALID_PERMISSIONS.includes(permission)) throw new Error(`Invalid permission name: ${permission}`);
     return this._permissions && this._permissions[permission];
-  }
-
-  userCan(clientId, permission) {
-    const presenceState = this.presence.state[clientId];
-    if (!presenceState) {
-      console.warn(`userCan: Had no presence state for ${clientId}`);
-      return false;
-    }
-
-    return !!presenceState.metas[0].permissions[permission];
   }
 
   // Returns true if the current session has the given permission, *or* will get the permission
@@ -103,9 +91,9 @@ export default class HubChannel extends EventTarget {
         onSync: this.presence.caller.onSync
       };
 
-      this.presence.onJoin(function () {});
-      this.presence.onLeave(function () {});
-      this.presence.onSync(function () {});
+      this.presence.onJoin(function() {});
+      this.presence.onLeave(function() {});
+      this.presence.onSync(function() {});
     }
 
     this.channel = await migrateChannelToSocket(this.channel, socket, params);
@@ -131,9 +119,9 @@ export default class HubChannel extends EventTarget {
         onSync: this.presence.caller.onSync
       };
 
-      this.presence.onJoin(function () {});
-      this.presence.onLeave(function () {});
-      this.presence.onSync(function () {});
+      this.presence.onJoin(function() {});
+      this.presence.onLeave(function() {});
+      this.presence.onSync(function() {});
     }
 
     this.channel = newChannel;
@@ -405,7 +393,10 @@ export default class HubChannel extends EventTarget {
       payload.promotion_token = promotionToken;
     }
     return new Promise((resolve, reject) => {
-      this.channel.push("pin", payload).receive("ok", resolve).receive("error", reject);
+      this.channel
+        .push("pin", payload)
+        .receive("ok", resolve)
+        .receive("error", reject);
     });
   };
 

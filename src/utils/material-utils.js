@@ -35,7 +35,6 @@ class HubsMeshBasicMaterial extends THREE.MeshBasicMaterial {
     const material = new HubsMeshBasicMaterial();
 
     THREE.Material.prototype.copy.call(material, source);
-    material.onBeforeRender = source.onBeforeRender;
 
     material.color.copy(source.color);
 
@@ -46,8 +45,7 @@ class HubsMeshBasicMaterial extends THREE.MeshBasicMaterial {
     material.map = source.map;
 
     material.lightMap = source.lightMap;
-    // See https://github.com/mrdoob/three.js/pull/23613 for "* Math.PI"
-    material.lightMapIntensity = source.lightMapIntensity * Math.PI;
+    material.lightMapIntensity = source.lightMapIntensity;
 
     material.aoMap = source.aoMap;
     material.aoMapIntensity = source.aoMapIntensity;
@@ -131,7 +129,6 @@ class HubsMeshPhongMaterial extends THREE.MeshPhongMaterial {
     const material = new HubsMeshPhongMaterial();
 
     THREE.Material.prototype.copy.call(material, source);
-    material.onBeforeRender = source.onBeforeRender;
 
     material.color.copy(source.color);
 

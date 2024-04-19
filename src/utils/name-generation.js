@@ -392,6 +392,7 @@ const adjectives = [
   "courageous",
   "courteous",
   "crafty",
+  "crazy",
   "creamy",
   "creative",
   "crisp",

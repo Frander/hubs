@@ -28,18 +28,24 @@ $input-height: 40px;
   &:hover {
     border-color: theme.$input-border-color-hover;
   }
-
+  
   &:focus {
     outline: none;
   }
-
-  &:focus-within {
+  
+  &:focus-within  {
     border-color: theme.$input-outline-color;
     box-shadow: 0 0 0 2px theme.$input-outline-color;
   }
 
   svg {
-    color: theme.$text1-color;
+    *[stroke=\#000] {
+      stroke: theme.$text1-color;
+    }
+
+    *[fill=\#000] {
+      fill: theme.$text1-color;
+    }
   }
 }
 
@@ -48,13 +54,13 @@ $input-height: 40px;
   top: $input-height + 4px;
   display: none;
   flex-direction: column;
-  background-color: theme.$input-bg-color;
+  background-color: theme.$dropdown-bg-color;
   border-radius: 8px;
   padding: 8px 0;
   z-index: 99999;
   left: 0;
   right: 0;
-  box-shadow: -1px -1px 1px theme.$border1-color, 3px 3px 6px theme.$shadow-color;
+  box-shadow: -1px -1px 1px theme.$dropdown-border-color, 3px 3px 6px theme.$dropdown-shadow-color;
   max-height: 320px;
   overflow-y: auto;
 }
@@ -81,5 +87,5 @@ $input-height: 40px;
 
 :local(.highlighted-item) {
   color: theme.$active-text-color;
-  background-color: theme.$active-color-hover;
+  background-color: theme.$active-color;
 }

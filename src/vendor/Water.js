@@ -51,13 +51,13 @@ THREE.Water = function(geometry, options) {
   const parameters = {
     minFilter: THREE.LinearFilter,
     magFilter: THREE.LinearFilter,
-    format: THREE.RGBAFormat,
+    format: THREE.RGBFormat,
     stencilBuffer: false
   };
 
   const renderTarget = new THREE.WebGLRenderTarget(textureWidth, textureHeight, parameters);
 
-  if (!THREE.MathUtils.isPowerOfTwo(textureWidth) || !THREE.MathUtils.isPowerOfTwo(textureHeight)) {
+  if (!THREE.Math.isPowerOfTwo(textureWidth) || !THREE.Math.isPowerOfTwo(textureHeight)) {
     renderTarget.texture.generateMipmaps = false;
   }
 

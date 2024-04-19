@@ -28,9 +28,12 @@ export function TokensContainer() {
     }
   };
 
-  useEffect(() => {
-    if (auth?.isAdmin) fetchTokens();
-  }, [auth.isAdmin]);
+  useEffect(
+    () => {
+      if (auth?.isAdmin) fetchTokens();
+    },
+    [auth.isAdmin]
+  );
 
   const onCreateTokenCreated = async () => {
     setShowCreateToken(false);
