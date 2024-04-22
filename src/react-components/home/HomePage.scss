@@ -107,6 +107,24 @@
   }
 }
 
+:local(.app-description2) {
+  white-space: pre-wrap;
+  align-self: auto;
+  font-size: theme.$font-size-md;
+  font-weight: theme.$font-weight-medium;
+  text-align: center;
+  margin: 0 24px 20px 24px;
+  line-height: 1.25;
+  color: gold;
+
+  @media (min-width: theme.$breakpoint-lg) {
+    text-align: left;
+    margin: 0 16px 48px 0px;
+    max-width: 860px;
+    font-size: theme.$font-size-md;
+  }
+}
+
 :local(.center-logo) {
   align-self: auto;
   margin: 24px 0;

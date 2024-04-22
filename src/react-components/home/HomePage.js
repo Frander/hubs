@@ -20,6 +20,7 @@ import { SignInButton } from "./SignInButton";
 import { AppLogo } from "../misc/AppLogo";
 import { isHmc } from "../../utils/isHmc";
 import maskEmail from "../../utils/mask-email";
+import { Button } from "./Button";
 
 export function HomePage() {
   const auth = useContext(AuthContext);
@@ -90,8 +91,16 @@ export function HomePage() {
           </div>
           <div className={styles.appInfo}>
             <div className={styles.appDescription}>{configs.translation("app-description")}</div>
+            
             {/* {canCreateRooms && <CreateRoomButton />} */}
-            <PWAButton />
+            {/* <PWAButton /> */}
+          </div>
+          <div className={styles.appInfo}>
+           <div className={styles.appDescription2}>test</div>
+          </div>
+          <div className={styles.appInfo}>
+            <Button>Web</Button>
+            <Button>Tienda</Button>
           </div>
           
         </div>
