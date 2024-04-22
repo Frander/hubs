@@ -57,7 +57,7 @@ export function HomePage() {
     <PageContainer className={styles.homePage}>
       <Container>
         <div className={styles.hero}>
-          {auth.isSignedIn ? (
+          {/* {auth.isSignedIn ? (
             <div className={styles.signInContainer}>
               <span>
                 <FormattedMessage
@@ -72,7 +72,7 @@ export function HomePage() {
             </div>
           ) : (
             <SignInButton mobile />
-          )}
+          )} */}
           <div className={styles.logoContainer}>
             <AppLogo />
           </div>
