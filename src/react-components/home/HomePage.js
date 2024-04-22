@@ -76,11 +76,6 @@ export function HomePage() {
           <div className={styles.logoContainer}>
             <AppLogo />
           </div>
-          <div className={styles.appInfo}>
-            <div className={styles.appDescription}>{configs.translation("app-description")}</div>
-            {canCreateRooms && <CreateRoomButton />}
-            <PWAButton />
-          </div>
           <div className={styles.heroImageContainer}>
             <img
               alt={intl.formatMessage(
@@ -93,6 +88,12 @@ export function HomePage() {
               src={configs.image("home_background")}
             />
           </div>
+          <div className={styles.appInfo}>
+            <div className={styles.appDescription}>{configs.translation("app-description")}</div>
+            {/* {canCreateRooms && <CreateRoomButton />} */}
+            <PWAButton />
+          </div>
+          
         </div>
       </Container>
       {configs.feature("show_feature_panels") && (
