@@ -49,6 +49,10 @@ AFRAME.registerComponent("avatar-volume-controls", {
     this.el.emit("gain_multiplier_updated", { gainMultiplier });
     const isLocalMuted = APP.mutedState.has(this.audioEl);
     updatePref && updateAvatarVolumesPref(this.playerInfo.displayName, gainMultiplier, isLocalMuted);
+    // If the gainMultiplier is lowered to 0, updated muted status in local storage
+    if (!gainMultiplier) {
+      this.updateLocalMuted(true, true);
+    }
   },
 
   updateLocalMuted(muted, updatePref = false) {
@@ -71,14 +75,14 @@ AFRAME.registerComponent("avatar-volume-controls", {
   volumeUp() {
     let gainMultiplier = APP.gainMultipliers.get(this.audioEl);
     const step = calcGainStepUp(gainMultiplier);
-    gainMultiplier = THREE.Math.clamp(gainMultiplier + step, 0, MAX_GAIN_MULTIPLIER);
+    gainMultiplier = THREE.MathUtils.clamp(gainMultiplier + step, 0, MAX_GAIN_MULTIPLIER);
     this.updateGainMultiplier(gainMultiplier, true);
   },
 
   volumeDown() {
     let gainMultiplier = APP.gainMultipliers.get(this.audioEl);
     const step = -calcGainStepDown(gainMultiplier);
-    gainMultiplier = THREE.Math.clamp(gainMultiplier + step, 0, MAX_GAIN_MULTIPLIER);
+    gainMultiplier = THREE.MathUtils.clamp(gainMultiplier + step, 0, MAX_GAIN_MULTIPLIER);
     this.updateGainMultiplier(gainMultiplier, true);
   },
 

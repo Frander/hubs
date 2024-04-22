@@ -1,5 +1,7 @@
 import "./stats-plus.css";
 import qsTruthy from "../utils/qs_truthy";
+import { defineQuery } from "bitecs";
+import { AEntity } from "../bit-components";
 
 function ThreeStats(renderer) {
   let _rS = null;
@@ -75,12 +77,20 @@ function createStats(scene) {
     values: {
       fps: { caption: "fps", below: 30 }
     },
-    groups: [{ caption: "Framerate", values: ["fps", "raf", "physics"] }],
+    groups: [
+      { caption: "Framerate", values: ["fps", "raf", "physics"] },
+      { caption: "BitECS", values: ["entities", "a-entities", "queries"] }
+    ],
     plugins: plugins
   });
 }
 
 const HIDDEN_CLASS = "a-hidden";
+
+let $queries;
+
+const allEntitiesQuery = defineQuery();
+const aEntityQuery = defineQuery([AEntity]);
 
 AFRAME.registerComponent("stats-plus", {
   // Whether or not the stats panel is expanded.
@@ -139,6 +149,8 @@ AFRAME.registerComponent("stats-plus", {
       this.initVRStats();
     }
     this.lastUpdate = 0;
+
+    $queries = Object.getOwnPropertySymbols(APP.world).find(s => s.description == "queries");
   },
   initVRStats() {
     this.vrPanel = document.createElement("a-entity");
@@ -198,6 +210,10 @@ AFRAME.registerComponent("stats-plus", {
       stats("FPS").frame();
       stats("physics").set(this.el.sceneEl.systems["hubs-systems"].physicsSystem.stepDuration);
 
+      stats("queries").set(APP.world[$queries].size);
+      stats("entities").set(allEntitiesQuery(APP.world).length);
+      stats("a-entities").set(aEntityQuery(APP.world).length);
+
       stats().update();
     } else if (!this.inVR) {
       // Update the fps counter
@@ -220,15 +236,9 @@ AFRAME.registerComponent("stats-plus", {
         "text",
         "value",
         [
-          `f ${stats("fps")
-            .value()
-            .toFixed(0)}`,
-          `r ${stats("raf")
-            .value()
-            .toFixed(0)}`,
-          `p ${stats("physics")
-            .value()
-            .toFixed(0)}`,
+          `f ${stats("fps").value().toFixed(0)}`,
+          `r ${stats("raf").value().toFixed(0)}`,
+          `p ${stats("physics").value().toFixed(0)}`,
           `c ${this.el.sceneEl.renderer.info.render.calls}`,
           `t ${(this.el.sceneEl.renderer.info.render.triangles / 1000).toFixed(0)}k`
         ].join("\n")

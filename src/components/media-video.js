@@ -1,13 +1,14 @@
-/* global performance THREE AFRAME NAF MediaStream setTimeout */
-import configs from "../utils/configs";
 import audioIcon from "../assets/images/audio.png";
 import { paths } from "../systems/userinput/paths";
 import HLS from "hls.js";
-import { MediaPlayer } from "dashjs";
-import { addAndArrangeMedia, createVideoOrAudioEl, hasAudioTracks } from "../utils/media-utils";
+import {
+  addAndArrangeMedia,
+  createVideoOrAudioEl,
+  createDashPlayer,
+  createHLSPlayer,
+  hasAudioTracks
+} from "../utils/media-utils";
 import { disposeTexture } from "../utils/material-utils";
-import { proxiedUrlFor } from "../utils/media-url-utils";
-import { buildAbsoluteURL } from "url-toolkit";
 import { SOUND_CAMERA_TOOL_TOOK_SNAPSHOT } from "../systems/sound-effects-system";
 import { applyPersistentSync } from "../utils/permissions-utils";
 import { refreshMediaMirror, getCurrentMirroredMedia } from "../utils/mirror-utils";
@@ -21,8 +22,7 @@ import { errorTexture } from "../utils/error-texture";
 import { scaleToAspectRatio } from "../utils/scale-to-aspect-ratio";
 import { isSafari } from "../utils/detect-safari";
 import { isIOS as detectIOS } from "../utils/is-mobile";
-
-import qsTruthy from "../utils/qs_truthy";
+import { Layers } from "../camera-layers";
 
 const ONCE_TRUE = { once: true };
 const TYPE_IMG_PNG = { type: "image/png" };
@@ -40,7 +40,7 @@ for (let i = 0; i <= 20; i++) {
   VOLUME_LABELS[i] = s;
 }
 
-function timeFmt(t) {
+export function timeFmt(t) {
   let s = Math.floor(t),
     h = Math.floor(s / 3600);
   s -= h * 3600;
@@ -193,7 +193,8 @@ AFRAME.registerComponent("media-video", {
   ensureOwned() {
     return (
       !this.el.components.networked ||
-      ((this.networkedEl && NAF.utils.isMine(this.networkedEl)) || NAF.utils.takeOwnership(this.networkedEl))
+      (this.networkedEl && NAF.utils.isMine(this.networkedEl)) ||
+      NAF.utils.takeOwnership(this.networkedEl)
     );
   },
 
@@ -213,7 +214,7 @@ AFRAME.registerComponent("media-video", {
 
   changeVolumeBy(v) {
     let gainMultiplier = APP.gainMultipliers.get(this.el);
-    gainMultiplier = THREE.Math.clamp(gainMultiplier + v, 0, MAX_GAIN_MULTIPLIER);
+    gainMultiplier = THREE.MathUtils.clamp(gainMultiplier + v, 0, MAX_GAIN_MULTIPLIER);
     APP.gainMultipliers.set(this.el, gainMultiplier);
     this.updateVolumeLabel();
     const audio = APP.audios.get(this.el);
@@ -358,6 +359,8 @@ AFRAME.registerComponent("media-video", {
     } else {
       this.audio = new THREE.Audio(audioListener);
     }
+    // Default to being quiet so it fades in when volume is set by audio systems
+    this.audio.gain.gain.value = 0;
     this.audioSystem.addAudio({ sourceType: SourceType.MEDIA_VIDEO, node: this.audio });
 
     this.audio.setNodeSource(this.mediaElementAudioSource);
@@ -370,6 +373,8 @@ AFRAME.registerComponent("media-video", {
 
     APP.audios.set(this.el, this.audio);
     updateAudioSettings(this.el, this.audio);
+    // Original audio source volume can now be restored as audio systems will take over
+    this.mediaElementAudioSource.mediaElement.volume = 1;
   },
 
   async updateSrc(oldData) {
@@ -473,6 +478,7 @@ AFRAME.registerComponent("media-video", {
       }
 
       this.mesh = new THREE.Mesh(geometry, material);
+      this.mesh.layers.set(Layers.CAMERA_LAYER_FX_MASK);
       this.el.setObject3D("mesh", this.mesh);
     }
 
@@ -503,6 +509,7 @@ AFRAME.registerComponent("media-video", {
     const contentType = this.data.contentType;
     let pollTimeout;
 
+    /* eslint-disable-next-line no-async-promise-executor*/
     return new Promise(async (resolve, reject) => {
       if (this._audioSyncInterval) {
         clearInterval(this._audioSyncInterval);
@@ -510,7 +517,7 @@ AFRAME.registerComponent("media-video", {
       }
 
       let resolved = false;
-      const failLoad = function(e) {
+      const failLoad = function (e) {
         if (resolved) return;
         resolved = true;
         clearTimeout(pollTimeout);
@@ -529,16 +536,6 @@ AFRAME.registerComponent("media-video", {
         texture = new THREE.VideoTexture(videoEl);
         texture.minFilter = THREE.LinearFilter;
         texture.encoding = THREE.sRGBEncoding;
-
-        // Firefox seems to have video play (or decode) performance issue.
-        // Somehow setting RGBA format improves the performance very well.
-        // Some tickets have been opened for the performance issue but
-        // I don't think it will be fixed soon. So we set RGBA format for Firefox
-        // as workaround so far.
-        // See https://github.com/mozilla/hubs/issues/3470
-        if (/firefox/i.test(navigator.userAgent)) {
-          texture.format = THREE.RGBAFormat;
-        }
 
         isReady = () => {
           if (texture.hls && texture.hls.streamController.audioOnly) {
@@ -580,76 +577,16 @@ AFRAME.registerComponent("media-video", {
         videoEl.srcObject = new MediaStream(stream.getVideoTracks());
         // If hls.js is supported we always use it as it gives us better events
       } else if (contentType.startsWith("application/dash")) {
-        const dashPlayer = MediaPlayer().create();
-        dashPlayer.extend("RequestModifier", function() {
-          return { modifyRequestHeader: xhr => xhr, modifyRequestURL: proxiedUrlFor };
-        });
-        dashPlayer.on(MediaPlayer.events.ERROR, failLoad);
-        dashPlayer.initialize(videoEl, url);
-        dashPlayer.setTextDefaultEnabled(false);
-
-        // TODO this countinously pings to get updated time, unclear if this is actually needed, but this preserves the default behavior
-        dashPlayer.clearDefaultUTCTimingSources();
-        dashPlayer.addUTCTimingSource(
-          "urn:mpeg:dash:utc:http-xsdate:2014",
-          proxiedUrlFor("https://time.akamai.com/?iso")
-        );
-        // We can also use our own HEAD request method like we use to sync NAF
-        // dashPlayer.addUTCTimingSource("urn:mpeg:dash:utc:http-head:2014", location.href);
-
-        texture.dash = dashPlayer;
+        texture.dash = createDashPlayer(url, videoEl, failLoad);
       } else if (AFRAME.utils.material.isHLS(url, contentType)) {
         if (HLS.isSupported()) {
-          const corsProxyPrefix = `https://${configs.CORS_PROXY_SERVER}/`;
-          const baseUrl = url.startsWith(corsProxyPrefix) ? url.substring(corsProxyPrefix.length) : url;
-          const setupHls = () => {
-            if (texture.hls) {
-              texture.hls.stopLoad();
-              texture.hls.detachMedia();
-              texture.hls.destroy();
-              texture.hls = null;
-            }
-
-            const hls = new HLS({
-              debug: qsTruthy("hlsDebug"),
-              xhrSetup: (xhr, u) => {
-                if (u.startsWith(corsProxyPrefix)) {
-                  u = u.substring(corsProxyPrefix.length);
-                }
-
-                // HACK HLS.js resolves relative urls internally, but our CORS proxying screws it up. Resolve relative to the original unproxied url.
-                // TODO extend HLS.js to allow overriding of its internal resolving instead
-                if (!u.startsWith("http")) {
-                  u = buildAbsoluteURL(baseUrl, u.startsWith("/") ? u : `/${u}`);
-                }
-
-                xhr.open("GET", proxiedUrlFor(u), true);
-              }
-            });
-
-            texture.hls = hls;
-            hls.loadSource(url);
-            hls.attachMedia(videoEl);
-
-            hls.on(HLS.Events.ERROR, function(event, data) {
-              if (data.fatal) {
-                switch (data.type) {
-                  case HLS.ErrorTypes.NETWORK_ERROR:
-                    // try to recover network error
-                    hls.startLoad();
-                    break;
-                  case HLS.ErrorTypes.MEDIA_ERROR:
-                    hls.recoverMediaError();
-                    break;
-                  default:
-                    failLoad(event);
-                    return;
-                }
-              }
-            });
-          };
-
-          setupHls();
+          if (texture.hls) {
+            texture.hls.stopLoad();
+            texture.hls.detachMedia();
+            texture.hls.destroy();
+            texture.hls = null;
+          }
+          texture.hls = createHLSPlayer(url, videoEl, failLoad);
         } else if (videoEl.canPlayType(contentType)) {
           videoEl.src = url;
           videoEl.onerror = failLoad;
@@ -732,8 +669,10 @@ AFRAME.registerComponent("media-video", {
     const isPinned = pinnableElement.components.pinnable && pinnableElement.components.pinnable.data.pinned;
     this.playbackControls.object3D.visible = !this.data.hidePlaybackControls && !!this.video;
     this.timeLabel.object3D.visible = !this.data.hidePlaybackControls;
-    this.volumeLabel.object3D.visible = this.volumeUpButton.object3D.visible = this.volumeDownButton.object3D.visible =
-      this.hasAudioTracks && !this.data.hidePlaybackControls && !!this.video;
+    this.volumeLabel.object3D.visible =
+      this.volumeUpButton.object3D.visible =
+      this.volumeDownButton.object3D.visible =
+        this.hasAudioTracks && !this.data.hidePlaybackControls && !!this.video;
 
     this.snapButton.object3D.visible =
       !!this.video && !this.data.contentType.startsWith("audio/") && window.APP.hubChannel.can("spawn_and_move_media");
@@ -742,7 +681,10 @@ AFRAME.registerComponent("media-video", {
     const mayModifyPlayHead =
       !!this.video && !this.videoIsLive && (!isPinned || window.APP.hubChannel.can("pin_objects"));
 
-    this.playPauseButton.object3D.visible = this.seekForwardButton.object3D.visible = this.seekBackButton.object3D.visible = mayModifyPlayHead;
+    this.playPauseButton.object3D.visible =
+      this.seekForwardButton.object3D.visible =
+      this.seekBackButton.object3D.visible =
+        mayModifyPlayHead;
 
     this.linkButton.object3D.visible = !!mediaLoader.mediaOptions.href;
 
@@ -761,7 +703,7 @@ AFRAME.registerComponent("media-video", {
   },
 
   tick: (() => {
-    return function() {
+    return function () {
       if (!this.video) return;
 
       const userinput = this.el.sceneEl.systems.userinput;

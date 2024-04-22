@@ -113,6 +113,11 @@ export const keyboardMouseUserBindings = addSetsToBindings({
       xform: xforms.rising
     },
     {
+      src: { value: paths.device.keyboard.key("b") },
+      dest: { value: paths.actions.toggleRecord },
+      xform: xforms.rising
+    },
+    {
       src: { value: paths.device.keyboard.key("Tab") },
       dest: { value: paths.actions.toggleFreeze },
       xform: xforms.rising
@@ -152,11 +157,6 @@ export const keyboardMouseUserBindings = addSetsToBindings({
       src: { value: paths.device.keyboard.key("c") },
       dest: { value: paths.actions.toggleCamera },
       xform: xforms.rising
-    },
-    {
-      src: { value: paths.device.keyboard.key("x") },
-      dest: { value: paths.actions.takeSnapshot },
-      xform: xforms.copy
     },
     {
       src: { value: paths.device.smartMouse.cursorPose },
@@ -724,6 +724,11 @@ export const keyboardMouseUserBindings = addSetsToBindings({
       dest: { value: paths.actions.startInspecting },
       xform: xforms.any,
       priority: 201
+    },
+    {
+      src: { value: paths.device.keyboard.key("x") },
+      dest: { value: paths.actions.cursor.right.deleteEntity },
+      xform: xforms.rising
     }
   ],
   [sets.rightCursorHoveringOnVideo]: [
@@ -732,6 +737,34 @@ export const keyboardMouseUserBindings = addSetsToBindings({
       dest: { value: paths.actions.cursor.right.mediaVolumeMod },
       xform: xforms.scale(-0.3),
       priority: 1
+    },
+    // TODO These 3 only technically apply to newLoader but making them conditional is tricky
+    // This makes old videos have the grab behavior of newLoader ones, but we can live
+    // with that for now.
+    {
+      src: { value: paths.device.mouse.buttonLeft },
+      dest: { value: k("mousedown") },
+      xform: xforms.rising,
+      priority: 3
+    },
+    {
+      src: { value: paths.device.mouse.buttonLeft },
+      dest: { value: k("mouseup") },
+      xform: xforms.falling,
+      priority: 3
+    },
+    {
+      src: {
+        rising: k("mousedown"),
+        falling: k("mouseup")
+      },
+      dest: {
+        click: paths.actions.cursor.right.togglePlayVideo,
+        grab: paths.actions.cursor.right.grab,
+        drop: paths.actions.cursor.right.drop
+      },
+      xform: xforms.clickAndHold(),
+      priority: 3
     }
   ],
   [sets.inputFocused]: [

@@ -7,6 +7,11 @@ import ducky from "./assets/models/DuckyMesh.glb";
 import { EventTarget } from "event-target-shim";
 import { ExitReason } from "./react-components/room/ExitedRoomScreen";
 import { LogMessageType } from "./react-components/room/ChatSidebar";
+import { createNetworkedEntity } from "./utils/create-networked-entity";
+import { add, testAsset, respawn } from "./utils/chat-commands";
+import { isLockedDownDemoRoom } from "./utils/hub-utils";
+import { loadState, clearState } from "./utils/entity-state-utils";
+import { shouldUseNewLoader } from "./utils/bit-utils";
 
 let uiRoot;
 // Handles user-entered messages
@@ -24,6 +29,16 @@ export default class MessageDispatch extends EventTarget {
   addToPresenceLog(entry) {
     entry.key = Date.now().toString();
 
+    const lastEntry = this.presenceLogEntries.length > 0 && this.presenceLogEntries[this.presenceLogEntries.length - 1];
+    if (lastEntry && entry.type === "permission" && lastEntry.type === "permission") {
+      if (
+        lastEntry.body.permission === entry.body.permission &&
+        parseInt(entry.key) - parseInt(lastEntry.key) < 10000
+      ) {
+        this.presenceLogEntries.pop();
+      }
+    }
+
     this.presenceLogEntries.push(entry);
     this.remountUI({ presenceLogEntries: this.presenceLogEntries });
     if (entry.type === "chat" && this.scene.is("loaded")) {
@@ -38,11 +53,13 @@ export default class MessageDispatch extends EventTarget {
       setTimeout(() => {
         this.presenceLogEntries.splice(this.presenceLogEntries.indexOf(entry), 1);
         this.remountUI({ presenceLogEntries: this.presenceLogEntries });
-      }, 5000);
+      }, 1000);
     }, 20000);
   }
 
   receive(message) {
+    if (isLockedDownDemoRoom()) return;
+
     this.addToPresenceLog(message);
     this.dispatchEvent(new CustomEvent("message", { detail: message }));
   }
@@ -114,7 +131,8 @@ export default class MessageDispatch extends EventTarget {
         this.entryManager.exitScene();
         this.remountUI({ roomUnavailableReason: ExitReason.left });
         break;
-      case "duck":
+
+      case "oldduck":
         spawnChatMessage(getAbsoluteHref(location.href, ducky));
         if (Math.random() < 0.01) {
           this.scene.systems["hubs-systems"].soundEffectsSystem.playSoundOneShot(SOUND_SPECIAL_QUACK);
@@ -122,6 +140,30 @@ export default class MessageDispatch extends EventTarget {
           this.scene.systems["hubs-systems"].soundEffectsSystem.playSoundOneShot(SOUND_QUACK);
         }
         break;
+      case "duck":
+        if (shouldUseNewLoader()) {
+          const avatarPov = document.querySelector("#avatar-pov-node").object3D;
+          const eid = createNetworkedEntity(APP.world, "duck");
+          const obj = APP.world.eid2obj.get(eid);
+          obj.position.copy(avatarPov.localToWorld(new THREE.Vector3(0, 0, -1.5)));
+          obj.lookAt(avatarPov.getWorldPosition(new THREE.Vector3()));
+        } else {
+          spawnChatMessage(getAbsoluteHref(location.href, ducky));
+        }
+        if (Math.random() < 0.01) {
+          this.scene.systems["hubs-systems"].soundEffectsSystem.playSoundOneShot(SOUND_SPECIAL_QUACK);
+        } else {
+          this.scene.systems["hubs-systems"].soundEffectsSystem.playSoundOneShot(SOUND_QUACK);
+        }
+        break;
+      case "cube": {
+        const avatarPov = document.querySelector("#avatar-pov-node").object3D;
+        const eid = createNetworkedEntity(APP.world, "cube");
+        const obj = APP.world.eid2obj.get(eid);
+        obj.position.copy(avatarPov.localToWorld(new THREE.Vector3(0, 0, -1.5)));
+        obj.lookAt(avatarPov.getWorldPosition(new THREE.Vector3()));
+        break;
+      }
       case "debug":
         physicsSystem = document.querySelector("a-scene").systems["hubs-systems"].physicsSystem;
         physicsSystem.setDebug(!physicsSystem.debugEnabled);
@@ -137,7 +179,7 @@ export default class MessageDispatch extends EventTarget {
               this.log(LogMessageType.unauthorizedSceneChange);
             }
           } else {
-            this.log(LogMessageType.inalidSceneUrl);
+            this.log(LogMessageType.invalidSceneUrl);
           }
         } else if (this.hubChannel.canOrWillIfCreator("update_hub")) {
           this.mediaSearchStore.sourceNavigateWithNoNav("scenes", "use");
@@ -190,6 +232,39 @@ export default class MessageDispatch extends EventTarget {
             }
           } else {
             this.log(LogMessageType.invalidAudioNormalizationRange);
+          }
+        }
+        break;
+      case "add":
+        {
+          const avatarPov = document.querySelector("#avatar-pov-node").object3D;
+          add(APP.world, avatarPov, args);
+        }
+        break;
+      case "respawn":
+        {
+          const sceneEl = AFRAME.scenes[0];
+          const characterController = this.scene.systems["hubs-systems"].characterController;
+          respawn(APP.world, sceneEl, characterController);
+        }
+        break;
+      case "test":
+        {
+          const avatarPov = document.querySelector("#avatar-pov-node").object3D;
+          testAsset(APP.world, avatarPov, args);
+        }
+        break;
+      case "load":
+        {
+          if (this.hubChannel.can("pin_objects") && this.hubChannel.signIn) {
+            loadState(this.hubChannel, APP.world, args);
+          }
+        }
+        break;
+      case "clear":
+        {
+          if (this.hubChannel.can("pin_objects") && this.hubChannel.signIn) {
+            clearState(this.hubChannel, APP.world);
           }
         }
         break;

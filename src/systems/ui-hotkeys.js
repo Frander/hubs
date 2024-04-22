@@ -1,5 +1,6 @@
 import { paths } from "./userinput/paths";
 import { SOURCES } from "../storage/media-search-store";
+import { isLockedDownDemoRoom } from "../utils/hub-utils";
 
 const MEDIA_SEARCH_PATHS = [
   paths.actions.mediaSearch1,
@@ -18,17 +19,19 @@ AFRAME.registerSystem("ui-hotkeys", {
     this.mediaSearchStore = window.APP.mediaSearchStore;
   },
 
-  tick: function() {
+  tick: function () {
     if (!this.userinput) {
       this.userinput = this.el.systems.userinput;
     }
 
-    if (this.userinput.get(paths.actions.focusChat)) {
-      window.dispatchEvent(new CustomEvent("focus_chat", { detail: { prefix: "" } }));
-    }
+    if (!isLockedDownDemoRoom()) {
+      if (this.userinput.get(paths.actions.focusChat)) {
+        window.dispatchEvent(new CustomEvent("focus_chat", { detail: { prefix: "" } }));
+      }
 
-    if (this.userinput.get(paths.actions.focusChatCommand)) {
-      window.dispatchEvent(new CustomEvent("focus_chat", { detail: { prefix: "/" } }));
+      if (this.userinput.get(paths.actions.focusChatCommand)) {
+        window.dispatchEvent(new CustomEvent("focus_chat", { detail: { prefix: "/" } }));
+      }
     }
 
     if (this.userinput.get(paths.actions.mediaExit)) {
@@ -61,6 +64,9 @@ AFRAME.registerSystem("ui-hotkeys", {
 
     if (this.userinput.get(paths.actions.toggleUI)) {
       this.el.emit("action_toggle_ui");
+    }
+    if (this.userinput.get(paths.actions.toggleRecord)) {
+      this.el.emit("action_toggle_record");
     }
   }
 });
