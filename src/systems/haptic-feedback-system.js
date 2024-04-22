@@ -40,7 +40,7 @@ function determineStretchStrength(stretchSystem) {
     return 0;
   }
 
-  return THREE.MathUtils.clamp(
+  return THREE.Math.clamp(
     STRENGTH.STRETCH_BASE +
       STRENGTH.STRETCH_DISTANCE *
         Math.abs(

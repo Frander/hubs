@@ -2,9 +2,7 @@ import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { RoomSettingsSidebar } from "./RoomSettingsSidebar";
 import configs from "../../utils/configs";
-import { useInviteUrl } from "./hooks/useInviteUrl";
-
-const NotifiablePermissions = ["text_chat", "voice_chat"];
+import { useInviteUrl } from "./useInviteUrl";
 
 export function RoomSettingsSidebarContainer({ showBackButton, room, hubChannel, onChangeScene, onClose }) {
   const maxRoomSize = configs.feature("max_room_size");
@@ -15,18 +13,6 @@ export function RoomSettingsSidebarContainer({ showBackButton, room, hubChannel,
     settings => {
       hubChannel.updateHub(settings);
       onClose();
-
-      NotifiablePermissions.forEach(perm => {
-        if (APP.hub.member_permissions[perm] !== settings.member_permissions[perm]) {
-          hubChannel.sendMessage(
-            {
-              permission: perm,
-              status: settings.member_permissions[perm]
-            },
-            "permission"
-          );
-        }
-      });
     },
     [hubChannel, onClose]
   );

@@ -1,7 +1,6 @@
 import { computeObjectAABB, getBox, getScaleCoefficient } from "../utils/auto-box-collider";
 import {
   resolveUrl,
-  fetchContentType,
   getDefaultResolveQuality,
   injectCustomShaderChunks,
   addMeshScaleAnimation,
@@ -13,11 +12,7 @@ import {
   proxiedUrlFor,
   isHubsRoomUrl,
   isLocalHubsSceneUrl,
-  isLocalHubsAvatarUrl,
-  isHubsDestinationUrl,
-  isHubsAvatarUrl,
-  hubsRoomRegex,
-  localHubsRoomRegex
+  isLocalHubsAvatarUrl
 } from "../utils/media-url-utils";
 import { addAnimationComponents } from "../utils/animation";
 
@@ -28,8 +23,6 @@ import { cloneObject3D, setMatrixWorld } from "../utils/three-utils";
 import { waitForDOMContentLoaded } from "../utils/async-utils";
 
 import { SHAPE } from "three-ammo/constants";
-import { addComponent } from "bitecs";
-import { MediaContentBounds } from "../bit-components";
 
 let loadingObject;
 
@@ -38,6 +31,10 @@ waitForDOMContentLoaded().then(() => {
     loadingObject = gltf;
   });
 });
+
+const fetchContentType = url => {
+  return fetch(url, { method: "HEAD" }).then(r => r.headers.get("content-type"));
+};
 
 AFRAME.registerComponent("media-loader", {
   schema: {
@@ -81,7 +78,7 @@ AFRAME.registerComponent("media-loader", {
     }
   },
 
-  updateScale: (function () {
+  updateScale: (function() {
     const center = new THREE.Vector3();
     const originalMeshMatrix = new THREE.Matrix4();
     const desiredObjectMatrix = new THREE.Matrix4();
@@ -89,7 +86,7 @@ AFRAME.registerComponent("media-loader", {
     const quaternion = new THREE.Quaternion();
     const scale = new THREE.Vector3();
     const box = new THREE.Box3();
-    return function (fitToBox, moveTheParentNotTheMesh) {
+    return function(fitToBox, moveTheParentNotTheMesh) {
       this.el.object3D.updateMatrices();
       const mesh = this.el.getObject3D("mesh");
       mesh.updateMatrices();
@@ -105,13 +102,17 @@ AFRAME.registerComponent("media-loader", {
         computeObjectAABB(mesh, box);
         center.addVectors(box.min, box.max).multiplyScalar(0.5);
         this.el.object3D.matrixWorld.decompose(position, quaternion, scale);
-        desiredObjectMatrix.compose(center, quaternion, scale);
+        desiredObjectMatrix.compose(
+          center,
+          quaternion,
+          scale
+        );
         setMatrixWorld(this.el.object3D, desiredObjectMatrix);
         mesh.updateMatrices();
         setMatrixWorld(mesh, originalMeshMatrix);
       } else {
         // Move the mesh such that the center of its bounding box is in the same position as the parent matrix position
-        const box = getBox(this.el.object3D, mesh);
+        const box = getBox(this.el, mesh);
         const scaleCoefficient = fitToBox ? getScaleCoefficient(0.5, box) : 1;
         const { min, max } = box;
         center.addVectors(min, max).multiplyScalar(0.5 * scaleCoefficient);
@@ -234,10 +235,10 @@ AFRAME.registerComponent("media-loader", {
     this.removeShape("loader");
   },
 
-  updateHoverableVisuals: (function () {
+  updateHoverableVisuals: (function() {
     const boundingBox = new THREE.Box3();
     const boundingSphere = new THREE.Sphere();
-    return function () {
+    return function() {
       const hoverableVisuals = this.el.components["hoverable-visuals"];
 
       if (hoverableVisuals) {
@@ -281,11 +282,6 @@ AFRAME.registerComponent("media-loader", {
         this.el.sceneEl.systems["linked-media"].registerLinkage(this.data.linkedEl, this.el);
         this.data.linkedEl.addEventListener("componentremoved", this.handleLinkedElRemoved);
       }
-
-      // TODO this does duplicate work in some cases, but finish() is the only consistent place to do it
-      const contentBounds = getBox(this.el.object3D, this.el.getObject3D("mesh")).getSize(new THREE.Vector3());
-      addComponent(APP.world, MediaContentBounds, el.eid);
-      MediaContentBounds.bounds[el.eid].set(contentBounds.toArray());
 
       el.emit("media-loaded");
     };
@@ -363,14 +359,10 @@ AFRAME.registerComponent("media-loader", {
 
       // We want to resolve and proxy some hubs urls, like rooms and scene links,
       // but want to avoid proxying assets in order for this to work in dev environments
-      const isLocalAsset =
-        isNonCorsProxyDomain(parsedUrl.hostname) &&
-        !(await isHubsDestinationUrl(src)) &&
-        !(await isHubsAvatarUrl(src)) &&
-        !src.match(hubsRoomRegex)?.groups.id &&
-        !src.match(localHubsRoomRegex)?.groups.id;
+      const isLocalModelAsset =
+        isNonCorsProxyDomain(parsedUrl.hostname) && (guessContentType(src) || "").startsWith("model/gltf");
 
-      if (this.data.resolve && !src.startsWith("data:") && !src.startsWith("hubs:") && !isLocalAsset) {
+      if (this.data.resolve && !src.startsWith("data:") && !src.startsWith("hubs:") && !isLocalModelAsset) {
         const is360 = !!(this.data.mediaOptions.projection && this.data.mediaOptions.projection.startsWith("360"));
         const quality = getDefaultResolveQuality(is360);
         const result = await resolveUrl(src, quality, version, forceLocalRefresh);
@@ -548,7 +540,7 @@ AFRAME.registerComponent("media-loader", {
           { once: true }
         );
         this.el.addEventListener("model-error", this.onError, { once: true });
-        if (Object.prototype.hasOwnProperty.call(this.data.mediaOptions, "applyGravity")) {
+        if (this.data.mediaOptions.hasOwnProperty("applyGravity")) {
           this.el.setAttribute("floaty-object", {
             modifyGravityOnRelease: !this.data.mediaOptions.applyGravity
           });
@@ -662,7 +654,9 @@ AFRAME.registerComponent("media-pager", {
       })
       .catch(() => {}); //ignore exception, entity might not be networked
 
-    this.el.addEventListener("pdf-loaded", this.update);
+    this.el.addEventListener("pdf-loaded", async () => {
+      this.update();
+    });
   },
 
   async update(oldData) {
@@ -708,12 +702,6 @@ AFRAME.registerComponent("media-pager", {
       this.networkedEl.removeEventListener("unpinned", this.update);
     }
 
-    this.nextButton.object3D.removeEventListener("interact", this.onNext);
-    this.prevButton.object3D.removeEventListener("interact", this.onPrev);
-    this.snapButton.object3D.removeEventListener("interact", this.onSnap);
-
     window.APP.hubChannel.removeEventListener("permissions_updated", this.update);
-
-    this.el.removeEventListener("pdf-loaded", this.update);
   }
 });

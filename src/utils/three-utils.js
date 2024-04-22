@@ -1,6 +1,3 @@
-import { hasComponent, removeEntity } from "bitecs";
-import { forEachMaterial } from "./material-utils";
-
 const tempVector3 = new THREE.Vector3();
 const tempQuaternion = new THREE.Quaternion();
 
@@ -29,14 +26,7 @@ export function disposeMaterial(mtrl) {
   if (mtrl.normalMap) mtrl.normalMap.dispose();
   if (mtrl.specularMap) mtrl.specularMap.dispose();
   if (mtrl.envMap) mtrl.envMap.dispose();
-  if (mtrl.aoMap) mtrl.aoMap.dispose();
-  if (mtrl.metalnessMap) mtrl.metalnessMap.dispose();
-  if (mtrl.roughnessMap) mtrl.roughnessMap.dispose();
-  if (mtrl.emissiveMap) mtrl.emissiveMap.dispose();
   mtrl.dispose();
-  if (mtrl.eid) {
-    removeEntity(APP.world, mtrl.eid);
-  }
 }
 
 export function disposeNode(node) {
@@ -46,7 +36,19 @@ export function disposeNode(node) {
     node.geometry.dispose();
   }
 
-  forEachMaterial(node.material, disposeMaterial);
+  if (node.material) {
+    let materialArray;
+    if (node.material instanceof THREE.MeshFaceMaterial || node.material instanceof THREE.MultiMaterial) {
+      materialArray = node.material.materials;
+    } else if (node.material instanceof Array) {
+      materialArray = node.material;
+    }
+    if (materialArray) {
+      materialArray.forEach(disposeMaterial);
+    } else {
+      disposeMaterial(node.material);
+    }
+  }
 }
 
 const IDENTITY = new THREE.Matrix4().identity();
@@ -60,9 +62,12 @@ export function setMatrixWorld(object3D, m) {
   object3D.matrixWorld.copy(m);
   if (object3D.parent) {
     object3D.parent.updateMatrices();
-    object3D.matrix.copy(object3D.parent.matrixWorld).invert().multiply(m);
+    object3D.matrix = object3D.matrix
+      .copy(object3D.parent.matrixWorld)
+      .invert()
+      .multiply(object3D.matrixWorld);
   } else {
-    object3D.matrix.copy(m);
+    object3D.matrix.copy(object3D.matrixWorld);
   }
   object3D.matrix.decompose(object3D.position, object3D.quaternion, object3D.scale);
   if (tempMatrix4.near(object3D.matrixWorld, EPSILON)) {
@@ -89,13 +94,9 @@ function parallelTraverse(a, b, callback) {
 // uuid.objectName[objectIndex].propertyName[propertyIndex]
 // Does not support property bindings that use object3D names or parent nodes
 function cloneKeyframeTrack(sourceKeyframeTrack, cloneUUIDLookup) {
-  const {
-    nodeName: uuid,
-    objectName,
-    objectIndex,
-    propertyName,
-    propertyIndex
-  } = THREE.PropertyBinding.parseTrackName(sourceKeyframeTrack.name);
+  const { nodeName: uuid, objectName, objectIndex, propertyName, propertyIndex } = THREE.PropertyBinding.parseTrackName(
+    sourceKeyframeTrack.name
+  );
 
   let path = "";
 
@@ -146,10 +147,6 @@ export function cloneObject3D(source, preserveUUIDs) {
 
   parallelTraverse(source, clone, (sourceNode, clonedNode) => {
     cloneLookup.set(sourceNode, clonedNode);
-
-    if (sourceNode.userData.gltfExtensions?.MOZ_hubs_components) {
-      clonedNode.userData.gltfExtensions.MOZ_hubs_components = sourceNode.userData.gltfExtensions.MOZ_hubs_components;
-    }
   });
 
   source.traverse(sourceNode => {
@@ -168,8 +165,6 @@ export function cloneObject3D(source, preserveUUIDs) {
     if (!clonedNode) {
       return;
     }
-
-    clonedNode.onBeforeRender = sourceNode.onBeforeRender;
 
     if (sourceNode.animations) {
       clonedNode.animations = sourceNode.animations.map(animationClip =>
@@ -215,7 +210,7 @@ export function findNode(root, pred) {
   return null;
 }
 
-export const interpolateAffine = (function () {
+export const interpolateAffine = (function() {
   const mat4 = new THREE.Matrix4();
   const end = {
     position: new THREE.Vector3(),
@@ -232,7 +227,7 @@ export const interpolateAffine = (function () {
     quaternion: new THREE.Quaternion(),
     scale: new THREE.Vector3()
   };
-  return function (startMat4, endMat4, progress, outMat4) {
+  return function(startMat4, endMat4, progress, outMat4) {
     start.quaternion.setFromRotationMatrix(mat4.extractRotation(startMat4));
     end.quaternion.setFromRotationMatrix(mat4.extractRotation(endMat4));
     interpolated.quaternion.slerpQuaternions(start.quaternion, end.quaternion, progress);
@@ -246,14 +241,18 @@ export const interpolateAffine = (function () {
       end.scale.setFromMatrixScale(endMat4),
       progress
     );
-    return outMat4.compose(interpolated.position, interpolated.quaternion, interpolated.scale);
+    return outMat4.compose(
+      interpolated.position,
+      interpolated.quaternion,
+      interpolated.scale
+    );
   };
 })();
 
-export const squareDistanceBetween = (function () {
+export const squareDistanceBetween = (function() {
   const posA = new THREE.Vector3();
   const posB = new THREE.Vector3();
-  return function (objA, objB) {
+  return function(objA, objB) {
     objA.updateMatrices();
     objB.updateMatrices();
     posA.setFromMatrixColumn(objA.matrixWorld, 3);
@@ -269,7 +268,7 @@ export function almostEqual(a, b, epsilon = 0.01) {
   return Math.abs(a - b) < epsilon;
 }
 
-export const affixToWorldUp = (function () {
+export const affixToWorldUp = (function() {
   const inRotationMat4 = new THREE.Matrix4();
   const inForward = new THREE.Vector3();
   const outForward = new THREE.Vector3();
@@ -292,23 +291,26 @@ export const affixToWorldUp = (function () {
   };
 })();
 
-export const calculateCameraTransformForWaypoint = (function () {
+export const calculateCameraTransformForWaypoint = (function() {
   const upAffixedCameraTransform = new THREE.Matrix4();
   const upAffixedWaypointTransform = new THREE.Matrix4();
   const detachFromWorldUp = new THREE.Matrix4();
   return function calculateCameraTransformForWaypoint(cameraTransform, waypointTransform, outMat4) {
     affixToWorldUp(cameraTransform, upAffixedCameraTransform);
-    detachFromWorldUp.copy(upAffixedCameraTransform).invert().multiply(cameraTransform);
+    detachFromWorldUp
+      .copy(upAffixedCameraTransform)
+      .invert()
+      .multiply(cameraTransform);
     affixToWorldUp(waypointTransform, upAffixedWaypointTransform);
     outMat4.copy(upAffixedWaypointTransform).multiply(detachFromWorldUp);
   };
 })();
 
-export const calculateViewingDistance = (function () {
+export const calculateViewingDistance = (function() {
   return function calculateViewingDistance(fov, aspect, box, center, vrMode) {
     const halfYExtents = Math.max(Math.abs(box.max.y - center.y), Math.abs(center.y - box.min.y));
     const halfXExtents = Math.max(Math.abs(box.max.x - center.x), Math.abs(center.x - box.min.x));
-    const halfVertFOV = THREE.MathUtils.degToRad(fov / 2);
+    const halfVertFOV = THREE.Math.degToRad(fov / 2);
     const halfHorFOV = Math.atan(Math.tan(halfVertFOV) * aspect) * (vrMode ? 0.5 : 1);
     const margin = 1.05;
     const length1 = Math.abs((halfYExtents * margin) / Math.tan(halfVertFOV));
@@ -319,7 +321,7 @@ export const calculateViewingDistance = (function () {
   };
 })();
 
-export const rotateInPlaceAroundWorldUp = (function () {
+export const rotateInPlaceAroundWorldUp = (function() {
   const inMat4Copy = new THREE.Matrix4();
   const startRotation = new THREE.Matrix4();
   const endRotation = new THREE.Matrix4();
@@ -333,7 +335,7 @@ export const rotateInPlaceAroundWorldUp = (function () {
   };
 })();
 
-export const childMatch = (function () {
+export const childMatch = (function() {
   const inverseParentWorld = new THREE.Matrix4();
   const childRelativeToParent = new THREE.Matrix4();
   const childInverse = new THREE.Matrix4();
@@ -364,11 +366,7 @@ export function createPlaneBufferGeometry(width, height, widthSegments, heightSe
   return geometry;
 }
 
-import { Layers } from "../camera-layers";
-import { Box3, DoubleSide, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
-import { TEXTURES_FLIP_Y } from "../loaders/HubsTextureLoader";
-import { MediaVideo } from "../bit-components";
-import { Text } from "troika-three-text";
+import { Layers } from "../components/layers";
 
 // This code is from three-vrm. We will likely be using that in the future and this inlined code can go away
 function excludeTriangles(triangles, bws, skinIndex, exclude) {
@@ -470,147 +468,3 @@ export function createHeadlessModelForSkinnedMesh(mesh) {
 
   return createErasedMesh(mesh, eraseBoneIndexes);
 }
-
-export const isFacingCamera = (function () {
-  const objWorldDir = new THREE.Vector3();
-  const objWorld = new THREE.Vector3();
-  const camWorld = new THREE.Vector3();
-  return function isFacingCamera(obj) {
-    const playerCamera = AFRAME.scenes[0].systems["hubs-systems"].cameraSystem.viewingCamera;
-    playerCamera.getWorldPosition(camWorld);
-    obj.getWorldPosition(objWorld);
-    obj.getWorldDirection(objWorldDir);
-    return objWorldDir.dot(objWorld.sub(camWorld)) < 0;
-  };
-})();
-
-export function findAncestor(obj, predicate) {
-  let ancestor = obj;
-  while (ancestor) {
-    if (predicate(ancestor)) return ancestor;
-    ancestor = ancestor.parent;
-  }
-  return null;
-}
-
-export function findAncestors(obj, predicate) {
-  const ancestors = [];
-  let ancestor = obj;
-  while (ancestor) {
-    if (predicate(ancestor)) ancestors.push(ancestor);
-    ancestor = ancestor.parent;
-  }
-  return ancestors;
-}
-
-export function traverseSome(obj, fn) {
-  const shouldContinue = fn(obj);
-  if (shouldContinue) {
-    for (let i = 0; i < obj.children.length; i++) {
-      traverseSome(obj.children[i], fn);
-    }
-  }
-}
-
-const expandByObject = (function () {
-  const _box = new Box3();
-  const _vector = new Vector3();
-  return function expandByObject(box, object, onlyVisible = true, precise = false) {
-    // Computes the world-axis-aligned bounding box of an object (including its children),
-    // accounting for both the object's, and children's, world transforms
-
-    object.updateWorldMatrix(false, false);
-
-    if (object.boundingBox !== undefined) {
-      if (object.boundingBox === null) {
-        object.computeBoundingBox();
-      }
-
-      _box.copy(object.boundingBox);
-      _box.applyMatrix4(object.matrixWorld);
-
-      box.union(_box);
-    } else {
-      const geometry = object.geometry;
-
-      if (geometry !== undefined) {
-        if (precise && geometry.attributes !== undefined && geometry.attributes.position !== undefined) {
-          const position = geometry.attributes.position;
-          for (let i = 0, l = position.count; i < l; i++) {
-            _vector.fromBufferAttribute(position, i).applyMatrix4(object.matrixWorld);
-            box.expandByPoint(_vector);
-          }
-        } else {
-          if (geometry.boundingBox === null) {
-            geometry.computeBoundingBox();
-          }
-
-          _box.copy(geometry.boundingBox);
-          _box.applyMatrix4(object.matrixWorld);
-
-          box.union(_box);
-        }
-      }
-    }
-
-    const children = object.children;
-
-    for (let i = 0, l = children.length; i < l; i++) {
-      if (onlyVisible && !children[i].visible) {
-        continue;
-      } else {
-        expandByObject(box, children[i], onlyVisible, precise);
-      }
-    }
-  };
-})();
-
-export function setFromObject(box, object, onlyVisible = true, precise = false) {
-  box.makeEmpty();
-  expandByObject(box, object, onlyVisible, precise);
-}
-
-const videoGeometry = createPlaneBufferGeometry(1, 1, 1, 1, TEXTURES_FLIP_Y);
-const previewMaterial = new MeshBasicMaterial();
-previewMaterial.side = DoubleSide;
-previewMaterial.transparent = true;
-previewMaterial.opacity = 0.5;
-THREE.Object3D.prototype._clone = THREE.Object3D.prototype.clone;
-THREE.Object3D.prototype.clone = (function () {
-  return function clone() {
-    if (this.type === "Audio") {
-      console.log("Audio clone not supported");
-      return new Object3D();
-    } else if (hasComponent(APP.world, MediaVideo, this.eid)) {
-      const videoMesh = new Mesh(videoGeometry, previewMaterial);
-      videoMesh.material.map = this.material.map;
-      videoMesh.material.needsUpdate = true;
-      // Preview mesh UVs are set to accommodate textureLoader default, but video textures don't match this
-      const aspectRatio = MediaVideo.ratio[this.eid];
-      videoMesh.scale.setY(TEXTURES_FLIP_Y !== videoMesh.material.map.flipY ? -aspectRatio : aspectRatio);
-      videoMesh.matrixNeedsUpdate = true;
-
-      for (let i = 0; i < this.children.length; i++) {
-        const child = this.children[i];
-        videoMesh.add(child.clone());
-      }
-
-      return videoMesh;
-    } else if (this.type === "Group") {
-      const group = new Group().copy(this, false);
-      for (let i = 0; i < this.children.length; i++) {
-        const child = this.children[i];
-        // Troika text material crashes when cloning: https://github.com/protectwise/troika/issues/248
-        // Ignoring for now...
-        if (child instanceof Text) {
-          group.add(new Object3D());
-        } else {
-          group.add(child.clone());
-        }
-      }
-      return group;
-    } else {
-      return this._clone();
-    }
-  };
-})();

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import styles from "./InputField.scss";
 
-/* eslint-disable-next-line react/display-name */
 export const InputField = memo(
   ({ id, htmlFor, label, error, description, className, fullWidth, children, ...rest }) => {
     return (
@@ -18,16 +17,15 @@ export const InputField = memo(
           <small className={styles.error}>{error}</small>
         ) : description ? (
           <small className={styles.info}>{description}</small>
-        ) : undefined}
+        ) : (
+          undefined
+        )}
       </div>
     );
   }
 );
 
 InputField.propTypes = {
-  id: PropTypes.string,
-  htmlFor: PropTypes.string,
-  label: PropTypes.node,
   className: PropTypes.string,
   children: PropTypes.node,
   error: PropTypes.node,

@@ -1,3 +1,5 @@
+/* global AFRAME */
+
 /**
  * Toggle visibility of an entity based on if the user is in vr mode or not
  * @namespace vr-mode

@@ -1,5 +1,3 @@
-import { addComponent } from "bitecs";
-import { AudioSettingsChanged } from "./bit-components";
 import {
   AudioType,
   SourceType,
@@ -17,7 +15,7 @@ const defaultSettingsForSourceType = Object.freeze(
   ])
 );
 
-export function applySettings(audio, settings) {
+function applySettings(audio, settings) {
   if (audio.panner) {
     audio.setDistanceModel(settings.distanceModel);
     audio.setRolloffFactor(settings.rolloffFactor);
@@ -52,7 +50,6 @@ export function getCurrentAudioSettings(el) {
   const preferencesOverrides = {};
 
   const overriddenPanningModelType = getOverriddenPanningModelType();
-  const isNonModeratorAvatarAudio = sourceType === SourceType.AVATAR_AUDIO_SOURCE && !APP.moderatorAudioSource.has(el);
 
   if (overriddenPanningModelType !== null) {
     preferencesOverrides.panningModel = overriddenPanningModelType;
@@ -72,12 +69,7 @@ export function getCurrentAudioSettings(el) {
     preferencesOverrides
   );
 
-  if (
-    APP.clippingState.has(el) ||
-    APP.mutedState.has(el) ||
-    APP.linkedMutedState.has(el) ||
-    (isNonModeratorAvatarAudio && !APP.hub.member_permissions?.voice_chat)
-  ) {
+  if (APP.clippingState.has(el) || APP.mutedState.has(el)) {
     settings.gain = 0;
   } else if (APP.gainMultipliers.has(el)) {
     settings.gain = settings.gain * APP.gainMultipliers.get(el);
@@ -97,24 +89,18 @@ export function getCurrentAudioSettingsForSourceType(sourceType) {
   return Object.assign({}, defaults, sceneOverrides, audioDebugPanelOverrides);
 }
 
-// Follow these rules and you'll have a good time:
-// - If a THREE.Audio or THREE.PositionalAudio is created, call this function.
-// - If audio settings change, call this function.
-export function updateAudioSettings(elOrEid, audio) {
-  if (!elOrEid.isEntity) {
-    const eid = elOrEid;
-    addComponent(APP.world, AudioSettingsChanged, eid);
-  } else {
-    const el = elOrEid;
-    const settings = getCurrentAudioSettings(el);
-    if (
-      (audio.panner === undefined && settings.audioType === AudioType.PannerNode) ||
-      (audio.panner !== undefined && settings.audioType === AudioType.Stereo)
-    ) {
-      el.emit("audio_type_changed");
-    }
-    applySettings(audio, settings);
+export function updateAudioSettings(el, audio) {
+  // Follow these rules and you'll have a good time:
+  // - If a THREE.Audio or THREE.PositionalAudio is created, call this function.
+  // - If audio settings change, call this function.
+  const settings = getCurrentAudioSettings(el);
+  if (
+    (audio.panner === undefined && settings.audioType === AudioType.PannerNode) ||
+    (audio.panner !== undefined && settings.audioType === AudioType.Stereo)
+  ) {
+    el.emit("audio_type_changed");
   }
+  applySettings(audio, settings);
 }
 
 export function shouldAddSupplementaryAttenuation(el, audio) {

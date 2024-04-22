@@ -5,12 +5,7 @@ import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as ShareIcon } from "../icons/Share.svg";
 import { defineMessage, useIntl } from "react-intl";
-import { ToolTip } from "@mozilla/lilypad-ui";
-
-const shareTooltipDescription = defineMessage({
-  id: "share-tooltip.description",
-  defaultMessage: "Display your screen or webcam as an object in the room"
-});
+import  ShareIconBtn from "../../assets/newSkin/shareBtn.svg";
 
 const sharePopoverTitle = defineMessage({
   id: "share-popover.title",
@@ -20,7 +15,6 @@ const sharePopoverTitle = defineMessage({
 export function SharePopoverButton({ items }) {
   const intl = useIntl();
   const title = intl.formatMessage(sharePopoverTitle);
-  const description = intl.formatMessage(shareTooltipDescription);
 
   const filteredItems = items.filter(item => !!item);
 
@@ -59,16 +53,15 @@ export function SharePopoverButton({ items }) {
       disableFullscreen
     >
       {({ togglePopover, popoverVisible, triggerRef }) => (
-        <ToolTip description={description}>
-          <ToolbarButton
-            ref={triggerRef}
-            icon={<ShareIcon />}
-            selected={popoverVisible}
-            onClick={togglePopover}
-            label={title}
-            preset="accent5"
-          />
-        </ToolTip>
+        <ToolbarButton
+          ref={triggerRef}
+          // icon={<ShareIcon />}
+          icon={<img src={ShareIconBtn} width="100%"/>}
+          selected={popoverVisible}
+          onClick={togglePopover}
+          // label={title}
+          preset="accent5"
+        />
       )}
     </Popover>
   );

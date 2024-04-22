@@ -1,6 +1,5 @@
 import { SourceType, AudioType } from "./audio-params";
 import { getCurrentAudioSettings, updateAudioSettings } from "../update-audio-settings";
-import { isRoomOwner } from "../utils/hub-utils";
 const INFO_INIT_FAILED = "Failed to initialize avatar-audio-source.";
 const INFO_NO_NETWORKED_EL = "Could not find networked el.";
 const INFO_NO_OWNER = "Networked component has no owner.";
@@ -28,7 +27,7 @@ async function getOwnerId(el) {
   return networkedEl.components.networked.data.owner;
 }
 
-export async function getMediaStream(el) {
+async function getMediaStream(el) {
   const peerId = await getOwnerId(el);
   if (!peerId) {
     console.error(INFO_INIT_FAILED, INFO_NO_OWNER);
@@ -44,7 +43,7 @@ export async function getMediaStream(el) {
 }
 
 AFRAME.registerComponent("avatar-audio-source", {
-  createAudio: async function () {
+  createAudio: async function() {
     this.removeAudio();
 
     this.isCreatingAudio = true;
@@ -62,9 +61,6 @@ AFRAME.registerComponent("avatar-audio-source", {
     } else {
       audio = new THREE.Audio(audioListener);
     }
-    // Default to being quiet so it fades in when volume is set by audio systems
-    audio.gain.gain.value = 0;
-
     this.audioSystem.addAudio({ sourceType: SourceType.AVATAR_AUDIO_SOURCE, node: audio });
 
     if (SHOULD_CREATE_SILENT_AUDIO_ELS) {
@@ -79,15 +75,8 @@ AFRAME.registerComponent("avatar-audio-source", {
     this.el.setObject3D(this.attrName, audio);
     this.el.emit("sound-source-set", { soundSource: destinationSource });
 
-    getOwnerId(this.el).then(async ownerId => {
-      if (isRoomOwner(ownerId)) {
-        APP.moderatorAudioSource.add(this.el);
-      } else {
-        APP.moderatorAudioSource.delete(this.el);
-      }
-      APP.audios.set(this.el, audio);
-      updateAudioSettings(this.el, audio);
-    });
+    APP.audios.set(this.el, audio);
+    updateAudioSettings(this.el, audio);
   },
 
   removeAudio() {
@@ -100,7 +89,6 @@ AFRAME.registerComponent("avatar-audio-source", {
 
   init() {
     this.createAudio = this.createAudio.bind(this);
-    this.onPermissionsUpdated = this.onPermissionsUpdated.bind(this);
 
     this.audioSystem = this.el.sceneEl.systems["hubs-systems"].audioSystem;
     // We subscribe to audio stream notifications for this peer to update the audio source
@@ -130,19 +118,6 @@ AFRAME.registerComponent("avatar-audio-source", {
     };
     APP.store.addEventListener("statechanged", this.onPreferenceChanged);
     this.el.addEventListener("audio_type_changed", this.createAudio);
-    APP.hubChannel.addEventListener("permissions_updated", this.onPermissionsUpdated);
-  },
-
-  onPermissionsUpdated() {
-    getOwnerId(this.el).then(async ownerId => {
-      if (isRoomOwner(ownerId)) {
-        APP.moderatorAudioSource.add(this.el);
-      } else {
-        APP.moderatorAudioSource.delete(this.el);
-      }
-      const audio = APP.audios.get(this.el);
-      audio && updateAudioSettings(this.el, audio);
-    });
   },
 
   async _onStreamUpdated(peerId, kind) {
@@ -167,9 +142,8 @@ AFRAME.registerComponent("avatar-audio-source", {
     });
   },
 
-  remove: function () {
+  remove: function() {
     APP.dialog.off("stream_updated", this._onStreamUpdated);
-    APP.hubChannel.removeEventListener("permissions_updated", this.onPermissionsUpdated);
 
     window.APP.store.removeEventListener("statechanged", this.onPreferenceChanged);
     this.el.removeEventListener("audio_type_changed", this.createAudio);
@@ -268,8 +242,6 @@ AFRAME.registerComponent("zone-audio-source", {
         const avatar = playerInfo.el;
 
         if (this.data.onlyMods && !playerInfo.can("amplify_audio")) continue;
-        // don't use avatar-rig if not entering scene yet.
-        if (avatar.id === "avatar-rig" && !this.el.sceneEl.is("entered")) continue;
 
         const distanceSquared = avatar.object3D.position.distanceToSquared(tmpWorldPos);
         if (distanceSquared < this.boundingRadiusSquared) {
@@ -320,7 +292,7 @@ AFRAME.registerComponent("audio-target", {
     this.el.addEventListener("audio_type_changed", this.createAudio);
   },
 
-  remove: function () {
+  remove: function() {
     APP.supplementaryAttenuation.delete(this.el);
     APP.audios.delete(this.el);
     APP.sourceType.delete(this.el);
@@ -331,7 +303,7 @@ AFRAME.registerComponent("audio-target", {
     this.el.removeEventListener("audio_type_changed", this.createAudio);
   },
 
-  createAudio: function () {
+  createAudio: function() {
     this.removeAudio();
 
     APP.sourceType.set(this.el, SourceType.AUDIO_TARGET);
@@ -347,7 +319,7 @@ AFRAME.registerComponent("audio-target", {
 
     if (this.data.maxDelay > 0) {
       const delayNode = audio.context.createDelay(this.data.maxDelay);
-      delayNode.delayTime.value = THREE.MathUtils.randFloat(this.data.minDelay, this.data.maxDelay);
+      delayNode.delayTime.value = THREE.Math.randFloat(this.data.minDelay, this.data.maxDelay);
       audio.setFilters([delayNode]);
     }
 

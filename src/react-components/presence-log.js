@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styles from "../assets/stylesheets/presence-log.scss";
 import classNames from "classnames";
+import { injectIntl } from "react-intl";
 import { formatSystemMessage } from "./room/ChatSidebar";
 
 import ChatMessage from "./chat-message";
@@ -9,20 +10,23 @@ import PhotoMessage from "./photo-message";
 import VideoMessage from "./video-message";
 import ImageMessage from "./image-message";
 import { getPresenceContextForSession } from "../utils/phoenix-utils";
-import { useIntl } from "react-intl";
-import PermissionMessage from "./permission-message";
-import { useRole } from "./room/hooks/useRole";
 
-export const presets = ["InRoom", "Notifications"];
+class PresenceLog extends Component {
+  static propTypes = {
+    entries: PropTypes.array,
+    inRoom: PropTypes.bool,
+    hubId: PropTypes.string,
+    history: PropTypes.object,
+    presences: PropTypes.object,
+    onViewProfile: PropTypes.func,
+    intl: PropTypes.object
+  };
 
-export function PresenceLog({ entries, preset, hubId, history, presences, onViewProfile, include, exclude, ...rest }) {
-  const intl = useIntl();
-  const isMod = useRole("owner");
+  constructor(props) {
+    super(props);
+  }
 
-  const domForEntry = e => {
-    if (include && !include.includes(e.type)) return;
-    if (exclude && exclude.includes(e.type)) return;
-
+  domForEntry = e => {
     const entryClasses = {
       [styles.presenceLogEntry]: true,
       [styles.presenceLogEntryWithButton]: (e.type === "chat" || e.type === "image") && e.maySpawn,
@@ -30,7 +34,7 @@ export function PresenceLog({ entries, preset, hubId, history, presences, onView
       [styles.expired]: !!e.expired
     };
 
-    const presenceContext = e.sessionId ? getPresenceContextForSession(presences, e.sessionId) : {};
+    const presenceContext = e.sessionId ? getPresenceContextForSession(this.props.presences, e.sessionId) : {};
     const isBot = !!presenceContext.discord;
 
     switch (e.type) {
@@ -43,9 +47,9 @@ export function PresenceLog({ entries, preset, hubId, history, presences, onView
             body={e.body}
             maySpawn={e.maySpawn}
             sessionId={e.sessionId}
-            includeFromLink={preset === "inRoom" && !isBot}
-            history={history}
-            onViewProfile={onViewProfile}
+            includeFromLink={this.props.inRoom && !isBot}
+            history={this.props.history}
+            onViewProfile={this.props.onViewProfile}
           />
         );
       case "image":
@@ -66,7 +70,7 @@ export function PresenceLog({ entries, preset, hubId, history, presences, onView
             className={classNames(entryClasses, styles.media)}
             body={e.body}
             maySpawn={e.maySpawn}
-            hubId={hubId}
+            hubId={this.props.hubId}
           />
         );
       case "video":
@@ -77,23 +81,11 @@ export function PresenceLog({ entries, preset, hubId, history, presences, onView
             className={classNames(entryClasses, styles.media)}
             body={e.body}
             maySpawn={e.maySpawn}
-            hubId={hubId}
+            hubId={this.props.hubId}
           />
         );
-      case "permission":
-        return (
-          (!isMod || e.sessionId !== NAF.clientId) && (
-            <PermissionMessage
-              key={e.key}
-              permission={e.body.permission}
-              className={classNames(entryClasses, styles.permission)}
-              body={e.body}
-              isMod={isMod && e.sessionId === NAF.clientId}
-            />
-          )
-        );
       default: {
-        const systemMessage = formatSystemMessage(e, intl);
+        const systemMessage = formatSystemMessage(e, this.props.intl);
 
         return (
           systemMessage && (
@@ -106,22 +98,14 @@ export function PresenceLog({ entries, preset, hubId, history, presences, onView
     }
   };
 
-  return (
-    <div className={classNames(styles.presenceLog, styles["presenceLog" + preset])} {...rest}>
-      {entries.map(domForEntry)}
-    </div>
-  );
+  render() {
+    const presenceClasses = {
+      [styles.presenceLog]: true,
+      [styles.presenceLogInRoom]: this.props.inRoom
+    };
+
+    return <div className={classNames(presenceClasses)}>{this.props.entries.map(this.domForEntry)}</div>;
+  }
 }
 
-PresenceLog.propTypes = {
-  entries: PropTypes.array,
-  preset: PropTypes.oneOf(presets),
-  hubId: PropTypes.string,
-  history: PropTypes.object,
-  presences: PropTypes.object,
-  onViewProfile: PropTypes.func,
-  className: PropTypes.string,
-  children: PropTypes.node,
-  include: PropTypes.array,
-  exclude: PropTypes.array
-};
+export default injectIntl(PresenceLog);

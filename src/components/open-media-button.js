@@ -60,10 +60,9 @@ AFRAME.registerComponent("open-media-button", {
         if (url.hash && window.APP.hub.hub_id === hubId) {
           // move to waypoint w/o writing to history
           window.history.replaceState(null, null, window.location.href.split("#")[0] + url.hash);
-        } else if (await isLocalHubsUrl(this.src)) {
-          const waypoint = url.hash && url.hash.substring(1);
+        } else if (APP.store.state.preferences.fastRoomSwitching && isLocalHubsUrl(this.src)) {
           // move to new room without page load or entry flow
-          changeHub(hubId, true, waypoint);
+          changeHub(hubId);
         } else {
           await exitImmersive();
           location.href = this.src;
@@ -74,14 +73,11 @@ AFRAME.registerComponent("open-media-button", {
       }
     };
 
-    NAF.utils
-      .getNetworkedEntity(this.el)
-      .then(networkedEl => {
-        this.targetEl = networkedEl;
-        this.targetEl.addEventListener("media_resolved", this.updateSrc, { once: true });
-        this.updateSrc();
-      })
-      .catch(() => {});
+    NAF.utils.getNetworkedEntity(this.el).then(networkedEl => {
+      this.targetEl = networkedEl;
+      this.targetEl.addEventListener("media_resolved", this.updateSrc, { once: true });
+      this.updateSrc();
+    });
   },
 
   play() {

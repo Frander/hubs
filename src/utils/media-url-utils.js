@@ -33,7 +33,10 @@ function b64EncodeUnicode(str) {
 const farsparkEncodeUrl = url => {
   // farspark doesn't know how to read '=' base64 padding characters
   // translate base64 + to - and / to _ for URL safety
-  return b64EncodeUnicode(url).replace(/=+$/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+  return b64EncodeUnicode(url)
+    .replace(/=+$/g, "")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
 };
 
 export const scaledThumbnailUrlFor = (url, width, height) => {
@@ -96,13 +99,13 @@ export function getAbsoluteHref(baseUrl, relativeUrl) {
   return getAbsoluteUrl(baseUrl, relativeUrl).href;
 }
 
-// Note these files are configured in webpack.config.js to be handled with file-loader, so this will be a string containing the file paths
+// Note this file is configured in webpack.config.js to be handled with file-loader, so this will be a string containing the file path
 import basisJsUrl from "three/examples/js/libs/basis/basis_transcoder.js";
-import dracoWrapperJsUrl from "three/examples/js/libs/draco/gltf/draco_wasm_wrapper.js";
 import basisWasmUrl from "three/examples/js/libs/basis/basis_transcoder.wasm";
+import dracoWrapperJsUrl from "three/examples/js/libs/draco/gltf/draco_wasm_wrapper.js";
 import dracoWasmUrl from "three/examples/js/libs/draco/gltf/draco_decoder.wasm";
 
-export const rewriteBasisTranscoderUrls = function (url) {
+export const rewriteBasisTranscoderUrls = function(url) {
   if (url === "basis_transcoder.js") {
     return basisJsUrl;
   } else if (url === "basis_transcoder.wasm") {
@@ -185,8 +188,7 @@ async function isHubsServer(url) {
 
 const hubsSceneRegex = /https?:\/\/[^/]+\/scenes\/[a-zA-Z0-9]{7}(?:\/|$)/;
 const hubsAvatarRegex = /https?:\/\/[^/]+\/avatars\/(?<id>[a-zA-Z0-9]{7})(?:\/|$)/;
-export const hubsRoomRegex = /(https?:\/\/)?[^/]+\/(?<id>[a-zA-Z0-9]{7})(?:\/|$)/;
-export const localHubsRoomRegex = /https?:\/\/[^/]+\/hub\.html\?hub_id=(?<id>[a-zA-Z0-9]{7})/;
+const hubsRoomRegex = /(https?:\/\/)?[^/]+\/(?<id>[a-zA-Z0-9]{7})(?:\/|$)/;
 
 export const isLocalHubsUrl = async url =>
   (await isHubsServer(url)) && new URL(url).origin === document.location.origin;
@@ -197,10 +199,11 @@ export const isLocalHubsSceneUrl = async url => (await isHubsSceneUrl(url)) && (
 export const isHubsAvatarUrl = async url => (await isHubsServer(url)) && hubsAvatarRegex.test(url);
 export const isLocalHubsAvatarUrl = async url => (await isHubsAvatarUrl(url)) && (await isLocalHubsUrl(url));
 
-export const hubIdFromUrl = url => url.match(hubsRoomRegex)?.groups.id || url.match(localHubsRoomRegex)?.groups.id;
-
 export const isHubsRoomUrl = async url =>
-  (await isHubsServer(url)) && !(await isHubsAvatarUrl(url)) && !(await isHubsSceneUrl(url)) && hubIdFromUrl(url);
+  (await isHubsServer(url)) &&
+  !(await isHubsAvatarUrl(url)) &&
+  !(await isHubsSceneUrl(url)) &&
+  url.match(hubsRoomRegex)?.groups.id;
 
 export const isHubsDestinationUrl = async url =>
   (await isHubsServer(url)) && ((await isHubsSceneUrl(url)) || (await isHubsRoomUrl(url)));

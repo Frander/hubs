@@ -93,5 +93,3 @@ TextInput.defaultProps = {
   onChange: () => {},
   as: "input"
 };
-
-TextInput.displayName = "TextInput";

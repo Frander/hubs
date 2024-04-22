@@ -11,13 +11,7 @@ export function SceneUrlModalContainer({ hubChannel, onClose }) {
   const onValidateUrl = useCallback(
     async url => {
       const valid = await isValidSceneUrl(url.trim());
-      return (
-        valid ||
-        intl.formatMessage({
-          id: "scene-url-modal.invalid-scene-url",
-          defaultMessage: "This URL does not point to a scene or valid GLB."
-        })
-      );
+      return valid || intl.formatMessage("scene-url-modal.invalid-scene-url");
     },
     [intl]
   );

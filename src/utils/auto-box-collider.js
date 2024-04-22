@@ -18,7 +18,7 @@ const FAKE_TROIKA_BOUNDS = new THREE.Box3(
 );
 
 // TODO This whole function is suspect for manually computing bounding boxes when geometry already has code for this
-export const computeLocalBoundingBox = (function () {
+export const computeLocalBoundingBox = (function() {
   const vertex = new THREE.Vector3();
   const rootInverse = new THREE.Matrix4();
   const toRootSpace = new THREE.Matrix4();
@@ -67,7 +67,7 @@ export const computeLocalBoundingBox = (function () {
 // possible AABB -- we could return a tighter one if we examined all of the vertices
 // of the geometry for ourselves, but we don't care enough for what we're using this
 // for to do so much work.
-export const computeObjectAABB = (function () {
+export const computeObjectAABB = (function() {
   const bounds = new THREE.Box3();
   return function computeObjectAABB(root, target, excludeInvisible) {
     target.makeEmpty();
@@ -90,13 +90,13 @@ export const computeObjectAABB = (function () {
 })();
 
 const rotation = new THREE.Euler();
-export function getBox(obj, boxRoot, worldSpace) {
+export function getBox(entity, boxRoot, worldSpace) {
   const box = new THREE.Box3();
 
-  rotation.copy(obj.rotation);
-  obj.rotation.set(0, 0, 0);
+  rotation.copy(entity.object3D.rotation);
+  entity.object3D.rotation.set(0, 0, 0);
 
-  obj.updateMatrices(true, true);
+  entity.object3D.updateMatrices(true, true);
   boxRoot.updateMatrices(true, true);
   boxRoot.updateMatrixWorld(true);
 
@@ -104,11 +104,11 @@ export function getBox(obj, boxRoot, worldSpace) {
 
   if (!box.isEmpty()) {
     if (!worldSpace) {
-      obj.worldToLocal(box.min);
-      obj.worldToLocal(box.max);
+      entity.object3D.worldToLocal(box.min);
+      entity.object3D.worldToLocal(box.max);
     }
-    obj.rotation.copy(rotation);
-    obj.matrixNeedsUpdate = true;
+    entity.object3D.rotation.copy(rotation);
+    entity.object3D.matrixNeedsUpdate = true;
   }
 
   boxRoot.matrixWorldNeedsUpdate = true;

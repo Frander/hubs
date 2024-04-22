@@ -37,21 +37,21 @@ function findLocale(locale) {
 
   for (let i = 0; i < locales.length; i++) {
     const curLocale = locales[i];
-    if (Object.prototype.hasOwnProperty.call(AVAILABLE_LOCALES, curLocale)) {
+    if (AVAILABLE_LOCALES.hasOwnProperty(curLocale)) {
       return curLocale;
     }
-    if (Object.prototype.hasOwnProperty.call(FALLBACK_LOCALES, curLocale)) {
-      Object.prototype.hasOwnProperty.call(FALLBACK_LOCALES, curLocale);
+    if (FALLBACK_LOCALES.hasOwnProperty(curLocale)) {
+      FALLBACK_LOCALES.hasOwnProperty(curLocale);
     }
     // Also check the primary language subtag in case
     // we do not have an entry for full tag
     // See https://en.wikipedia.org/wiki/IETF_language_tag#Syntax_of_language_tags
     // and https://github.com/mozilla/hubs/pull/3350/files#diff-70ef5717d3da03ef288e8d15c2fda32c5237d7f37074421496f22403e4475bf1R16
     const primaryLanguageSubtag = curLocale.split("-")[0].toLowerCase();
-    if (Object.prototype.hasOwnProperty.call(AVAILABLE_LOCALES, primaryLanguageSubtag)) {
+    if (AVAILABLE_LOCALES.hasOwnProperty(primaryLanguageSubtag)) {
       return primaryLanguageSubtag;
     }
-    if (Object.prototype.hasOwnProperty.call(FALLBACK_LOCALES, primaryLanguageSubtag)) {
+    if (FALLBACK_LOCALES.hasOwnProperty(primaryLanguageSubtag)) {
       return FALLBACK_LOCALES[primaryLanguageSubtag];
     }
   }
@@ -72,7 +72,7 @@ export function setLocale(locale) {
     } else {
       import(`../assets/locales/${resolvedLocale}.json`).then(({ default: localeData }) => {
         _locale = resolvedLocale;
-        _localeData = { ...defaultLocaleData, ...localeData };
+        _localeData = localeData;
         window.dispatchEvent(new CustomEvent("locale-updated"));
       });
     }
@@ -107,7 +107,7 @@ export const getMessages = () => {
   if (configs.APP_CONFIG && configs.APP_CONFIG.translations && configs.APP_CONFIG.translations[_locale]) {
     const configTranslations = configs.APP_CONFIG.translations[_locale];
     for (const messageKey in configTranslations) {
-      if (!Object.prototype.hasOwnProperty.call(configTranslations, messageKey)) continue;
+      if (!configTranslations.hasOwnProperty(messageKey)) continue;
       if (!configTranslations[messageKey]) continue;
       _localeData[messageKey] = configTranslations[messageKey];
     }
@@ -115,7 +115,7 @@ export const getMessages = () => {
 
   const entries = [];
   for (const key in _localeData) {
-    if (!Object.prototype.hasOwnProperty.call(_localeData, key)) continue;
+    if (!_localeData.hasOwnProperty(key)) continue;
     entries.push([key, _localeData[key]]);
   }
 

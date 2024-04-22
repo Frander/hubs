@@ -5,12 +5,7 @@ import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as ObjectIcon } from "../icons/Object.svg";
 import { defineMessage, useIntl } from "react-intl";
-import { ToolTip } from "@mozilla/lilypad-ui";
-
-const placeTooltipDescription = defineMessage({
-  id: "place-tooltip.description",
-  defaultMessage: "Select from a variety of objects and tools to edit your room"
-});
+import  PlaceIconBtn from "../../assets/newSkin/placeBtn.svg";
 
 const placePopoverTitle = defineMessage({
   id: "place-popover.title",
@@ -27,7 +22,6 @@ export function PlacePopoverButton({ items }) {
   }
 
   const title = intl.formatMessage(placePopoverTitle);
-  const description = intl.formatMessage(placeTooltipDescription);
 
   return (
     <Popover
@@ -37,16 +31,15 @@ export function PlacePopoverButton({ items }) {
       offsetDistance={28}
     >
       {({ togglePopover, popoverVisible, triggerRef }) => (
-        <ToolTip description={description}>
-          <ToolbarButton
-            ref={triggerRef}
-            icon={<ObjectIcon />}
-            selected={popoverVisible}
-            onClick={togglePopover}
-            label={title}
-            preset="accent3"
-          />
-        </ToolTip>
+        <ToolbarButton
+          ref={triggerRef}
+          // icon={<ObjectIcon />}
+          icon={<img src={PlaceIconBtn} width="100%"/>}
+          selected={popoverVisible}
+          onClick={togglePopover}
+          // label={title}
+          preset="accent3"
+        />
       )}
     </Popover>
   );

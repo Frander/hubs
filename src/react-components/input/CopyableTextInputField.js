@@ -42,7 +42,9 @@ export function CopyableTextInputField({ buttonPreset, ...rest }) {
           >
             {clipboard.copied ? copiedLabel : copyLabel}
           </Button>
-        ) : undefined
+        ) : (
+          undefined
+        )
       }
       {...rest}
     />

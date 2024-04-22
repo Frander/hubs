@@ -5,10 +5,11 @@ import { CopyableTextInputField } from "../input/CopyableTextInputField";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as InviteIcon } from "../icons/Invite.svg";
+import  InviteIconBtn from "../../assets/newSkin/invitebtn.svg";
+
 import { Column } from "../layout/Column";
 import { InviteLinkInputField } from "./InviteLinkInputField";
 import { FormattedMessage, defineMessage, useIntl } from "react-intl";
-import { ToolTip } from "@mozilla/lilypad-ui";
 
 function InvitePopoverContent({ url, embed, inviteRequired, fetchingInvite, inviteUrl, revokeInvite }) {
   return (
@@ -24,13 +25,11 @@ function InvitePopoverContent({ url, embed, inviteRequired, fetchingInvite, invi
             value={url}
             buttonPreset="accent3"
           />
-          {embed && (
-            <CopyableTextInputField
-              label={<FormattedMessage id="invite-popover.embed-code" defaultMessage="Embed Code" />}
-              value={embed}
-              buttonPreset="accent5"
-            />
-          )}
+          <CopyableTextInputField
+            label={<FormattedMessage id="invite-popover.embed-code" defaultMessage="Embed Code" />}
+            value={embed}
+            buttonPreset="accent5"
+          />
         </>
       )}
     </Column>
@@ -39,17 +38,12 @@ function InvitePopoverContent({ url, embed, inviteRequired, fetchingInvite, invi
 
 InvitePopoverContent.propTypes = {
   url: PropTypes.string.isRequired,
-  embed: PropTypes.string,
+  embed: PropTypes.string.isRequired,
   inviteRequired: PropTypes.bool,
   fetchingInvite: PropTypes.bool,
   inviteUrl: PropTypes.string,
   revokeInvite: PropTypes.func
 };
-
-const inviteTooltipDescription = defineMessage({
-  id: "invite-tooltip.description",
-  defaultMessage: "Copy room link to invite others to the room"
-});
 
 const invitePopoverTitle = defineMessage({
   id: "invite-popover.title",
@@ -69,7 +63,6 @@ export function InvitePopoverButton({
 }) {
   const intl = useIntl();
   const title = intl.formatMessage(invitePopoverTitle);
-  const description = intl.formatMessage(inviteTooltipDescription);
 
   return (
     <Popover
@@ -90,16 +83,15 @@ export function InvitePopoverButton({
       popoverApiRef={popoverApiRef}
     >
       {({ togglePopover, popoverVisible, triggerRef }) => (
-        <ToolTip description={description}>
-          <ToolbarButton
-            ref={triggerRef}
-            icon={<InviteIcon />}
-            selected={popoverVisible}
-            onClick={togglePopover}
-            label={title}
-            {...rest}
-          />
-        </ToolTip>
+        <ToolbarButton
+          ref={triggerRef}
+          // icon={<InviteIcon />}
+          icon={<img src={InviteIconBtn} width="100%"/>}
+          selected={popoverVisible}
+          onClick={togglePopover}
+          // label={title}
+          {...rest}
+        />
       )}
     </Popover>
   );

@@ -16,7 +16,6 @@ RadioInputContainer.propTypes = {
   children: PropTypes.node
 };
 
-/* eslint-disable-next-line react/display-name */
 export const RadioInputOption = forwardRef(({ label, description, className, labelClassName, ...rest }, ref) => (
   <label className={classNames(styles.option, className)}>
     <input className={styles.input} type="radio" ref={ref} {...rest} />

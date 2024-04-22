@@ -51,8 +51,7 @@
   overflow-wrap: break-word;
   line-height: 1.25;
 
-  img,
-  video {
+  img, video {
     max-height: 240px;
     border-radius: 18px;
   }
@@ -86,8 +85,7 @@
   }
 }
 
-:local(.message-bubble):local(.emoji),
-:local(.message-bubble):local(.media) {
+:local(.message-bubble):local(.emoji), :local(.message-bubble):local(.media) {
   font-size: 32px;
   background-color: theme.$transparent;
   padding: 0;
@@ -111,26 +109,18 @@
   }
 }
 
-:local(.message-bubble):local(.permission) {
-  display: flex;
-  gap: 10px;
-  background-color: theme.$transparent;
-  border: 1px solid theme.$input-border-color;
-  color: theme.$text1-color;
-  align-items: center;
-}
-
 :local(.chat-input-icon) {
   cursor: pointer;
   width: 24px;
 
-  &:disabled,
-  &[disabled] {
-    cursor: default;
-  }
-
   svg {
-    color: theme.$input-icon-color;
+    *[stroke=\#000] {
+      stroke: theme.$input-icon-color;
+    }
+
+    *[fill=\#000] {
+      fill: theme.$input-icon-color;
+    }
   }
 }
 
@@ -148,8 +138,4 @@
 
 :local(.chat-input-text-area-styles) {
   max-height: 50vh;
-}
-
-:local(.emojiPopover) {
-  border: none;
 }
