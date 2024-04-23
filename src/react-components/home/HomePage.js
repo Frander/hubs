@@ -95,10 +95,10 @@ export function HomePage() {
             {/* {canCreateRooms && <CreateRoomButton />} */}
             {/* <PWAButton /> */}
           </div>
-          <div className={styles.appInfo}>
+          <div className={styles.appInfo2}>
            <div className={styles.appDescription2}>test</div>
           </div>
-          <div className={styles.appInfo}>
+          <div className={styles.appInfo2}>
             <Button>Web</Button>
             <Button>Tienda</Button>
           </div>
