@@ -20,7 +20,7 @@ import { SignInButton } from "./SignInButton";
 import { AppLogo } from "../misc/AppLogo";
 import { isHmc } from "../../utils/isHmc";
 import maskEmail from "../../utils/mask-email";
-import { Button } from "./Button";
+import Button from "@material-ui/core/Button";
 
 export function HomePage() {
   const auth = useContext(AuthContext);

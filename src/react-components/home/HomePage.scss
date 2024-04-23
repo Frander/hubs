@@ -59,7 +59,7 @@
 }
 
 :local(.hero-image-container) {
-
+  width: 100%;
   img {
     @media (min-width: theme.$breakpoint-lg) {
       border-radius: 16px;
