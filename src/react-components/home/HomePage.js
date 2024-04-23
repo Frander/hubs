@@ -90,7 +90,15 @@ export function HomePage() {
             />
           </div>
           <div className={styles.appInfo}>
-            <div className={styles.appDescription}>{configs.translation("app-description")}</div>
+            <h5>LA PRIMERA PLATAFORMA</h5>
+            <h1>EN EL METAVERSO</h1>
+            <h3>DE VENTA Y SUBASTA EN VIVO</h3>
+            <p>!Bienvenido a la revolución de las compras online!. Descubre la primera plataforma interactiva
+              para subastas y compras en vivo, donde la emoción del mercado se encuentra con la magia del 
+              mundo virtual. Vive la experiencia única de pujar y adquirir tesoros inigualables en un entorno
+              inmersivo. Únete a nosotros y se parte de la historia en el emocionante espacio de las compras online
+            </p>
+            {/* <div className={styles.appDescription}>{configs.translation("app-description")}</div> */}
             
             {/* {canCreateRooms && <CreateRoomButton />} */}
             {/* <PWAButton /> */}
@@ -101,7 +109,8 @@ export function HomePage() {
       </Container>
       <Container>
         <div className={styles.hero}>
-          <div className={styles.appDescription2}>test</div>
+          <div className={styles.appDescription2}>TU EMPRESA SIEMPRE ABIERTA DE MANERA VIRTUAL CON TODO LO QUE NECESITES QUE NECESITAS
+          PARA TRABAJAR DE MANERA REMOTA </div>
         </div>
       </Container>
       <Container>
