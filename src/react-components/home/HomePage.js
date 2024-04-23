@@ -97,16 +97,18 @@ export function HomePage() {
           </div>
           
         </div>
-        
+
+      </Container>
+      <Container>
         <div className={styles.hero}>
           <div className={styles.appDescription2}>test</div>
         </div>
-
+      </Container>
+      <Container>
         <div className={styles.hero}>
           <Button>Web</Button>
           <Button>Tienda</Button>
         </div> 
-
       </Container>
       {configs.feature("show_feature_panels") && (
         <Container className={classNames(styles.features, styles.colLg, styles.centerLg)}>
