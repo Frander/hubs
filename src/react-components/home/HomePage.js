@@ -20,7 +20,6 @@ import { SignInButton } from "./SignInButton";
 import { AppLogo } from "../misc/AppLogo";
 import { isHmc } from "../../utils/isHmc";
 import maskEmail from "../../utils/mask-email";
-import Button from "@material-ui/core/Button";
 
 export function HomePage() {
   const auth = useContext(AuthContext);
@@ -115,8 +114,8 @@ export function HomePage() {
       </Container>
       <Container>
         <div className={styles.hero}>
-          <Button>Web</Button>
-          <Button>Tienda</Button>
+          <button>Web</button>
+          <button>Tienda</button>
         </div> 
       </Container>
       {configs.feature("show_feature_panels") && (
