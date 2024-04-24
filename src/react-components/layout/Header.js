@@ -90,7 +90,7 @@ export function Header({
             )}
           </ul>
         </nav>
-        <div className={styles.signIn}>
+        {/* <div className={styles.signIn}>
           {isSignedIn ? (
             <div>
               <span>
@@ -107,7 +107,7 @@ export function Header({
           ) : (
             <SignInButton />
           )}
-        </div>
+        </div> */}
         {isHmc ? <SocialBar mobile /> : null}
       </Container>
     </header>
