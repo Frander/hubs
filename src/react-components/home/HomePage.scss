@@ -50,6 +50,7 @@
 :local(.hero) {
   margin: auto;
   text-align: center;
+  display: flex;
   // @media (min-width: theme.$breakpoint-lg) {
   //   flex-direction: row;
   // }
