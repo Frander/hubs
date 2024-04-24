@@ -73,9 +73,9 @@ export function HomePage() {
           ) : (
             <SignInButton mobile />
           )} */}
-          <div className={styles.logoContainer}>
+          {/* <div className={styles.logoContainer}>
             <AppLogo />
-          </div>
+          </div> */}
           <div className={styles.heroImageContainer}>
             <img
               alt={intl.formatMessage(
@@ -90,7 +90,7 @@ export function HomePage() {
           </div>
           <div className={styles.appInfo}>
             <h5>LA PRIMERA PLATAFORMA</h5>
-            <h1>EN EL METAVERSO</h1>
+            <h2>EN EL METAVERSO</h2>
             <h3>DE VENTA Y SUBASTA EN VIVO</h3>
             <p>!Bienvenido a la revolución de las compras online!. Descubre la primera plataforma interactiva
               para subastas y compras en vivo, donde la emoción del mercado se encuentra con la magia del 
@@ -114,8 +114,8 @@ export function HomePage() {
       </Container>
       <Container>
         <div className={styles.hero}>
-          <button>Web</button>
-          <button>Tienda</button>
+          <button className={styles.button}>Web</button>
+          <button className={styles.button}>Tienda</button>
         </div> 
       </Container>
       {configs.feature("show_feature_panels") && (
