@@ -41,8 +41,8 @@ export function PlacePopoverButton({ items }) {
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            // icon={<ObjectIcon />}
-            icon={<img src={PlaceIconBtn} width="100%"/>}
+            icon={<ObjectIcon />}
+            // icon={<img src={PlaceIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
             label={title}

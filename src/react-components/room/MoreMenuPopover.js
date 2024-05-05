@@ -131,8 +131,8 @@ export function MoreMenuPopoverButton({ menu }) {
       {({ togglePopover, popoverVisible, triggerRef }) => (
         <ToolbarButton
           ref={triggerRef}
-          // icon={<MoreIcon />}
-          icon={<img src={MoreIconBtn} width="100%"/>}
+          icon={<MoreIcon />}
+          // icon={<img src={MoreIconBtn} width="100%"/>}
           selected={popoverVisible}
           onClick={togglePopover}
           label={title}

@@ -116,8 +116,8 @@ export function ReactionPopoverButton({ items, presence, onToggleHandRaised }) {
               presence.hand_raised ? (
                 <HandRaisedIcon width="32px" height="32px" style={{ marginLeft: "5px" }} />
               ) : (
-                // <ReactionIcon />
-                <img src={ReactionIconBtn} width="100%"/>
+                <ReactionIcon />
+                // <img src={ReactionIconBtn} width="100%"/>
               )
             }
             selected={popoverVisible}

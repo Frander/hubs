@@ -94,8 +94,8 @@ export function InvitePopoverButton({
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            // icon={<InviteIcon />}
-            icon={<img src={InviteIconBtn} width="100%"/>}
+            icon={<InviteIcon />}
+            // icon={<img src={InviteIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
             label={title}

@@ -63,8 +63,8 @@ export function SharePopoverButton({ items }) {
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            // icon={<ShareIcon />}
-            icon={<img src={ShareIconBtn} width="100%"/>}
+            icon={<ShareIcon />}
+            // icon={<img src={ShareIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
             label={title}
