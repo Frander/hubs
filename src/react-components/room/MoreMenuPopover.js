@@ -6,7 +6,6 @@ import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as MoreIcon } from "../icons/More.svg";
 import { useIntl, defineMessage } from "react-intl";
-import  MoreIconBtn from "../../assets/newSkin/dotBtn.svg";
 
 function MoreMenuItem({ item, closePopover }) {
   const Icon = item.icon;
@@ -132,7 +131,6 @@ export function MoreMenuPopoverButton({ menu }) {
         <ToolbarButton
           ref={triggerRef}
           icon={<MoreIcon />}
-          // icon={<img src={MoreIconBtn} width="100%"/>}
           selected={popoverVisible}
           onClick={togglePopover}
           label={title}

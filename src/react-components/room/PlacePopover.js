@@ -6,7 +6,6 @@ import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as ObjectIcon } from "../icons/Object.svg";
 import { defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
-import  PlaceIconBtn from "../../assets/newSkin/placeBtn.svg";
 
 const placeTooltipDescription = defineMessage({
   id: "place-tooltip.description",
@@ -42,7 +41,6 @@ export function PlacePopoverButton({ items }) {
           <ToolbarButton
             ref={triggerRef}
             icon={<ObjectIcon />}
-            // icon={<img src={PlaceIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
             label={title}
