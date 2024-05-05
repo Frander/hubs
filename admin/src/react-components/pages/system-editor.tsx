@@ -90,25 +90,23 @@ const SystemEditorComponent = ({ classes }) => {
 
         {/* AVATARS / SCENES  */}
         <div className="mb-40">
-          {/* <h3 className="heading-sm mb-28">Add avatars and scenes</h3>
+          <h3 className="heading-sm mb-28"></h3>
 
           <CardSection
             className="mb-20"
             ctaCallback={() => {
-              window.open(`https://hubs.mozilla.com/docs/hubs-cloud-asset-packs.html`);
+              window.open(`#`);
             }}
-            cta="get more avatars and scenes"
-            body="Give your hub visitors more scenes to explore and a wider
-              selection of avatars to choose from. Install your new assets
-              on the Import Content page."
-          /> */}
+            cta="="
+            body=""
+          />
         </div>
 
         {/* CUSTOMIZE HUB */}
         <section className="mb-40">
-          {/* <h3 className="heading-sm mb-28">Customize the look of your hub</h3> */}
+          <h3 className="heading-sm mb-28">Customize the look of your hub</h3>
 
-          {/* {hasPaidFeature() && !isBrandingDisabled() && (
+          {hasPaidFeature() && !isBrandingDisabled() && (
             <CardSection
               className="mb-20"
               ctaCallback={() => {
@@ -117,9 +115,9 @@ const SystemEditorComponent = ({ classes }) => {
               cta="Add my Logo"
               body="Apply your branding to the hub’s website and lobby."
             />
-          )} */}
+          )}
 
-          {/* <CardSection
+          <CardSection
             className="mb-20"
             ctaCallback={() => {
               window.location.href = "#/app-settings";
@@ -127,7 +125,7 @@ const SystemEditorComponent = ({ classes }) => {
             cta="Edit hub’s text and details"
             body="Edit your hub’s name, description and other text content for
                   improved search engines results."
-          /> */}
+          />
         </section>
 
         {/* CHANGE ROOM */}
