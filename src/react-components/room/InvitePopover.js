@@ -9,6 +9,7 @@ import { Column } from "../layout/Column";
 import { InviteLinkInputField } from "./InviteLinkInputField";
 import { FormattedMessage, defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
+import  InviteIconBtn from "../../assets/newSkin/invitebtn.svg";
 
 function InvitePopoverContent({ url, embed, inviteRequired, fetchingInvite, inviteUrl, revokeInvite }) {
   return (
@@ -93,7 +94,8 @@ export function InvitePopoverButton({
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            icon={<InviteIcon />}
+            // icon={<InviteIcon />}
+            icon={<img src={InviteIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
             label={title}

@@ -6,6 +6,7 @@ import { FormattedMessage, defineMessage, useIntl } from "react-intl";
 import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ToolTip } from "@mozilla/lilypad-ui";
+import  ChatIconBtn from "../../../../assets/newSkin/chatBtn.svg";
 
 const chatTooltipDescription = defineMessage({
   id: "chat-tooltip.description",
@@ -29,7 +30,8 @@ const ChatToolbarButton = ({ onClick, selected }: ChatToolbarButtonProps) => {
         // @ts-ignore
         onClick={onClick}
         statusColor={unreadMessages ? "unread" : undefined}
-        icon={<ChatIcon />}
+        icon={<img src={ChatIconBtn} width="100%"/>}
+        // icon={<ChatIcon />}
         preset="accent4"
         label={<FormattedMessage id="chat-toolbar-button" defaultMessage="Chat" />}
         selected={selected}
