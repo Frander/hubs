@@ -102,36 +102,19 @@ const SystemEditorComponent = ({ classes }) => {
 
         {/* CHANGE ROOM */}
         <section className="mb-40">
-          <h3 className="heading-sm mb-28">Change room settings</h3>
-
-          <CardSection
-            className="mb-20"
-            ctaCallback={() => {
-              window.location.href = "#/app-settings";
-            }}
-            cta="Change room settings"
-            body="Specify the default room size and how they are accessed and created."
-          />
+         
         </section>
 
         {/* CHANGE ROOM */}
         <section className="">
-          <h3 className="heading-sm">Limit who can access your hub</h3>
-
-          <CardSection
-            ctaCallback={() => {
-              window.open("https://hubs.mozilla.com/docs/hubs-cloud-limiting-user-access.html");
-            }}
-            cta="Limit access guide"
-            body="Learn how to control who can enter your hub’s rooms."
-          />
+          
         </section>
       </Card>
 
       {/* WARNING  */}
       {reticulumMeta && adminInfo && (needsAvatars || needsScenes || isInSESSandbox || exceededStorageQuota) && (
         <Card>
-          <h2 className="heading-lg mb-12">Status</h2>
+       
           {isInSESSandbox && (
             <div className="flex mb-12">
               <div className="mr-20">
@@ -239,81 +222,28 @@ const SystemEditorComponent = ({ classes }) => {
       <Card>
         <h2 className="heading-lg mb-24">Getting Help</h2>
         <div className="flex-align-items-center mb-20">
-          <div className="mr-20">
-            <DiscordIcon />
-          </div>
-          <p className="body-md">
-            The{" "}
-            <a className="link" rel="noopener noreferrer" href="https://discord.com/invite/sBMqSjCndj" target="_blank">
-              Hubs Discord Community
-            </a>{" "}
-            is built by Hubs users and administrators, just like you.
-          </p>
+         
+         
         </div>
 
         <div className="flex-align-items-center mb-20">
-          <div className="mr-20">
-            <BookIcon />
-          </div>
-          <p className="body-md">
-            The{" "}
-            <a
-              href="https://hubs.mozilla.com/docs/welcome.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link"
-            >
-              Hubs Documentation
-            </a>{" "}
-            contains a Getting Started guide and other resources.
-          </p>
+         
+          
         </div>
 
         <div className="flex-align-items-center mb-20">
-          <div className="mr-20">
-            <QuestionIcon />
-          </div>
-          <p className="body-md">
-            Visit{" "}
-            <a
-              href="https://support.mozilla.org/en-US/products/hubs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link"
-            >
-              Mozilla Support
-            </a>{" "}
-            to seek help with Hubs subscriptions.
-          </p>
+          
+         
         </div>
 
         <div className="flex-align-items-center">
-          <div className="mr-20">
-            <GithubIcon />
-          </div>
-          <p className="body-md">
-            You can{" "}
-            <a
-              rel="noopener noreferrer"
-              href="https://github.com/mozilla/hubs/discussions"
-              target="_blank"
-              className="link"
-            >
-              ask questions
-            </a>{" "}
-            or{" "}
-            <a className="link" href="https://github.com/mozilla/hubs" target="_blank" rel="noopener noreferrer">
-              file an issue
-            </a>{" "}
-            on GitHub.
-          </p>
+         
+         
         </div>
       </Card>
 
       <div className="flex-align-items-center ml-12">
-        <a href="https://hubs.mozilla.com/whats-new" target="_blank" rel="noopener noreferrer" className="link mr-24">
-          What's new
-        </a>
+       
         {!configs.IS_LOCAL_OR_CUSTOM_CLIENT && (
           <p className="body-md">{`Hubs version: ${process.env.BUILD_VERSION || "?"}`}</p>
         )}
