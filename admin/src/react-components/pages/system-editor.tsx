@@ -86,10 +86,10 @@ const SystemEditorComponent = ({ classes }) => {
   return (
     <div className="page_wrapper">
       <Card className="mb-24">
-        <h2 className="heading-lg mb-24">Getting Started</h2>
+        <h2 className="heading-lg mb-24">SUBASTA</h2>
 
         {/* AVATARS / SCENES  */}
-        <div className="mb-40">
+        {/* <div className="mb-40">
           <h3 className="heading-sm mb-28">Add avatars and scenes</h3>
 
           <CardSection
@@ -102,10 +102,10 @@ const SystemEditorComponent = ({ classes }) => {
               selection of avatars to choose from. Install your new assets
               on the Import Content page."
           />
-        </div>
+        </div> */}
 
         {/* CUSTOMIZE HUB */}
-        <section className="mb-40">
+        {/* <section className="mb-40">
           <h3 className="heading-sm mb-28">Customize the look of your hub</h3>
 
           {hasPaidFeature() && !isBrandingDisabled() && (
@@ -128,10 +128,10 @@ const SystemEditorComponent = ({ classes }) => {
             body="Edit your hub’s name, description and other text content for
                   improved search engines results."
           />
-        </section>
+        </section> */}
 
         {/* CHANGE ROOM */}
-        <section className="mb-40">
+        {/* <section className="mb-40">
           <h3 className="heading-sm mb-28">Change room settings</h3>
 
           <CardSection
@@ -142,10 +142,10 @@ const SystemEditorComponent = ({ classes }) => {
             cta="Change room settings"
             body="Specify the default room size and how they are accessed and created."
           />
-        </section>
+        </section> */}
 
         {/* CHANGE ROOM */}
-        <section className="">
+        {/* <section className="">
           <h3 className="heading-sm">Limit who can access your hub</h3>
 
           <CardSection
@@ -155,13 +155,13 @@ const SystemEditorComponent = ({ classes }) => {
             cta="Limit access guide"
             body="Learn how to control who can enter your hub’s rooms."
           />
-        </section>
+        </section> */}
       </Card>
 
       {/* WARNING  */}
       {reticulumMeta && adminInfo && (needsAvatars || needsScenes || isInSESSandbox || exceededStorageQuota) && (
         <Card>
-          <h2 className="heading-lg mb-12">Status</h2>
+          {/* <h2 className="heading-lg mb-12">Status</h2>
           {isInSESSandbox && (
             <div className="flex mb-12">
               <div className="mr-20">
@@ -262,12 +262,12 @@ const SystemEditorComponent = ({ classes }) => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </Card>
       )}
 
       <Card>
-        <h2 className="heading-lg mb-24">Getting Help</h2>
+        {/* <h2 className="heading-lg mb-24">Getting Help</h2>
         <div className="flex-align-items-center mb-20">
           <div className="mr-20">
             <DiscordIcon />
@@ -337,29 +337,29 @@ const SystemEditorComponent = ({ classes }) => {
             </a>{" "}
             on GitHub.
           </p>
-        </div>
+        </div> */}
       </Card>
 
-      <div className="flex-align-items-center ml-12">
+      {/* <div className="flex-align-items-center ml-12">
         <a href="https://hubs.mozilla.com/whats-new" target="_blank" rel="noopener noreferrer" className="link mr-24">
           What's new
         </a>
         {!configs.IS_LOCAL_OR_CUSTOM_CLIENT && (
           <p className="body-md">{`Hubs version: ${process.env.BUILD_VERSION || "?"}`}</p>
         )}
-      </div>
+      </div> */}
 
       {configs.IS_LOCAL_OR_CUSTOM_CLIENT && (
-        <div className="body-md mt-12 ml-12">
-          <p>App client: Custom client</p>
-          <p>{`Undeploy custom client to run build ${process.env.BUILD_VERSION || "?"}`}</p>
-          <p>
-            Remember to regularly pull in upstream changes from the "hubs-cloud" branch:{" "}
-            <a href="https://github.com/mozilla/hubs" target="_blank" rel="noopener noreferrer" className="link">
-              Github
-            </a>
-          </p>
-        </div>
+        // <div className="body-md mt-12 ml-12">
+        //   <p>App client: Custom client</p>
+        //   <p>{`Undeploy custom client to run build ${process.env.BUILD_VERSION || "?"}`}</p>
+        //   <p>
+        //     Remember to regularly pull in upstream changes from the "hubs-cloud" branch:{" "}
+        //     <a href="https://github.com/mozilla/hubs" target="_blank" rel="noopener noreferrer" className="link">
+        //       Github
+        //     </a>
+        //   </p>
+        // </div>
       )}
     </div>
   );
