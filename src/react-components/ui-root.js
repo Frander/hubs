@@ -1676,8 +1676,8 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <ToolbarButton
-                        icon={<LeaveIconBtn/>}
-                        // icon={<LeaveIcon />}
+                        // icon={<LeaveIconBtn/>}
+                        icon={<LeaveIcon />}
                         label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Leave" />}
                         preset="cancel"
                         selected={!!this.state.leaving}
