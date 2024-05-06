@@ -78,7 +78,7 @@
 
   &:hover :local(.icon-container) {
     border: 1px solid theme.$toolbar-basic-border-color;
-    background-color: theme.$basic-color-hover;
+    background-color: transparent;
 
     &:disabled,
     &[disabled] {
@@ -409,7 +409,7 @@
   }
 
   &:hover :local(.icon-container) {
-    background-color: theme.$accent2-color-hover;
+    background-color: transparent;
 
     &:disabled,
     &[disabled] {
@@ -473,7 +473,7 @@
   }
 
   &:hover :local(.icon-container) {
-    background-color: theme.$accent3-color-hover;
+    background-color: transparent;
 
     &:disabled,
     &[disabled] {
@@ -601,7 +601,7 @@
   }
 
   &:hover :local(.icon-container) {
-    background-color: theme.$accent5-color-hover;
+    background-color: transparent;
 
     &:disabled,
     &[disabled] {
