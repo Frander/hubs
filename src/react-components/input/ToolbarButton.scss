@@ -537,7 +537,7 @@
   }
 
   &:hover :local(.icon-container) {
-    background-color: theme.$accent4-color-hover;
+    background-color: transparent;
 
     &:disabled,
     &[disabled] {
