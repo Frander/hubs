@@ -1210,6 +1210,18 @@ class UIRoot extends Component {
             icon: SupportIcon,
             onClick: () => this.props.scene.systems.tips.resetTips()
           },
+          configs.feature("show_terms") && {
+            id: "tos",
+            label: <FormattedMessage id="more-menu.tos" defaultMessage="Terms of Service" />,
+            icon: TextDocumentIcon,
+            href: configs.link("terms_of_use", TERMS)
+          },
+          configs.feature("show_privacy") && {
+            id: "privacy",
+            label: <FormattedMessage id="more-menu.privacy" defaultMessage="Privacy Notice" />,
+            icon: ShieldIcon,
+            href: configs.link("privacy_notice", PRIVACY)
+          }
         ].filter(item => item)
       }
     ];

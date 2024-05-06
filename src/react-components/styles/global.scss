@@ -80,7 +80,7 @@
   --background3-color: #{theme.$lightgrey};
   --background4-color: #{theme.$grey};
 
-  --loading-screen-background: radial-gradient(50% 50% at 50% 50%, #ffffff 0%, #eeeeee 100%);
+  --loading-screen-background: #000;
 
   --border1-color: #{theme.$lightgrey};
   --border2-color: #{theme.$grey};
@@ -89,8 +89,8 @@
 
   --shadow-color: rgba(0, 0, 0, 0.2);
 
-  --basic-color: #{theme.$white};
-  --basic-color-hover: #{theme.$white-hover};
+  --basic-color: #fff;
+  --basic-color-hover: #c3a254;
   --basic-color-pressed: #{theme.$white-pressed};
   --basic-border-color: var(--border1-color);
 

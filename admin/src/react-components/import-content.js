@@ -439,32 +439,13 @@ class ImportContentComponent extends Component {
       <Card className={this.props.classes.container}>
         <Title title="Import Content" />
         <CardContent className={this.props.classes.info}>
-          <Typography variant="body2" gutterBottom>
-            You can import avatars and scenes from any other Hubs Cloud site, such as{" "}
-            <a href="https://hubs.mozilla.com" target="_blank" rel="noopener noreferrer">
-              hubs.mozilla.com
-            </a>
-            .<br />
-            Please ensure the content you import has a permissible license (such as{" "}
-            <a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener noreferrer" target="_blank">
-              CC-BY
-            </a>
-            ) or is licensed to you for redistribution.
-          </Typography>
-          <Button
-            className={this.props.classes.button}
-            variant="outlined"
-            href="https://hubs.mozilla.com/docs/hubs-cloud-asset-packs.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Find Avatars &amp; Scenes
-          </Button>
+          
+         
           <Typography variant="subheading" gutterBottom className={this.props.classes.section}>
             Importing Content
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Enter a comma-separted list of URLs avatars or scenes to import them into your Hubs Cloud instance.
+            Enter a comma-separted list of URLs avatars or scenes to import them into your Metaverse instance.
             <br />
             Or, specify a .pack file which contains a list of URLs, one per line.
           </Typography>
