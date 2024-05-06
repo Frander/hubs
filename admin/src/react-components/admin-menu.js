@@ -130,9 +130,7 @@ class Menu extends Component {
     if (configs.ITA_SERVER == "turkey") {
       return (
         <List className={this.props.classes.root}>
-          <ListItem className={this.props.classes.logo}>
-            <img className={this.props.classes.logo} src={HubsLogo} />
-          </ListItem>
+          
           <ListItem
             className={this.props.classes.item}
             component={NavLink}
