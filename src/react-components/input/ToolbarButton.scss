@@ -92,7 +92,7 @@
 
   &:active :local(.icon-container) {
     border-color: transparent;
-    background-color: theme.$basic-color-pressed;
+    background-color: transparent;
   }
 
   &:local(.selected) {
@@ -548,7 +548,7 @@
   }
 
   &:active :local(.icon-container) {
-    background-color: theme.$accent4-color-pressed;
+    background-color: transparent;
   }
 
   &:local(.selected) {

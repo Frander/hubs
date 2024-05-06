@@ -35,13 +35,7 @@ export function Header({
                 <AppLogo />
               </a>
             </li>
-            {enableSpoke && (
-              <li>
-                <a href="/spoke">
-                  {isHmc ? <FormattedMessage id="header.spoke" defaultMessage="Spoke" /> : editorName}
-                </a>
-              </li>
-            )}
+            
             {showDocsLink && (
               <li>
                 <a href={docsUrl}>
@@ -74,17 +68,6 @@ export function Header({
               <li>
                 <a href="/labs">
                   <FormattedMessage id="header.labs" defaultMessage="Labs" />
-                </a>
-              </li>
-            )}
-            {isAdmin && (
-              <li>
-                <a href="/admin" rel="noreferrer noopener">
-                  <i>
-                    <FontAwesomeIcon icon={faCog} />
-                  </i>
-                  &nbsp;
-                  <FormattedMessage id="header.admin" defaultMessage="Admin" />
                 </a>
               </li>
             )}
