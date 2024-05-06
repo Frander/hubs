@@ -397,7 +397,7 @@
 
 :local(.accent2) {
   :local(.icon-container) {
-    background-color: theme.$accent2-color;
+    background-color: transparent;
     border-color: theme.$accent2-border-color;
 
     &:disabled,
@@ -461,7 +461,7 @@
 
 :local(.accent3) {
   :local(.icon-container) {
-    background-color: theme.$accent3-color;
+    background-color: transparent;
     border-color: theme.$accent3-border-color;
 
     &:disabled,
@@ -525,7 +525,7 @@
 
 :local(.accent4) {
   :local(.icon-container) {
-    background-color: theme.$accent4-color;
+    background-color: transparent;
     border-color: theme.$accent4-border-color;
 
     &:disabled,
@@ -589,7 +589,7 @@
 
 :local(.accent5) {
   :local(.icon-container) {
-    background-color: theme.$accent5-color;
+    background-color: transparent;
     border-color: theme.$accent5-border-color;
 
     &:disabled,
