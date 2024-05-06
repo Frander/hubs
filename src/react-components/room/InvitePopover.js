@@ -4,11 +4,11 @@ import styles from "./InvitePopover.scss";
 import { CopyableTextInputField } from "../input/CopyableTextInputField";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
-import { ReactComponent as InviteIcon } from "../icons/Invite.svg";
 import { Column } from "../layout/Column";
 import { InviteLinkInputField } from "./InviteLinkInputField";
 import { FormattedMessage, defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
+import  InviteIconBtn from "../../assets/newSkin/invitebtn.svg";
 
 function InvitePopoverContent({ url, embed, inviteRequired, fetchingInvite, inviteUrl, revokeInvite }) {
   return (
@@ -93,10 +93,9 @@ export function InvitePopoverButton({
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            icon={<InviteIcon />}
+            icon={<img src={InviteIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
-            label={title}
             {...rest}
           />
         </ToolTip>
