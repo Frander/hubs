@@ -265,7 +265,7 @@
 
 :local(.cancel) {
   :local(.icon-container) {
-    background-color: theme.$cancel-color;
+    background-color: transparent;
 
     &:disabled,
     &[disabled] {
@@ -276,7 +276,7 @@
   }
 
   &:hover :local(.icon-container) {
-    background-color: theme.$cancel-color-hover;
+    background-color: transparent;
 
     &:disabled,
     &[disabled] {
