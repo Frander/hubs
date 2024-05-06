@@ -128,7 +128,6 @@ export function ReactionPopoverButton({ items, presence, onToggleHandRaised }) {
                 togglePopover();
               }
             }}
-            label={title}
             preset="accent2"
           />
         </ToolTip>
