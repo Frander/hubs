@@ -89,7 +89,7 @@ export function useThemeFromStore(store) {
     };
   });
 
-  useTheme(themeId);
+  //useTheme(themeId);
 }
 
 export function ThemeProvider({ store, children }) {
