@@ -103,7 +103,7 @@ import { usePermissions } from "./room/hooks/usePermissions";
 import { ChatContextProvider } from "./room/contexts/ChatContext";
 import ChatToolbarButton from "./room/components/ChatToolbarButton/ChatToolbarButton";
 import SeePlansCTA from "./room/components/SeePlansCTA/SeePlansCTA";
-import LeaveIconBtn from "./icons/leaveBtn.svg";
+import LeaveIconBtn from "../assets/newSkin/leaveBtn.png";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
