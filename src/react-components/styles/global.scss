@@ -75,7 +75,7 @@
 
   --secondary-color: #{theme.$lightgrey};
 
-  --background1-color: #{theme.$white};
+  --background1-color: #000;
   --background2-color: #{theme.$recessed-bg};
   --background3-color: #{theme.$lightgrey};
   --background4-color: #{theme.$grey};
@@ -143,7 +143,7 @@
   --toolbar-basic-color: var(--secondary-color);
   --toolbar-basic-color-hover: var(--secondary-color-hover);
   --toolbar-basic-color-pressed: var(--secondary-color-pressed);
-  --toolbar-basic-border-color: var(--basic-border-color);
+  --toolbar-basic-border-color: transparent;
 
   --tile-text-color: var(--text2-color);
   --tile-bg-color: var(--secondary-color);
