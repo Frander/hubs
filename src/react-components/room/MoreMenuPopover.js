@@ -6,7 +6,6 @@ import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as MoreIcon } from "../icons/More.svg";
 import { useIntl, defineMessage } from "react-intl";
-import  MoreIconBtn from "../../assets/newSkin/dotBtn.png";
 
 function MoreMenuItem({ item, closePopover }) {
   const Icon = item.icon;

@@ -6,7 +6,6 @@ import { ToolbarButton } from "../input/ToolbarButton";
 import { ReactComponent as ObjectIcon } from "../icons/Object.svg";
 import { defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
-import  ShareIconBtn from "../../assets/newSkin/shareBtn.png";
 
 const placeTooltipDescription = defineMessage({
   id: "place-tooltip.description",
