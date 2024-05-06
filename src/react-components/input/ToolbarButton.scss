@@ -29,11 +29,13 @@
 
 :local(.icon-container) {
   position: relative;
+  border-radius: 9999px;
   width: 48px;
   height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid theme.$transparent;
   background-color: theme.$transparent;
 
   transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out;
@@ -264,6 +266,8 @@
 
 :local(.cancel) {
   :local(.icon-container) {
+    background-color: theme.$cancel-color;
+
     &:disabled,
     &[disabled] {
       svg {
