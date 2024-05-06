@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { ButtonGridPopover } from "../popover/ButtonGridPopover";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
-import { ReactComponent as ObjectIcon } from "../icons/Object.svg";
 import { defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
+import  PlaceIconBtn from "../../assets/newSkin/placeBtn.png";
 
 const placeTooltipDescription = defineMessage({
   id: "place-tooltip.description",
@@ -40,10 +40,9 @@ export function PlacePopoverButton({ items }) {
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            icon={<ObjectIcon />}
+            icon={<img src={PlaceIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
-            label={title}
             preset="accent3"
           />
         </ToolTip>

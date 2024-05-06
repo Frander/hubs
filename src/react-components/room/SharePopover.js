@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { ButtonGridPopover } from "../popover/ButtonGridPopover";
 import { Popover } from "../popover/Popover";
 import { ToolbarButton } from "../input/ToolbarButton";
-import { ReactComponent as ShareIcon } from "../icons/Share.svg";
 import { defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
+import  ShareIconBtn from "../../assets/newSkin/shareBtn.png";
 
 const shareTooltipDescription = defineMessage({
   id: "share-tooltip.description",
@@ -62,10 +62,9 @@ export function SharePopoverButton({ items }) {
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            icon={<ShareIcon />}
+            icon={<img src={ShareIconBtn} width="100%"/>}
             selected={popoverVisible}
             onClick={togglePopover}
-            label={title}
             preset="accent5"
           />
         </ToolTip>
