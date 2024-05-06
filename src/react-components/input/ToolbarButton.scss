@@ -35,7 +35,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid theme.$transparent;
   background-color: theme.$transparent;
 
   transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out;
