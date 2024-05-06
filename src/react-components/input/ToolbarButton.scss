@@ -91,7 +91,7 @@
   }
 
   &:active :local(.icon-container) {
-    border-color: theme.$basic-color-pressed;
+    border-color: transparent;
     background-color: theme.$basic-color-pressed;
   }
 
@@ -287,7 +287,7 @@
   }
 
   &:active :local(.icon-container) {
-    background-color: theme.$cancel-color-pressed;
+    background-color: transparent;
   }
 
   &:local(.selected) {
@@ -420,7 +420,7 @@
   }
 
   &:active :local(.icon-container) {
-    background-color: theme.$accent2-color-pressed;
+    background-color: transparent;
   }
 
   &:local(.selected) {
@@ -484,7 +484,7 @@
   }
 
   &:active :local(.icon-container) {
-    background-color: theme.$accent3-color-pressed;
+    background-color: transparent;
   }
 
   &:local(.selected) {
@@ -577,7 +577,7 @@
 
     &:active {
       :local(.icon-container) {
-        border-color: theme.$accent4-color-pressed;
+        border-color: transparent;
 
         svg {
           color: theme.$accent4-color-pressed;
@@ -612,7 +612,7 @@
   }
 
   &:active :local(.icon-container) {
-    background-color: theme.$accent5-color-pressed;
+    background-color: transparent;
   }
 
   &:local(.selected) {
