@@ -1675,8 +1675,15 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <ToolbarButton
-                        icon={<img src="./icons/leaveBtn.svg" width="100%"/>}
-                        label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Leave" />}
+                        icon={<img src='<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118 167" width="20" height="20">
+                        <title>New Project</title>
+                        <defs>
+                          <image  width="118" height="159" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAACfCAMAAAAbMt1pAAAAAXNSR0IB2cksfwAAANJQTFRFAAAA/zBQ9zBd+TBd+TBe+DBe+DBe9zBY+jBd+DBf+DBd/zBg+DBe9DBa+DBe7zBg+TBe+TBf+DBe+T1o+WOG+n2a+mOG+4qk/vL1/////uXr+32a+n6a//L1/bHC/b7M+mSG/LHC+D1o+nGQ/Jiu+36a/KS5/KS4+Upy+5ev/b7N/Iuk+4uk9zBe9jBe9zBg9DBg////////////////////////////////////////////////////////////////////////////////////2/OrGgAAAEZ0Uk5TABBgn8/v/yCPj48Q3zCQEO+fz///////////////////////////////////oJAgMGCfoCAQf++/QHDfb1DPj4AwkK8fX7UBz7wAAAPRSURBVHic7dtrW5swFADgtNW4Wa/1Vuqm1a27uLkOChaKrbRu//8v7eQCtIA2uBD2zHM+WDFpXk4SAtJCSBKNZmtjk1YUmxutZoPkY+tNZWQSra0M2nhbuclju72S6o4ZldKdpYR3jang7prPlbsy34ZRFVwxvoZmUxrbvItNq5Sybm6ZZ/cI2Tev0oM2adbA0mYdfUzpIenUwXZI9SeAgjggdaiUIossssgiiyyyyCKLrF726PhEKU61smddSzF65/rYd6ooizNtbK8M+/5IE3sKjXUvVOKSDUZfE8v6+FKlIqVXUPVEI3uFLLL62GtoS2nx0cvSDxcf1VS9rHpUz553C5b96tle0YhXz/JzYdatnh1YBa6BKVXkmpjJBa6RAyjvmjluc65W9tOa65jU1cmerr18qoTtr2N7lbD08xp2UA37ZJxnVDNsTjXC5lUTbIFq4nxboBo632ZVQ+fbrGrifNvr5tT/4hLu+ELxMlkr+wXa+mqefV3/AyH7b7E3mi9q3t8o3SHSeYPoWvnW3+qF1V+y9FsZVmVBU1yTB8q3/7rfVdpTPhX0B0rRV7jhWIbVG8giiyyyyCKLrAG2pq9X1vRl0ts62MO6vii8X8fgtgn5YV49JIQMzbND9lV74+nu8ecK9ut5nIEMzT68MazlUZWf6SMy5vJNc+Xja2he7a08hsQSrn6V3Nwbkny0m7ed6h4x67Sa2UwxMDAwMDAwMDD0he04dg3syLIcZF8R67pu5g/e86147roaa1nvbsw+wPOD+A8THzbDexL4/pR4szCMSx7CMGKvNqsANUrIOXY+jj85vOPb7kxuziLLgmMNfi5k1dCy5rCbj/EbwkwflWBdUMcLe8LamrDcQ5b5IoKExpydwy8iLRsK4MVhFSaTBVQMlfPNsvDmkSezZs0/gMI71WU+W1lgByJe1efbgIte90ZxQXk2gEbkr6JPAZsmRZyF1xnfD1FV4NwdJ+8ty4LlBCLu2SDOpZFmRwh0NkvPEe9kvSEDdvGF7Gjl42iHpZYULyQrJxUgLs95OX7pYadLxZFkPT7qtijRw0LTkZuExzrZj8se41FcsEn+KLraY8dNGopqwZTyl4uhVUu25Voxyyq58dzzBV8yCg4gsUyQ+0C2KlYBb5aw/BiKN6JkmZjflWLHYRyQ6JStNpFtP8B8/U3E8hE6YjthA74mibWBryfOxGZLqPpJZWUOhWLvZYhlwk4KkwT5MZQYfB0RMXo5S1xfoJFc6eS279opG6VDDvlGAvZfMMbL4QXT6Xxp2w3s6fOr7Tywg6dq/AEYvQM26wCwkgAAAABJRU5ErkJggg=="/>
+                        </defs>
+                        <style>
+                        </style>
+                        <use id="Layer 2" href="#img1" x="0" y="0"/>
+                      </svg>' width="100%"/>}
                         preset="cancel"
                         selected={!!this.state.leaving}
                         onClick={() => {
