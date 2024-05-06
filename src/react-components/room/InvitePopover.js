@@ -8,7 +8,7 @@ import { Column } from "../layout/Column";
 import { InviteLinkInputField } from "./InviteLinkInputField";
 import { FormattedMessage, defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
-import  InviteIconBtn from "../../assets/newSkin/invitebtn.svg";
+import  InviteIconBtn from "../../assets/newSkin/inviteBtn.png";
 
 function InvitePopoverContent({ url, embed, inviteRequired, fetchingInvite, inviteUrl, revokeInvite }) {
   return (
