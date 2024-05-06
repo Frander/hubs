@@ -6,6 +6,7 @@ import { FormattedMessage, defineMessage, useIntl } from "react-intl";
 import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ToolTip } from "@mozilla/lilypad-ui";
+import  ChatIconBtn from "../../../../assets/newSkin/chatBtn.png";
 
 const chatTooltipDescription = defineMessage({
   id: "chat-tooltip.description",
@@ -27,11 +28,10 @@ const ChatToolbarButton = ({ onClick, selected }: ChatToolbarButtonProps) => {
       <ToolbarButton
         // Ignore type lint error as we will be redoing ToolbarButton in the future
         // @ts-ignore
+        icon={<img src={ChatIconBtn} width="100%"/>}
         onClick={onClick}
         statusColor={unreadMessages ? "unread" : undefined}
-        icon={<ChatIcon />}
         preset="accent4"
-        label={<FormattedMessage id="chat-toolbar-button" defaultMessage="Chat" />}
         selected={selected}
       />
     </ToolTip>
