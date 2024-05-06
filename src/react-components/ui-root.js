@@ -103,7 +103,7 @@ import { usePermissions } from "./room/hooks/usePermissions";
 import { ChatContextProvider } from "./room/contexts/ChatContext";
 import ChatToolbarButton from "./room/components/ChatToolbarButton/ChatToolbarButton";
 import SeePlansCTA from "./room/components/SeePlansCTA/SeePlansCTA";
-import { ReactComponent as LeaveIconBtn } from "./icons/leaveBtn.svg";
+import LeaveIconBtn from "./icons/leaveBtn.svg";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -1675,7 +1675,7 @@ class UIRoot extends Component {
                     )}
                     {entered && (
                       <ToolbarButton
-                        icon={<LeaveIconBtn />}
+                        icon={<img src={LeaveIconBtn} width="100%"/>}
                         label={<FormattedMessage id="toolbar.leave-room-button" defaultMessage="Leave" />}
                         preset="cancel"
                         selected={!!this.state.leaving}
