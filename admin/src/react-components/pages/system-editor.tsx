@@ -220,7 +220,6 @@ const SystemEditorComponent = ({ classes }) => {
       )}
 
       <Card>
-        <h2 className="heading-lg mb-24">Getting Help</h2>
         <div className="flex-align-items-center mb-20">
          
          
@@ -245,7 +244,7 @@ const SystemEditorComponent = ({ classes }) => {
       <div className="flex-align-items-center ml-12">
        
         {!configs.IS_LOCAL_OR_CUSTOM_CLIENT && (
-          <p className="body-md">{`Hubs version: ${process.env.BUILD_VERSION || "?"}`}</p>
+          <p className="body-md">{`version: ${process.env.BUILD_VERSION || "?"}`}</p>
         )}
       </div>
 
