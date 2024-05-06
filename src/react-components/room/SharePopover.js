@@ -63,9 +63,10 @@ export function SharePopoverButton({ items }) {
         <ToolTip description={description}>
           <ToolbarButton
             ref={triggerRef}
-            icon={<img src={ShareIconBtn} width="100%"/>}
+            icon={<ShareIcon />}
             selected={popoverVisible}
             onClick={togglePopover}
+            label={title}
             preset="accent5"
           />
         </ToolTip>

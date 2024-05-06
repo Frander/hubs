@@ -12,7 +12,6 @@ import { HandRaisedButton } from "./ReactionButton";
 import styles from "./ReactionPopover.scss";
 import { Button } from "../input/Button";
 import { ToolTip } from "@mozilla/lilypad-ui";
-import  ReactionIconBtn from "../../assets/newSkin/reactBtn.png";
 
 const reactTooltipDescription = defineMessage({
   id: "react-tooltip.description",
