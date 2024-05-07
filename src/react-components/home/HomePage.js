@@ -114,8 +114,8 @@ export function HomePage() {
       </Container>
       <Container>
         <div className={styles.hero}>
-          <button className={styles.button}>Web</button>
-          <button className={styles.button}>Tienda</button>
+          <a href='https://spacemall.es/'><button className={styles.button}>Web</button></a>
+          <a href='https://myspacemall.com/link/tMJuWR2'><button className={styles.button}>Tienda</button></a>
         </div> 
       </Container>
       {configs.feature("show_feature_panels") && (
