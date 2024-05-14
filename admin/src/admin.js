@@ -287,11 +287,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Could not initialize app config.", e);
   }
 
-  if (itaSchemas) {
+  //if (itaSchemas) {
     customRoutes.push(
       <Route path="/server-setup" render={props => <ServiceEditor {...props} schema={itaSchemas} />} />
     );
-  }
+  //}
 
   const layout = props => (
     <Layout
