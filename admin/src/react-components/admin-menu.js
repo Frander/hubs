@@ -127,7 +127,7 @@ class Menu extends Component {
   }
 
   render() {
-    if (configs.ITA_SERVER != "turkey") {
+    if (configs.ITA_SERVER == "turkey") {
       return (
         <List className={this.props.classes.root}>
           
@@ -183,6 +183,18 @@ class Menu extends Component {
                   <ViewIcon />
                 </ListItemIcon>
                 <ListItemText className={this.props.classes.text} primary="App Settings" />
+              </ListItem>
+
+              <ListItem
+                className={classNames(this.props.classes.item, this.props.classes.nested)}
+                component={NavLink}
+                key="server-setup"
+                to="/server-setup"
+              >
+                <ListItemIcon className={this.props.classes.icon}>
+                  <ViewIcon />
+                </ListItemIcon>
+                <ListItemText className={this.props.classes.text} primary="Server Settings" />
               </ListItem>
 
               {hasPaidFeature() && !isBrandingDisabled() && (

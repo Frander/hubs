@@ -7,8 +7,7 @@ export function hasPaidFeature(): boolean {
   if (configs.ITA_SERVER != "turkey") return true;
 
   const authorizedTiers: PaidTiers[] = ["p1", "b1","b0"];
-  //return authorizedTiers.includes(configs.TIER);
-  return true;
+  return authorizedTiers.includes(configs.TIER);
 }
 
 export function isBrandingDisabled(): boolean {
