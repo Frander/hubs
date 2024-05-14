@@ -127,7 +127,7 @@ class Menu extends Component {
   }
 
   render() {
-    if (configs.ITA_SERVER == "turkey") {
+    if (configs.ITA_SERVER != "turkey") {
       return (
         <List className={this.props.classes.root}>
           
