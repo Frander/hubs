@@ -108,6 +108,7 @@ function fetchWithAuth(req) {
 }
 
 function getSchemas() {
+  console.log(getEndpoint("schemas"))
   return fetchWithAuth(getEndpoint("schemas")).then(resp => resp.json());
 }
 
