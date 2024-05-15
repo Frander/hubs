@@ -8,7 +8,7 @@ postgrest_server = "https://hubs.local:3000"
 ita_server = ""
 base_assets_path = "/"
 sentry_dsn = ""
-ga_tracking_id = ""
+ga_tracking_id = "GTM-P2J6V7FR"
 
 [deploy]
 type = "none"
