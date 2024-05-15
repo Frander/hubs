@@ -239,6 +239,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       itaSchemas = schemaByCategories(await getItaSchemas());
     } catch (e) {
+      console.log(e);
       // Let the admin console run but skip showing configs.
     }
   }
