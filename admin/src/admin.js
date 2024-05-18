@@ -87,6 +87,7 @@ class AdminUI extends Component {
     const adminInfo = await getAdminInfo();
     // Unauthorized account
     if (adminInfo.error && adminInfo.code === 401) this.setState({ isAdmin: false });
+    console.log(adminInfo);
   }
 
   componentWillUnmount() {
