@@ -77,7 +77,8 @@ class AdminUI extends Component {
 
   state = {
     showAutoEndSessionDialog: false,
-    isAdmin: true
+    isAdmin: true,
+    auth: true
   };
 
   async componentDidMount() {
@@ -86,8 +87,8 @@ class AdminUI extends Component {
     window.addEventListener("activity_detected", this.onActivityDetected);
     const adminInfo = await getAdminInfo();
     // Unauthorized account
-    if (adminInfo.error && adminInfo.code === 401) this.setState({ isAdmin: false });
-    console.log(adminInfo);
+    if (adminInfo.error && adminInfo.code === 401) this.setState({ auth: false });
+    //console.log(adminInfo);
   }
 
   componentWillUnmount() {
@@ -148,8 +149,8 @@ class AdminUI extends Component {
                 options={{ label: "Featured avatars" }}
               />
 
-              <Resource name="accounts" list={AccountList} edit={AccountEdit} />
-              <Resource name="identities" list={IdentityList} create={IdentityCreate} edit={IdentityEdit} />
+              {this.state.auth && <Resource name="accounts" list={AccountList} edit={AccountEdit} />}
+              {this.state.auth && <Resource name="identities" list={IdentityList} create={IdentityCreate} edit={IdentityEdit} />}
               <Resource name="scenes" list={SceneList} edit={SceneEdit} />
               <Resource name="avatars" list={AvatarList} edit={AvatarEdit} />
               <Resource name="owned_files" />
