@@ -50,6 +50,10 @@
   "link-page.enter-code": "Insertar código:",
   "link-page.toggle-mode-button": "¿Tienes un código de letras?",
   "link-page.try-again": "No pudimos encontrar este código.{linebreak}Por favor, vuelve a intentar.",
+  "loading-screen.default": "Cargando escena...",
+  "loading-screen.loading-objects": "Se estan cargando los objetos {loadedCount}/{objectCount}",
+  "loading-screen.connecting": "Conectando a la escena",
+  "loading-screen.entering-room": "Entrando a spacemall",
   "media-browser.add_custom_avatar": "URL del avatar en .GLB",
   "media-browser.add_custom_object": "URL personalizado o archivo",
   "media-browser.add_custom_scene": "Escena personalizada",
@@ -196,14 +200,5 @@
   "twitter-oauth-modal.connect-button": "Conectarse a Twitter",
   "twitter-oauth-modal.message": "Conectarse a Twitter para enviar tuits desde {appName}.",
   "ui-root.interstitial-prompt": "Continuar",
-  "loading-screen.default": "Cargando escena...",
-  "loading-screen.loading-objects": "Se estan cargando los objetos {loadedCount}/{objectCount}",
-  "loading-screen.connecting": "Conectando a la escena",
-  "loading-screen.entering-room": "Entrando a spacemall",
   "invite-tooltip.description": "Copia el link para invitar a otros a spacemall"
-
-
-
-
-
 }
