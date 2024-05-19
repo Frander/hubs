@@ -61,7 +61,7 @@ function findLocale(locale) {
 export function setLocale(locale) {
   console.log(locale)
   //const resolvedLocale = findLocale(locale);
-  const resolvedLocale = es;
+  const resolvedLocale = "es";
   //force "es"
   //resolvedLocale = "es";
   console.log(resolvedLocale)
