@@ -104,8 +104,8 @@ const interval = window.setInterval(() => {
 }, 100);
 
 export const getLocale = () => {
-  //return _locale;
-  return "es"
+  return _locale;
+  //return "es"
 };
 
 export const getMessage = key => {
