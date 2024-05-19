@@ -12,7 +12,7 @@ const defaultLocaleData = {
   "app-tagline": "Private social VR in your web browser"
 };
 
-const DEFAULT_LOCALE = "es";
+const DEFAULT_LOCALE = "en";
 const cachedMessages = new Map();
 
 let _locale = DEFAULT_LOCALE;
