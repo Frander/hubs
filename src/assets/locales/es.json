@@ -199,7 +199,9 @@
   "loading-screen.default": "Cargando escena...",
   "loading-screen.loading-objects": "Se estan cargando los objetos {loadedCount}/{objectCount}",
   "loading-screen.connecting": "Conectando a la escena",
-  "loading-screen.entering-room": "Entrando a spacemall"
+  "loading-screen.entering-room": "Entrando a spacemall",
+  "invite-tooltip.description": "Copia el link para invitar a otros a spacemall"
+
 
 
 
