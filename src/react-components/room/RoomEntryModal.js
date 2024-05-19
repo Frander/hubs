@@ -43,26 +43,26 @@ export function RoomEntryModal({
             <Button preset="accent4" onClick={onJoinRoom}>
               <EnterIcon />
               <span>
-                <FormattedMessage id="room-entry-modal.join-room-button" defaultMessage="Join Room" />
+                <FormattedMessage id="room-entry-modal.join-room-button" defaultMessage="Entrar en SpaceMall" />
               </span>
             </Button>
           )}
-          {showEnterOnDevice && (
+          {/* {showEnterOnDevice && (
             <Button preset="accent5" onClick={onEnterOnDevice}>
               <VRIcon />
               <span>
                 <FormattedMessage id="room-entry-modal.enter-on-device-button" defaultMessage="Enter On Device" />
               </span>
             </Button>
-          )}
-          {showSpectate && (
+          )} */}
+          {/* {showSpectate && (
             <Button preset="accent2" onClick={onSpectate}>
               <ShowIcon />
               <span>
                 <FormattedMessage id="room-entry-modal.spectate-button" defaultMessage="Spectate" />
               </span>
             </Button>
-          )}
+          )} */}
           {showRoomSettings && breakpoint !== "sm" && (
             <>
               <hr className={styleUtils.showLg} />

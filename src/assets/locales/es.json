@@ -195,5 +195,7 @@
   "tweet-editor-modal.tweet-button": "Tuitear",
   "twitter-oauth-modal.connect-button": "Conectarse a Twitter",
   "twitter-oauth-modal.message": "Conectarse a Twitter para enviar tuits desde {appName}.",
-  "ui-root.interstitial-prompt": "Continuar"
+  "ui-root.interstitial-prompt": "Continuar",
+  "loading-screen.default": "Cargando escena..."
+
 }
