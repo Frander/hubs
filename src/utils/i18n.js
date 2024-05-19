@@ -12,7 +12,7 @@ const defaultLocaleData = {
   "app-tagline": "Private social VR in your web browser"
 };
 
-const DEFAULT_LOCALE = "es";
+const DEFAULT_LOCALE = "en";
 const cachedMessages = new Map();
 
 let _locale = DEFAULT_LOCALE;
@@ -61,6 +61,8 @@ function findLocale(locale) {
 export function setLocale(locale) {
   console.log(locale)
   const resolvedLocale = findLocale(locale);
+  //force "es"
+  resolvedLocale = "es";
   console.log(resolvedLocale)
   console.log(DEFAULT_LOCALE)
   if (resolvedLocale === DEFAULT_LOCALE) {
@@ -68,13 +70,13 @@ export function setLocale(locale) {
     // _localeData = defaultLocaleData;
     // console.log("DEFAULT_LOCALE")
     // window.dispatchEvent(new CustomEvent("locale-updated"));
-    import(`../assets/locales/${resolvedLocale}.json`).then(({ default: localeData }) => {
-      console.log(resolvedLocale)
-      console.log(localeData)
-      _locale = resolvedLocale;
-      _localeData = { ...defaultLocaleData, ...localeData };
-      window.dispatchEvent(new CustomEvent("locale-updated"));
-    });
+    // import(`../assets/locales/${resolvedLocale}.json`).then(({ default: localeData }) => {
+    //   console.log(resolvedLocale)
+    //   console.log(localeData)
+    //   _locale = resolvedLocale;
+    //   _localeData = { ...defaultLocaleData, ...localeData };
+    //   window.dispatchEvent(new CustomEvent("locale-updated"));
+    // });
   } else {
     console.log(cachedMessages.has(resolvedLocale))
     if (cachedMessages.has(resolvedLocale)) {
