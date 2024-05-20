@@ -55,7 +55,7 @@
   "loading-screen.connecting": "Conectando a la escena",
   "loading-screen.entering-room": "Entrando a spacemall",
   "loading-screen.message.keyboard-controls": "Presione Q y E para girar a la izquierda y a la derecha.",
-  "loading-screen.message.whats-new": "Ahora puedes cambiar la ubicación en la configuración. <a>Más</a>",
+  "loading-screen.message.whats-new": "Ahora puedes cambiar el idioma en la configuración. <a>Más</a>",
   "loading-screen.heading.whats-new": "Novedad",
   "room-entry-modal.room-settings-button": "Configuración",
   "avatar-settings-content.display-name-label": "Nombre",
