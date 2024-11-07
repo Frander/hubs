@@ -65,7 +65,7 @@ declare module "aframe" {
     gainSystem: GainSystem;
     environmentSystem: EnvironmentSystem;
     nameTagSystem: NameTagVisibilitySystem;
-
+    iframeSystem: IframeSystem;
     DOMContentDidLoad: bool;
   }
 
