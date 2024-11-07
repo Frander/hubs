@@ -81,7 +81,7 @@
     <!-- End Google Tag Manager (noscript) -->
     <div id="support-root"></div>
 
-    <a-scene hubs-systems capture-system listed-media local-audio-analyser class="grab-cursor"
+    <a-scene id="main-scene" hubs-systems capture-system listed-media local-audio-analyser class="grab-cursor"
         networked-scene="audio: true; debug: true; connectOnLoad: false;"
         mute-mic="eventSrc: a-scene; toggleEvents: action_mute"
         action-to-event__mute="path: /actions/muteMic; event: action_mute;" freeze-controller
@@ -449,6 +449,16 @@
                         </a-entity>
                     </a-entity>
                 </a-entity>
+            </template>
+
+            <template id="interactable-iframe-media">
+                <a-entity id="iframe-container" class="interactable" is-remote-hover-target hoverable-visuals
+                    tags="isHandCollisionTarget: true; isHoldable: true; offersRemoteConstraint: true; offersHandConstraint: true;"
+                    body-helper="type: dynamic; mass: 1; collisionFilterGroup: 1; collisionFilterMask: 31;"
+                    matrix-auto-update shape-helper="type: box" set-unowned-body-kinematic
+                    floaty-object="modifyGravityOnRelease: true; autoLockOnLoad: true; gravitySpeedLimit: 0; reduceAngularFloat: true;"
+                    set-yxz-order destroy-at-extreme-distances matrix-auto-update
+                    loader="loadedEvent: page-thumbnail-loaded" WebPageUrlModal></a-entity>
             </template>
 
             <template id="linked-media">

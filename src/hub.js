@@ -140,6 +140,9 @@ import "./components/avatar-inspect-collider";
 import "./components/video-texture-target";
 import "./components/mirror";
 
+import "./components/page-thumbnail";
+import "./components/iframe";
+
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Router, Route } from "react-router-dom";
@@ -812,6 +815,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     remountUI({ roomUnavailableReason: ExitReason.connectError });
     APP.entryManager.exitScene();
   });
+
+  console.log(scene)
+  console.log(scene.systems["hubs-systems"])
 
   const audioSystem = scene.systems["hubs-systems"].audioSystem;
   APP.mediaDevicesManager = new MediaDevicesManager(scene, store, audioSystem);

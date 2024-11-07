@@ -17,7 +17,9 @@ export function showHoverEffect(el) {
       : window.APP.hubChannel.can("spawn_and_move_media")) &&
     (!isPinned || window.APP.hubChannel.can("pin_objects"));
   const isInspecting = el.sceneEl.systems["hubs-systems"].cameraSystem.mode === CAMERA_MODE_INSPECT;
-  return (isSpawner || !isPinned || isFrozen) && canMove && !isInspecting;
+  //return (isSpawner || !isPinned || isFrozen) && canMove && !isInspecting;
+  const isInteractable = el.classList.contains("interactable");
+  return isInteractable || ((isSpawner || !isPinned || isFrozen) && canMove);
 }
 
 export function canMove(entity) {

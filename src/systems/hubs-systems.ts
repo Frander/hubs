@@ -94,6 +94,8 @@ import { inspectSystem } from "../bit-systems/inspect-system";
 import { snapMediaSystem } from "../bit-systems/snap-media-system";
 import { scaleWhenGrabbedSystem } from "../bit-systems/scale-when-grabbed-system";
 
+import { IframeSystem } from "./iframe-system";
+
 declare global {
   interface Window {
     $S: HubsSystems;
@@ -117,6 +119,8 @@ AFRAME.registerSystem("hubs-systems", {
     waitForDOMContentLoaded().then(() => {
       this.DOMContentDidLoad = true;
     });
+    this.iframeSystem = new IframeSystem(this.el);
+
     this.cursorTogglingSystem = new CursorTogglingSystem();
     this.interactionSfxSystem = new InteractionSfxSystem();
     this.superSpawnerSystem = new SuperSpawnerSystem();
@@ -149,6 +153,7 @@ AFRAME.registerSystem("hubs-systems", {
     this.gainSystem = new GainSystem();
     this.environmentSystem = new EnvironmentSystem(this.el);
     this.nameTagSystem = new NameTagVisibilitySystem(this.el);
+
 
     window.$S = this;
   },
@@ -308,6 +313,8 @@ export function mainTick(xrFrame: XRFrame, renderer: WebGLRenderer, scene: Scene
   removeNetworkedObjectButtonSystem(world);
   removeObject3DSystem(world);
 
+  //this.iframeSystem.tick();
+  
   // We run this late in the frame so that its the last thing to have an opinion about the scale of an object
   hubsSystems.boneVisibilitySystem.tick();
 
@@ -327,6 +334,9 @@ export function mainTick(xrFrame: XRFrame, renderer: WebGLRenderer, scene: Scene
     renderer.render(scene, camera);
   }
 
+  hubsSystems.iframeSystem.tick()
+
   // tock()s on components and system will fire here. (As well as any other time render() is called without unbinding onAfterRender)
   // TODO inline invoking tocks instead of using onAfterRender registered in a-scene
+  //this.iframeSystem.tick();
 }

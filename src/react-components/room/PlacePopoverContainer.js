@@ -11,10 +11,14 @@ import { ReactComponent as SceneIcon } from "../icons/Scene.svg";
 import { ReactComponent as UploadIcon } from "../icons/Upload.svg";
 import { PlacePopoverButton } from "./PlacePopover";
 import { ObjectUrlModalContainer } from "./ObjectUrlModalContainer";
+import { WebPageUrlModalContainer } from "./WebPageUrlModalContainer";
+
 import configs from "../../utils/configs";
 import { FormattedMessage } from "react-intl";
 import { anyEntityWith } from "../../utils/bit-utils";
 import { MyCameraTool } from "../../bit-components";
+import { ReactComponent as BrowserIcon } from "../icons/Link.svg";
+
 
 export function PlacePopoverContainer({ scene, mediaSearchStore, showNonHistoriedDialog, hubChannel }) {
   const [items, setItems] = useState([]);
@@ -62,6 +66,13 @@ export function PlacePopoverContainer({ scene, mediaSearchStore, showNonHistorie
             color: "accent2",
             label: <FormattedMessage id="place-popover.item-type.model" defaultMessage="3D Model" />,
             onSelect: () => mediaSearchStore.sourceNavigate("sketchfab")
+          },
+          {
+            id: "iframe",
+            icon: BrowserIcon,
+            color: "accent2",
+            label: <FormattedMessage id="place-popover.item-type.iframe" defaultMessage="Web Page" />,
+            onSelect: () => showNonHistoriedDialog(WebPageUrlModalContainer, { scene })
           },
           {
             id: "avatar",

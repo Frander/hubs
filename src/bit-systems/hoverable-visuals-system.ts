@@ -14,7 +14,7 @@ import {
   RemoteLeft,
   RemoteRight
 } from "../bit-components";
-import { injectCustomShaderChunks } from "../utils/media-utils";
+//import { injectCustomShaderChunks } from "../utils/media-utils";
 import { anyEntityWith, findChildWithComponent } from "../utils/bit-utils";
 import { EntityID } from "../utils/networking-types";
 import { isPinned } from "./networking";
@@ -25,7 +25,7 @@ export const updateHoverableVisuals = (function () {
   return function (world: HubsWorld, eid: EntityID) {
     const obj = world.eid2obj.get(eid)!;
 
-    HoverableVisualsUniforms.set(eid, injectCustomShaderChunks(obj));
+    //HoverableVisualsUniforms.set(eid, injectCustomShaderChunks(obj));
 
     boundingBox.setFromObject(obj);
     boundingBox.getBoundingSphere(boundingSphere);

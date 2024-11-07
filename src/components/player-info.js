@@ -1,4 +1,4 @@
-import { injectCustomShaderChunks } from "../utils/media-utils";
+// import { injectCustomShaderChunks } from "../utils/media-utils";
 import { AVATAR_TYPES } from "../utils/avatar-utils";
 import { registerComponentInstance, deregisterComponentInstance } from "../utils/component-utils";
 import defaultAvatar from "../assets/models/DefaultAvatar.glb";
@@ -76,7 +76,8 @@ AFRAME.registerComponent("player-info", {
   },
 
   onAvatarModelLoaded(e) {
-    this.applyProperties(e);
+    //this.applyProperties(e);
+    this.applyProperties();
 
     const modelEl = this.el.querySelector(".model");
     if (this.isLocalPlayerInfo && e.target === modelEl) {
@@ -159,19 +160,20 @@ AFRAME.registerComponent("player-info", {
     return !!this.permissions && this.permissions[perm];
   },
 
-  applyProperties(e) {
+  //applyProperties(e) {
+    applyProperties() {
     const modelEl = this.el.querySelector(".model");
     if (this.data.avatarSrc && modelEl) {
       modelEl.components["gltf-model-plus"].jsonPreprocessor = ensureAvatarNodes;
       modelEl.setAttribute("gltf-model-plus", "src", this.data.avatarSrc);
     }
 
-    if (!e || e.target === modelEl) {
-      const uniforms = injectCustomShaderChunks(this.el.object3D);
-      this.el.querySelectorAll("[hover-visuals]").forEach(el => {
-        el.components["hover-visuals"].uniforms = uniforms;
-      });
-    }
+    // if (!e || e.target === modelEl) {
+    //   const uniforms = injectCustomShaderChunks(this.el.object3D);
+    //   this.el.querySelectorAll("[hover-visuals]").forEach(el => {
+    //     el.components["hover-visuals"].uniforms = uniforms;
+    //   });
+    // }
 
     const videoTextureTargets = modelEl.querySelectorAll("[video-texture-target]");
 
