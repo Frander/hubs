@@ -11,7 +11,7 @@ import styles from "./iframe.scss";
 const IFRAME_WIDTH_M = 1.6;
 const IFRAME_HEIGHT_M = 0.9;
 const IFRAME_WIDTH_PX = 1280;
-const IFRAME_HEIGHT_PX = 720;
+const IFRAME_HEIGHT_PX = 1280;
 function Browser({ src, widht, height, onChangeSrc }) {
   return (
     <div className={styles.browser}>
@@ -29,36 +29,37 @@ Browser.propTypes = {
 AFRAME.registerComponent("iframe", {
   schema: {
     src: { type: "string" },
-    width: { type: "string" },
-    height: { type: "string" }
+    width: { type: "float" },
+    height: { type: "float" }
   },
   init: function() {
+    console.log("IFRAME DATA");
+    console.log(this.data);
+    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
+    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
     const browserEl = document.createElement("div");
-    browserEl.style.width = `${IFRAME_WIDTH_PX}px`;
-    browserEl.style.height = `${IFRAME_HEIGHT_PX}px`;
+    browserEl.style.width = `${width}px`;
+    browserEl.style.height = `${height}px`;
     this.browserEl = browserEl;
-    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M, 1, 1);
-    const material = new THREE.ShaderMaterial({
-      fragmentShader: `void main() {
-        gl_FragColor = vec4(0, 0, 0, 0);
-      }`,
-      side: THREE.DoubleSide
-    });
-    window.material = material;
-    const mesh = new THREE.Mesh(geometry, material);
-    this.el.setObject3D("mesh", mesh);
+    // const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M, 1, 1);
+    // const material = new THREE.ShaderMaterial({
+    //   fragmentShader: `void main() {
+    //     gl_FragColor = vec4(0, 0, 0, 0);
+    //   }`,
+    //   side: THREE.DoubleSide
+    // });
+    //window.material = material;
+    //const mesh = new THREE.Mesh(geometry, material);
+    //this.el.setObject3D("mesh", mesh);
     this.cssObject = new CSS3DObject(this.browserEl);
+    
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
     this.cssObject.scale.setScalar(webglToCSSScale);
     this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
     this.iframeSystem.register(this);
     this.onChangeSrc = this.onChangeSrc.bind(this);
-    this.el.addEventListener( 'onMouseMove', this.mousemove, false );
 
   },
-  onMouseMove(e){
-    console.log("onMouseMove")
-},
   onChangeSrc(event) {
     this.el.setAttribute("iframe", { src: event.target.value });
   },
@@ -66,8 +67,8 @@ AFRAME.registerComponent("iframe", {
     let renderRoot = document.querySelector("#main-scene div")
     renderRoot.style.zIndex = 0;
     renderRoot.style.pointerEvents = "none";
-    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : this.data.width
-    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : this.data.height
+    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
+    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
 
     if (this.data.src !== prevData.src) {
         render(<Browser src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
