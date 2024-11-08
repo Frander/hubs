@@ -163,6 +163,8 @@ class ConfigurationEditor extends Component {
 
   firstAvailableCategory() {
     for (const category of schemaCategories) {
+      console.log(category)
+      console.log(this.props.schema)
       if (!this.props.schema[category] || isEmptyObject(this.props.schema[category])) continue;
       return category;
     }
