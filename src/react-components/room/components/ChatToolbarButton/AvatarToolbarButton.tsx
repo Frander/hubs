@@ -15,11 +15,13 @@ const chatTooltipDescription = defineMessage({
 });
 
 type AvatarToolbarButtonProps = {
+  onClick: () => void;
+  selected: boolean,
+  scene: any,
   showNonHistoriedDialog: any
-  scene: any
 };
 
-const AvatarToolbarButton = ({ showNonHistoriedDialog, scene }: AvatarToolbarButtonProps) => {
+const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog }: AvatarToolbarButtonProps) => {
   const { unreadMessages } = useContext(ChatContext);
   const intl = useIntl();
   const description = intl.formatMessage(chatTooltipDescription);
