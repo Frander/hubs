@@ -1546,7 +1546,7 @@ class UIRoot extends Component {
                     )}
                      {!isLockedDownDemo && (
                       <AvatarToolbarButton
-                      showNonHistoriedDialog={this.showNonHistoriedDialog}
+                        showNonHistoriedDialog={this.showNonHistoriedDialog}
                         scene={this.props.scene}
                       />
                     )}
