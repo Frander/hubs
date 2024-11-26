@@ -1546,8 +1546,7 @@ class UIRoot extends Component {
                     )}
                      {!isLockedDownDemo && (
                       <AvatarToolbarButton
-                        onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
-                        selected={this.state.sidebarId === "avatar"}
+                      showNonHistoriedDialog={this.showNonHistoriedDialog}
                         scene={this.props.scene}
                       />
                     )}
