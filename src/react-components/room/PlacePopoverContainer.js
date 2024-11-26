@@ -67,13 +67,13 @@ export function PlacePopoverContainer({ scene, mediaSearchStore, showNonHistorie
             label: <FormattedMessage id="place-popover.item-type.model" defaultMessage="3D Model" />,
             onSelect: () => mediaSearchStore.sourceNavigate("sketchfab")
           },
-          {
-            id: "iframe",
-            icon: BrowserIcon,
-            color: "accent2",
-            label: <FormattedMessage id="place-popover.item-type.iframe" defaultMessage="Web Page" />,
-            onSelect: () => showNonHistoriedDialog(WebPageUrlModalContainer, { scene })
-          },
+          // {
+          //   id: "iframe",
+          //   icon: BrowserIcon,
+          //   color: "accent2",
+          //   label: <FormattedMessage id="place-popover.item-type.iframe" defaultMessage="Web Page" />,
+          //   onSelect: () => showNonHistoriedDialog(WebPageUrlModalContainer, { scene })
+          // },
           {
             id: "avatar",
             icon: AvatarIcon,

@@ -11,17 +11,20 @@ export function WebPageUrlModal({ onSubmit, onClose }) {
   const { isSubmitting, handleSubmit, register, errors } = useForm();
   return (
     <Modal
-      title={<FormattedMessage id="web-page-url-modal.title" defaultMessage="Web Page URL" />}
+      title={<FormattedMessage id="web-page-url-modal.title" defaultMessage="Avatar IA" />}
       beforeTitle={<CloseButton onClick={onClose} />}
     >
-      <Column as="form" padding center onSubmit={handleSubmit(onSubmit)}>
-        <p>
+      <iframe src="https://cloudxrserver.com/spacemall/" width="100%" height="100%" allow="camera;microphone">
+      </iframe>
+      {/* <Column as="form" padding center onSubmit={handleSubmit(onSubmit)}> */}
+      
+        {/* <p>
           <FormattedMessage
             id="web-page-url-modal.message"
             defaultMessage="Paste a URL to the web page you want to embed in the scene."
           />
-        </p>
-        <TextInputField
+        </p> */}
+        {/* <TextInputField
           name="src"
           label={<FormattedMessage id="web-page-url-modal.url-input" defaultMessage="Web Page URL" />}
           placeholder="https://www.google.com"
@@ -29,11 +32,11 @@ export function WebPageUrlModal({ onSubmit, onClose }) {
         //   required
         //   ref={register}
           error=""
-        />
-        <Button type="submit" preset="accept" disabled={isSubmitting}>
+        /> */}
+        {/* <Button type="submit" preset="accept" disabled={isSubmitting}>
           <FormattedMessage id="web-page-url-modal.spawn-web-page-button" defaultMessage="Spawn Web Page" />
-        </Button>
-      </Column>
+        </Button> */}
+      {/* </Column> */}
     </Modal>
   );
 }

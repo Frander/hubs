@@ -102,6 +102,8 @@ import { NotificationsContainer } from "./room/NotificationsContainer";
 import { usePermissions } from "./room/hooks/usePermissions";
 import { ChatContextProvider } from "./room/contexts/ChatContext";
 import ChatToolbarButton from "./room/components/ChatToolbarButton/ChatToolbarButton";
+import AvatarToolbarButton from "./room/components/ChatToolbarButton/AvatarToolbarButton";
+
 import SeePlansCTA from "./room/components/SeePlansCTA/SeePlansCTA";
 import LeaveIconBtn from "../assets/newSkin/leaveBtn.png";
 
@@ -1540,6 +1542,13 @@ class UIRoot extends Component {
                       <ChatToolbarButton
                         onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
                         selected={this.state.sidebarId === "chat"}
+                      />
+                    )}
+                     {!isLockedDownDemo && (
+                      <AvatarToolbarButton
+                        onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
+                        selected={this.state.sidebarId === "avatar"}
+                        scene={this.props.scene}
                       />
                     )}
                     {entered && isMobileVR && (
