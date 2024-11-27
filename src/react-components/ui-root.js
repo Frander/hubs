@@ -1528,6 +1528,13 @@ class UIRoot extends Component {
                               mediaSearchStore={this.props.mediaSearchStore}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
                             />
+                            <AvatarToolbarButton
+                              onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
+                              selected={this.state.sidebarId === "avatar"}
+                              scene={this.props.scene}
+                              showNonHistoriedDialog={this.showNonHistoriedDialog}
+
+                            />
                           </>
                         )}
                         {this.props.hubChannel.can("spawn_emoji") && (
@@ -1538,13 +1545,7 @@ class UIRoot extends Component {
                         )}
                       </>
                     )}
-                    {!isLockedDownDemo && (
-                      <ChatToolbarButton
-                        onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
-                        selected={this.state.sidebarId === "chat"}
-                      />
-                    )}
-                     {!isLockedDownDemo && (
+                    {/* {!isLockedDownDemo && (
                       <AvatarToolbarButton
                         onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
                         selected={this.state.sidebarId === "avatar"}
@@ -1552,7 +1553,13 @@ class UIRoot extends Component {
                         showNonHistoriedDialog={this.showNonHistoriedDialog}
 
                       />
-                    )}
+                    )} */}
+                    {!isLockedDownDemo && (
+                      <ChatToolbarButton
+                        onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
+                        selected={this.state.sidebarId === "chat"}
+                      />
+                    )}         
                     {entered && isMobileVR && (
                       <ToolbarButton
                         className={styleUtils.hideLg}

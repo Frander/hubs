@@ -6,7 +6,7 @@ import { FormattedMessage, defineMessage, useIntl } from "react-intl";
 import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ToolTip } from "@mozilla/lilypad-ui";
-import  ChatIconBtn from "../../../../assets/newSkin/chatBtn.png";
+import  ChatIconBtn from "../../../../assets/newSkin/assistant.png";
 import { WebPageUrlModalContainer } from "../../WebPageUrlModalContainer";
 
 const chatTooltipDescription = defineMessage({
