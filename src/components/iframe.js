@@ -74,4 +74,8 @@ AFRAME.registerComponent("iframe", {
         render(<Browser src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
     }
   }
+
+  remove() {
+    this.iframeSystem.unregister(this);
+  }
 });
