@@ -52,7 +52,7 @@ export function LeaveRoomModal({ reason, destinationUrl, onClose }) {
     >
       <Column padding center centerMd="both" grow>
         <p>{intl.formatMessage(reasonMessages[reason])}</p>
-        <Button as="a" preset="cancel" href={destinationUrl} rel="noopener noreferrer">
+        <Button as="a" preset="cancel" href="https://spacemall.es" rel="noopener noreferrer">
           {intl.formatMessage(confirmationMessages[reason])}
         </Button>
       </Column>
