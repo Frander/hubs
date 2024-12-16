@@ -1,9 +1,10 @@
+
 import { computeObjectAABB, getBox, getScaleCoefficient } from "../utils/auto-box-collider";
 import {
   resolveUrl,
   fetchContentType,
   getDefaultResolveQuality,
-  // injectCustomShaderChunks,
+  injectCustomShaderChunks,
   addMeshScaleAnimation,
   closeExistingMediaMirror
 } from "../utils/media-utils";
@@ -234,24 +235,24 @@ AFRAME.registerComponent("media-loader", {
     this.removeShape("loader");
   },
 
-  // updateHoverableVisuals: (function () {
-  //   const boundingBox = new THREE.Box3();
-  //   const boundingSphere = new THREE.Sphere();
-  //   return function () {
-  //     const hoverableVisuals = this.el.components["hoverable-visuals"];
+  updateHoverableVisuals: (function () {
+    const boundingBox = new THREE.Box3();
+    const boundingSphere = new THREE.Sphere();
+    return function () {
+      const hoverableVisuals = this.el.components["hoverable-visuals"];
 
-  //     if (hoverableVisuals) {
-  //       if (!this.injectedCustomShaderChunks) {
-  //         this.injectedCustomShaderChunks = true;
-  //         hoverableVisuals.uniforms = injectCustomShaderChunks(this.el.object3D);
-  //       }
+      if (hoverableVisuals) {
+        if (!this.injectedCustomShaderChunks) {
+          this.injectedCustomShaderChunks = true;
+          hoverableVisuals.uniforms = injectCustomShaderChunks(this.el.object3D);
+        }
 
-  //       boundingBox.setFromObject(this.el.object3DMap.mesh);
-  //       boundingBox.getBoundingSphere(boundingSphere);
-  //       hoverableVisuals.geometryRadius = boundingSphere.radius / this.el.object3D.scale.y;
-  //     }
-  //   };
-  // })(),
+        boundingBox.setFromObject(this.el.object3DMap.mesh);
+        boundingBox.getBoundingSphere(boundingSphere);
+        hoverableVisuals.geometryRadius = boundingSphere.radius / this.el.object3D.scale.y;
+      }
+    };
+  })(),
 
   onMediaLoaded(physicsShape = null, shouldUpdateScale) {
     const el = this.el;
@@ -275,7 +276,7 @@ AFRAME.registerComponent("media-loader", {
         });
       }
 
-      // this.updateHoverableVisuals();
+      this.updateHoverableVisuals();
 
       if (this.data.linkedEl) {
         this.el.sceneEl.systems["linked-media"].registerLinkage(this.data.linkedEl, this.el);

@@ -1,10 +1,11 @@
+
 import { objectTypeForOriginAndContentType } from "../object-types";
 import { getReticulumFetchUrl, getDirectReticulumFetchUrl } from "./phoenix-utils";
 import { ObjectContentOrigins } from "../object-types";
-// import mediaHighlightFrag from "./media-highlight-frag.glsl";
+import mediaHighlightFrag from "./media-highlight-frag.glsl";
 import { updateMaterials } from "./material-utils";
 import HubsTextureLoader from "../loaders/HubsTextureLoader";
-// import { validMaterials } from "../components/hoverable-visuals";
+import { validMaterials } from "../components/hoverable-visuals";
 import { isNonCorsProxyDomain, proxiedUrlFor, guessContentType } from "../utils/media-url-utils";
 import { isIOS as detectIOS } from "./is-mobile";
 import Linkify from "linkify-it";
@@ -280,96 +281,96 @@ export const cloneMedia = (sourceEl, template, src = null, networked = true, lin
   );
 };
 
-// export function injectCustomShaderChunks(obj) {
-//   const shaderUniforms = [];
+export function injectCustomShaderChunks(obj) {
+  const shaderUniforms = [];
 
-//   obj.traverse(object => {
-//     if (!object.material || object.isTroikaText) return;
+  obj.traverse(object => {
+    if (!object.material || object.isTroikaText) return;
 
-//     // TODO this does not really belong here
-//     object.reflectionProbeMode = "dynamic";
+    // TODO this does not really belong here
+    object.reflectionProbeMode = "dynamic";
 
-//     updateMaterials(object, material => {
-//       if (material.hubs_InjectedCustomShaderChunks) return material;
-//       if (!validMaterials.includes(material.type)) {
-//         return material;
-//       }
+    updateMaterials(object, material => {
+      if (material.hubs_InjectedCustomShaderChunks) return material;
+      if (!validMaterials.includes(material.type)) {
+        return material;
+      }
 
-//       // HACK, this routine inadvertently leaves the A-Frame shaders wired to the old, dark
-//       // material, so maps cannot be updated at runtime. This breaks UI elements who have
-//       // hover/toggle state, so for now just skip these while we figure out a more correct
-//       // solution.
-//       if (
-//         object.el &&
-//         (object.el.classList.contains("ui") ||
-//           object.el.classList.contains("hud") ||
-//           object.el.getAttribute("text-button"))
-//       )
-//         return material;
+      // HACK, this routine inadvertently leaves the A-Frame shaders wired to the old, dark
+      // material, so maps cannot be updated at runtime. This breaks UI elements who have
+      // hover/toggle state, so for now just skip these while we figure out a more correct
+      // solution.
+      if (
+        object.el &&
+        (object.el.classList.contains("ui") ||
+          object.el.classList.contains("hud") ||
+          object.el.getAttribute("text-button"))
+      )
+        return material;
 
-//       const newMaterial = material.clone();
-//       newMaterial.onBeforeRender = material.onBeforeRender;
-//       newMaterial.onBeforeCompile = (shader, renderer) => {
-//         if (shader.vertexShader.indexOf("#include <skinning_vertex>") == -1) return;
+      const newMaterial = material.clone();
+      newMaterial.onBeforeRender = material.onBeforeRender;
+      newMaterial.onBeforeCompile = (shader, renderer) => {
+        if (shader.vertexShader.indexOf("#include <skinning_vertex>") == -1) return;
 
-//         if (material.onBeforeCompile) {
-//           material.onBeforeCompile(shader, renderer);
-//         }
+        if (material.onBeforeCompile) {
+          material.onBeforeCompile(shader, renderer);
+        }
 
-//         shader.uniforms.hubs_IsFrozen = { value: false };
-//         shader.uniforms.hubs_EnableSweepingEffect = { value: false };
-//         shader.uniforms.hubs_SweepParams = { value: [0, 0] };
-//         shader.uniforms.hubs_InteractorOnePos = { value: [0, 0, 0] };
-//         shader.uniforms.hubs_InteractorTwoPos = { value: [0, 0, 0] };
-//         shader.uniforms.hubs_HighlightInteractorOne = { value: false };
-//         shader.uniforms.hubs_HighlightInteractorTwo = { value: false };
-//         shader.uniforms.hubs_Time = { value: 0 };
+        shader.uniforms.hubs_IsFrozen = { value: false };
+        shader.uniforms.hubs_EnableSweepingEffect = { value: false };
+        shader.uniforms.hubs_SweepParams = { value: [0, 0] };
+        shader.uniforms.hubs_InteractorOnePos = { value: [0, 0, 0] };
+        shader.uniforms.hubs_InteractorTwoPos = { value: [0, 0, 0] };
+        shader.uniforms.hubs_HighlightInteractorOne = { value: false };
+        shader.uniforms.hubs_HighlightInteractorTwo = { value: false };
+        shader.uniforms.hubs_Time = { value: 0 };
 
-//         shader.vertexShader =
-//           [
-//             "varying vec3 hubs_WorldPosition;",
-//             "uniform bool hubs_IsFrozen;",
-//             "uniform bool hubs_HighlightInteractorOne;",
-//             "uniform bool hubs_HighlightInteractorTwo;\n"
-//           ].join("\n") +
-//           shader.vertexShader.replace(
-//             "#include <skinning_vertex>",
-//             `#include <skinning_vertex>
-//              if (hubs_HighlightInteractorOne || hubs_HighlightInteractorTwo || hubs_IsFrozen) {
-//               vec4 wt = modelMatrix * vec4(transformed, 1);
+        shader.vertexShader =
+          [
+            "varying vec3 hubs_WorldPosition;",
+            "uniform bool hubs_IsFrozen;",
+            "uniform bool hubs_HighlightInteractorOne;",
+            "uniform bool hubs_HighlightInteractorTwo;\n"
+          ].join("\n") +
+          shader.vertexShader.replace(
+            "#include <skinning_vertex>",
+            `#include <skinning_vertex>
+             if (hubs_HighlightInteractorOne || hubs_HighlightInteractorTwo || hubs_IsFrozen) {
+              vec4 wt = modelMatrix * vec4(transformed, 1);
 
-//               // Used in the fragment shader below.
-//               hubs_WorldPosition = wt.xyz;
-//             }`
-//           );
+              // Used in the fragment shader below.
+              hubs_WorldPosition = wt.xyz;
+            }`
+          );
 
-//         shader.fragmentShader =
-//           [
-//             "varying vec3 hubs_WorldPosition;",
-//             "uniform bool hubs_IsFrozen;",
-//             "uniform bool hubs_EnableSweepingEffect;",
-//             "uniform vec2 hubs_SweepParams;",
-//             "uniform bool hubs_HighlightInteractorOne;",
-//             "uniform vec3 hubs_InteractorOnePos;",
-//             "uniform bool hubs_HighlightInteractorTwo;",
-//             "uniform vec3 hubs_InteractorTwoPos;",
-//             "uniform float hubs_Time;\n"
-//           ].join("\n") +
-//           shader.fragmentShader.replace(
-//             "#include <output_fragment>",
-//             "#include <output_fragment>\n" + mediaHighlightFrag
-//           );
+        shader.fragmentShader =
+          [
+            "varying vec3 hubs_WorldPosition;",
+            "uniform bool hubs_IsFrozen;",
+            "uniform bool hubs_EnableSweepingEffect;",
+            "uniform vec2 hubs_SweepParams;",
+            "uniform bool hubs_HighlightInteractorOne;",
+            "uniform vec3 hubs_InteractorOnePos;",
+            "uniform bool hubs_HighlightInteractorTwo;",
+            "uniform vec3 hubs_InteractorTwoPos;",
+            "uniform float hubs_Time;\n"
+          ].join("\n") +
+          shader.fragmentShader.replace(
+            "#include <output_fragment>",
+            "#include <output_fragment>\n" + mediaHighlightFrag
+          );
 
-//         shaderUniforms.push(shader.uniforms);
-//       };
-//       newMaterial.needsUpdate = true;
-//       newMaterial.hubs_InjectedCustomShaderChunks = true;
-//       return newMaterial;
-//     });
-//   });
+        shaderUniforms.push(shader.uniforms);
+      };
+      newMaterial.needsUpdate = true;
+      newMaterial.hubs_InjectedCustomShaderChunks = true;
+      return newMaterial;
+    });
+  });
 
-//   return shaderUniforms;
-// }
+  return shaderUniforms;
+}
 
 export function getPromotionTokenForFile(fileId) {
   return window.APP.store.state.uploadPromotionTokens.find(upload => upload.fileId === fileId);
