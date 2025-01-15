@@ -32,10 +32,8 @@ export function HomePage() {
   const sortedPublicRooms = Array.from(publicRooms).sort((a, b) => b.member_count - a.member_count);
   const wrapInBold = chunk => <b>{chunk}</b>;
   
-  useEffect(() => {
-    window.location.href = "https://spacemall.es";
-  }, []);
   
+
   useEffect(() => {
     const qs = new URLSearchParams(location.search);
 

@@ -14,6 +14,11 @@ registerTelemetry("/home", "Hubs Home Page");
 window.APP = { store };
 
 function HomeRoot() {
+  
+  useEffect(() => {
+    window.location.href = "https://spacemall.es";
+  }, []);
+
   return (
     <WrappedIntlProvider>
       <ThemeProvider store={store}>
