@@ -10,11 +10,12 @@ import { ThemeProvider } from "./react-components/styles/theme";
 import { store } from "./utils/store-instance";
 
 registerTelemetry("/home", "Hubs Home Page");
+import React, { useContext, useEffect } from "react";
 
 window.APP = { store };
 
 function HomeRoot() {
-  
+
   useEffect(() => {
     window.location.href = "https://spacemall.es";
   }, []);
