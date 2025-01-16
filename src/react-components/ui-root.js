@@ -1535,7 +1535,7 @@ class UIRoot extends Component {
                               scene={this.props.scene}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
                               url={"https://cloudxrserver.com/spacemall/"}
-                              title="Avatar IA"
+                              title={"Avatar IA"}
                             />
                              <AccountWPToolbarButton
                               onClick={() => this.toggleSidebar("account", { chatPrefix: "", chatAutofocus: false })}
@@ -1543,7 +1543,7 @@ class UIRoot extends Component {
                               scene={this.props.scene}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
                               url={"https://spacemall.es/mi-cuenta/"}
-                              title="Mi cuenta"
+                              title={"Mi cuenta"}
                             />
                           </>
                         )}
