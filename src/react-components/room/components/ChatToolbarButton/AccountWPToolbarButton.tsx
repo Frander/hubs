@@ -20,9 +20,10 @@ type AccountWPToolbarButtonProps = {
   scene: any,
   showNonHistoriedDialog: any,
   url: string,
+  title: string,
 };
 
-const AccountWPToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog, url }: AccountWPToolbarButtonProps) => {
+const AccountWPToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog, url, title }: AccountWPToolbarButtonProps) => {
   const { unreadMessages } = useContext(ChatContext);
   const intl = useIntl();
   const description = intl.formatMessage(chatTooltipDescription);
@@ -32,7 +33,7 @@ const AccountWPToolbarButton = ({ onClick, selected, scene, showNonHistoriedDial
       <ToolbarButton
         // Ignore type lint error as we will be redoing ToolbarButton in the future
         // @ts-ignore
-        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url })}
+        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url, title })}
         statusColor={unreadMessages ? "unread" : undefined}
         icon={<img src={ChatIconBtn} width="100%"/>}
         preset="accent4"
