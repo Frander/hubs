@@ -103,6 +103,7 @@ import { usePermissions } from "./room/hooks/usePermissions";
 import { ChatContextProvider } from "./room/contexts/ChatContext";
 import ChatToolbarButton from "./room/components/ChatToolbarButton/ChatToolbarButton";
 import AvatarToolbarButton from "./room/components/ChatToolbarButton/AvatarToolbarButton";
+import AccountWPToolbarButton from "./room/components/ChatToolbarButton/AccountWPToolbarButton";
 
 import SeePlansCTA from "./room/components/SeePlansCTA/SeePlansCTA";
 import LeaveIconBtn from "../assets/newSkin/leaveBtn.png";
@@ -1534,6 +1535,13 @@ class UIRoot extends Component {
                               scene={this.props.scene}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
                               url={"https://cloudxrserver.com/spacemall/"}
+                            />
+                             <AccountWPToolbarButton
+                              onClick={() => this.toggleSidebar("account", { chatPrefix: "", chatAutofocus: false })}
+                              selected={this.state.sidebarId === "account"}
+                              scene={this.props.scene}
+                              showNonHistoriedDialog={this.showNonHistoriedDialog}
+                              url={"https://spacemall.es/mi-cuenta/"}
                             />
                           </>
                         )}

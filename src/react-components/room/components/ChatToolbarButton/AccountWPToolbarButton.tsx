@@ -6,22 +6,23 @@ import { FormattedMessage, defineMessage, useIntl } from "react-intl";
 import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ToolTip } from "@mozilla/lilypad-ui";
-import  ChatIconBtn from "../../../../assets/newSkin/assistant.png";
+import  ChatIconBtn from "../../../../assets/newSkin/account.png";
 import { WebPageUrlModalContainer } from "../../WebPageUrlModalContainer";
 
 const chatTooltipDescription = defineMessage({
   id: "chat-tooltip.description",
-  defaultMessage: "Open the chat avatar"
+  defaultMessage: "Open WP account"
 });
 
-type AvatarToolbarButtonProps = {
+type AccountWPToolbarButtonProps = {
   onClick: () => void;
   selected: boolean,
   scene: any,
-  showNonHistoriedDialog: any
+  showNonHistoriedDialog: any,
+  url: string,
 };
 
-const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog }: AvatarToolbarButtonProps) => {
+const AccountWPToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog, url }: AccountWPToolbarButtonProps) => {
   const { unreadMessages } = useContext(ChatContext);
   const intl = useIntl();
   const description = intl.formatMessage(chatTooltipDescription);
@@ -31,7 +32,7 @@ const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog 
       <ToolbarButton
         // Ignore type lint error as we will be redoing ToolbarButton in the future
         // @ts-ignore
-        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene })}
+        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url })}
         statusColor={unreadMessages ? "unread" : undefined}
         icon={<img src={ChatIconBtn} width="100%"/>}
         preset="accent4"
@@ -41,4 +42,4 @@ const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog 
   );
 };
 
-export default AvatarToolbarButton;
+export default AccountWPToolbarButton;
