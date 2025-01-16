@@ -7,14 +7,14 @@ import { useForm } from "react-hook-form";
 import { Button } from "../input/Button";
 import { FormattedMessage } from "react-intl";
 import { Column } from "../layout/Column";
-export function WebPageUrlModal({ onSubmit, onClose }) {
+export function WebPageUrlModal({ onSubmit, onClose, url }) {
   const { isSubmitting, handleSubmit, register, errors } = useForm();
   return (
     <Modal
       title={<FormattedMessage id="web-page-url-modal.title" defaultMessage="Avatar IA" />}
       beforeTitle={<CloseButton onClick={onClose} />}
     >
-      <iframe src="https://cloudxrserver.com/spacemall/" width="100%" height="500px" allow="camera;microphone">
+      <iframe src={url} width="100%" height="500px" allow="camera;microphone">
       </iframe>
       {/* <Column as="form" padding center onSubmit={handleSubmit(onSubmit)}> */}
       

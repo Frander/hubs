@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { WebPageUrlModal } from "./WebPageUrlModal";
-export function WebPageUrlModalContainer({ scene, onClose }) {
+export function WebPageUrlModalContainer({ scene, onClose, url }) {
   const onSubmit = useCallback(
     
     ({ src }) => {
@@ -11,7 +11,7 @@ export function WebPageUrlModalContainer({ scene, onClose }) {
     },
     [scene, onClose]
   );
-  return <WebPageUrlModal onSubmit={onSubmit} onClose={onClose} />;
+  return <WebPageUrlModal onSubmit={onSubmit} onClose={onClose} url={url} />;
 }
 WebPageUrlModalContainer.propTypes = {
   scene: PropTypes.object.isRequired,

@@ -1533,7 +1533,7 @@ class UIRoot extends Component {
                               selected={this.state.sidebarId === "avatar"}
                               scene={this.props.scene}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
-
+                              url={"https://cloudxrserver.com/spacemall/"}
                             />
                           </>
                         )}
