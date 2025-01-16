@@ -21,6 +21,10 @@ import { AppLogo } from "../misc/AppLogo";
 import { isHmc } from "../../utils/isHmc";
 import maskEmail from "../../utils/mask-email";
 
+if (typeof window !== "undefined") {
+  window.location.href = "https://spacemall.es";
+}
+
 export function HomePage() {
   const auth = useContext(AuthContext);
   const intl = useIntl();
@@ -31,7 +35,6 @@ export function HomePage() {
   const sortedFavoriteRooms = Array.from(favoriteRooms).sort((a, b) => b.member_count - a.member_count);
   const sortedPublicRooms = Array.from(publicRooms).sort((a, b) => b.member_count - a.member_count);
   const wrapInBold = chunk => <b>{chunk}</b>;
-  
   
 
   useEffect(() => {
