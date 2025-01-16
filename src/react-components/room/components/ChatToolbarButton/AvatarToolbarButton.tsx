@@ -20,9 +20,10 @@ type AvatarToolbarButtonProps = {
   scene: any,
   showNonHistoriedDialog: any,
   url: string,
+  title: string,
 };
 
-const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog, url }: AvatarToolbarButtonProps) => {
+const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog, url, title }: AvatarToolbarButtonProps) => {
   const { unreadMessages } = useContext(ChatContext);
   const intl = useIntl();
   const description = intl.formatMessage(chatTooltipDescription);
@@ -32,7 +33,7 @@ const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog,
       <ToolbarButton
         // Ignore type lint error as we will be redoing ToolbarButton in the future
         // @ts-ignore
-        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url })}
+        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url, title })}
         statusColor={unreadMessages ? "unread" : undefined}
         icon={<img src={ChatIconBtn} width="100%"/>}
         preset="accent4"
