@@ -1537,14 +1537,14 @@ class UIRoot extends Component {
                               url={"https://cloudxrserver.com/spacemall/"}
                               title={"Avatar IA"}
                             />
-                             <AccountWPToolbarButton
+                             {/* <AccountWPToolbarButton
                               onClick={() => this.toggleSidebar("account", { chatPrefix: "", chatAutofocus: false })}
                               selected={this.state.sidebarId === "account"}
                               scene={this.props.scene}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
                               url={"https://spacemall.es/mi-cuenta/"}
                               title={"Mi cuenta"}
-                            />
+                            /> */}
                           </>
                         )}
                         {this.props.hubChannel.can("spawn_emoji") && (
