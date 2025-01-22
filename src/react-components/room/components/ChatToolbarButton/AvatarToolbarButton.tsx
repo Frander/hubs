@@ -33,7 +33,7 @@ const AvatarToolbarButton = ({ onClick, selected, scene, showNonHistoriedDialog,
       <ToolbarButton
         // Ignore type lint error as we will be redoing ToolbarButton in the future
         // @ts-ignore
-        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url = url, title = title })}
+        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url, title })}
         statusColor={unreadMessages ? "unread" : undefined}
         icon={<img src={ChatIconBtn} width="100%"/>}
         preset="accent4"
