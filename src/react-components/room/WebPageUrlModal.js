@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "../input/Button";
 import { FormattedMessage } from "react-intl";
 import { Column } from "../layout/Column";
-export function WebPageUrlModal({ onSubmit, onClose, url, title }) {
+export function WebPageUrlModal({ onSubmit, onClose, url, title = "" }) {
   const { isSubmitting, handleSubmit, register, errors } = useForm();
   return (
     <Modal
