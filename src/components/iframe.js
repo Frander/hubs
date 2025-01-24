@@ -5,21 +5,34 @@ import PropTypes from "prop-types";
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import ReactDOM from "react-dom/client";
 import { createRoot } from "react-dom/client";
+import { WebPageUrlModalContainer } from "../react-components/room/WebPageUrlModalContainer";
 
 import "three/examples/jsm/renderers/CSS3DRenderer";
 import styles from "./iframe.scss";
+import { title } from "process";
 const IFRAME_WIDTH_M = 1.6;
 const IFRAME_HEIGHT_M = 0.9;
 const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
 function Browser({ src, widht, height, onChangeSrc }) {
+
+  showNonHistoriedDialog = (DialogClass, props = {}) => {
+    this.setState({
+      dialog: <DialogClass {...{ onClose: this.closeDialog, ...props }} />
+    });
+  };
+
   return (
-    <div className={styles.browser}>
+    <div className={styles.browser} 
+        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene: null, url : {src}, title: "Browser" })}>
+      <div style="pointer-events: none;">
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
       </div> */}
-      <iframe src={src} style={{ width: widht, height: height }} />
+        <iframe src={src} style={{ width: widht, height: height }} />
+      </div>
     </div>
+    
   );
 }
 Browser.propTypes = {
