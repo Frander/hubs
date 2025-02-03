@@ -16,15 +16,13 @@ const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
 function Browser({ src, widht, height, onChangeSrc }) {
 
-  showNonHistoriedDialog = (DialogClass, props = {}) => {
-    this.setState({
-      dialog: <DialogClass {...{ onClose: this.closeDialog, ...props }} />
-    });
+  showModalIframe = () => {
+    this.el.sceneEl.emit("show_iframe", { src })
   };
 
   return (
     <div className={styles.browser} 
-        onClick={() => showNonHistoriedDialog(WebPageUrlModalContainer, { scene: null, url : {src}, title: "Browser" })}>
+        onClick={() => showModalIframe()}>
       <div style="pointer-events: none;">
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />

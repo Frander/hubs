@@ -314,6 +314,8 @@ class UIRoot extends Component {
   };
 
   componentDidMount() {
+    window.addEventListener("show_iframe", this.showIframe);
+
     window.addEventListener("concurrentload", this.onConcurrentLoad);
     window.addEventListener("idle_detected", this.onIdleDetected);
     window.addEventListener("activity_detected", this.onActivityDetected);
@@ -682,6 +684,13 @@ class UIRoot extends Component {
     } else {
       showFullScreenIfWasFullScreen();
     }
+  };
+
+  showIframe = (e) => {
+    console.log(e);
+    this.setState({
+      dialog: <WebPageUrlModalContainer {...{ onClose: this.closeDialog, scene: scene, src: e, title: "Iframe" }} />
+    });
   };
 
   showNonHistoriedDialog = (DialogClass, props = {}) => {
