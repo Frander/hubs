@@ -16,7 +16,7 @@ const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
 function Browser({ src, widht, height, onChangeSrc }) {
 
-  showModalIframe = () => {
+  const showModalIframe = () => {
     this.el.sceneEl.emit("show_iframe", { src })
   };
 
