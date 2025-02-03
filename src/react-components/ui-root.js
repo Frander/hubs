@@ -690,7 +690,7 @@ class UIRoot extends Component {
   showIframe = (e) => {
     console.log(e);
     this.setState({
-      dialog: <WebPageUrlModalContainer {...{ onClose: this.closeDialog, scene: this.props.scene, src: e, title: "Iframe" }} />
+      dialog: <WebPageUrlModalContainer {...{ onClose: this.closeDialog, scene: this.props.scene, src: e.detail.src, title: "Iframe" }} />
     });
   };
 
