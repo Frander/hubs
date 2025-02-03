@@ -23,7 +23,7 @@ function Browser({ src, widht, height, onChangeSrc }) {
   return (
     <div className={styles.browser} 
         onClick={() => showModalIframe()}>
-      <div style="pointer-events: none;">
+      <div style={{ pointerEvents: "none" }}>
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
       </div> */}
