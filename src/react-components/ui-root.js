@@ -107,6 +107,7 @@ import AccountWPToolbarButton from "./room/components/ChatToolbarButton/AccountW
 
 import SeePlansCTA from "./room/components/SeePlansCTA/SeePlansCTA";
 import LeaveIconBtn from "../assets/newSkin/leaveBtn.png";
+import { WebPageUrlModalContainer } from "./room/WebPageUrlModalContainer";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
