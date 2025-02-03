@@ -14,10 +14,10 @@ const IFRAME_WIDTH_M = 1.6;
 const IFRAME_HEIGHT_M = 0.9;
 const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
-function Browser({ src, widht, height, onChangeSrc }) {
+function Browser({ scene, src, widht, height, onChangeSrc }) {
 
   const showModalIframe = () => {
-    this.el.sceneEl.emit("show_iframe", { src })
+    scene.emit("show_iframe", { src })
   };
 
   return (
@@ -82,7 +82,7 @@ AFRAME.registerComponent("iframe", {
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
 
     if (this.data.src !== prevData.src) {
-        render(<Browser src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
+        render(<Browser scene={this.el.sceneEl} src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
     }
   },
 
