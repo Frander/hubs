@@ -29,8 +29,10 @@ export class IframeSystem {
     this.scene.appendChild(entity);
     //entity.setAttribute("page-thumbnail", { src: event.detail.src });
     entity.setAttribute("iframe", { src: event.detail.src });
-    entity.setAttribute("offset-relative-to", { target: "#avatar-pov-node", offset: { x: 0, y: 0, z: -1 } });
-    entity.setAttribute("networked", { template: "#interactable-iframe-media" });
+    entity.setAttribute("geometry", { primitive: "box" });
+    entity.setAttribute("material", { shader: "html", target: "#htmlElement" });
+    // entity.setAttribute("offset-relative-to", { target: "#avatar-pov-node", offset: { x: 0, y: 0, z: -1 } });
+    // entity.setAttribute("networked", { template: "#interactable-iframe-media" });
   };
 
   onInspect = event => {
