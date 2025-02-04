@@ -9,7 +9,8 @@ import { WebPageUrlModalContainer } from "../react-components/room/WebPageUrlMod
 
 import "three/examples/jsm/renderers/CSS3DRenderer";
 import styles from "./iframe.scss";
-import { title } from "process";
+import 'aframe-html-shader'
+
 const IFRAME_WIDTH_M = 1.6;
 const IFRAME_HEIGHT_M = 0.9;
 const IFRAME_WIDTH_PX = 1280;
@@ -23,12 +24,15 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
   return (
     <div className={styles.browser} 
         onClick={() => showModalIframe()}>
-      <div style={{ pointerEvents: "none" }}>
+          <div style="width: 100%; height: 100%; position: fixed; left: 0; top: 0; z-index: -1; overflow: hidden">
+            <div id="htmlElement" style="background: #F8F8F8; color: #333; font-size: 48px">        <iframe src={src} style={{ width: widht, height: height }} />
+            </div>
+          </div>
+      {/* <div style={{ pointerEvents: "none" }}> */}
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
       </div> */}
-        <iframe src={src} style={{ width: widht, height: height }} />
-      </div>
+      {/* </div> */}
     </div>
     
   );
