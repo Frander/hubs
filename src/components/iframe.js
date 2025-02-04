@@ -9,7 +9,6 @@ import { WebPageUrlModalContainer } from "../react-components/room/WebPageUrlMod
 
 import "three/examples/jsm/renderers/CSS3DRenderer";
 import styles from "./iframe.scss";
-import 'aframe-html-shader'
 
 const IFRAME_WIDTH_M = 1.6;
 const IFRAME_HEIGHT_M = 0.9;
