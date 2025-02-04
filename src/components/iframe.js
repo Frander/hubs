@@ -53,16 +53,16 @@ AFRAME.registerComponent("iframe", {
     browserEl.style.width = `${width}px`;
     browserEl.style.height = `${height}px`;
     this.browserEl = browserEl;
-    // const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M, 1, 1);
-    // const material = new THREE.ShaderMaterial({
-    //   fragmentShader: `void main() {
-    //     gl_FragColor = vec4(0, 0, 0, 0);
-    //   }`,
-    //   side: THREE.DoubleSide
-    // });
-    //window.material = material;
-    //const mesh = new THREE.Mesh(geometry, material);
-    //this.el.setObject3D("mesh", mesh);
+    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M, 1, 1);
+    const material = new THREE.ShaderMaterial({
+      fragmentShader: `void main() {
+        gl_FragColor = vec4(0, 0, 0, 0);
+      }`,
+      side: THREE.DoubleSide
+    });
+    window.material = material;
+    const mesh = new THREE.Mesh(geometry, material);
+    this.el.setObject3D("mesh", mesh);
     this.cssObject = new CSS3DObject(this.browserEl);
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
