@@ -21,7 +21,7 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
   };
 
   return (
-    <div id={"htmlElement"} className={styles.newIframe} 
+    <div id={"htmlElement"} className={styles.browser} 
         onClick={() => showModalIframe()}>
       <div style={{ pointerEvents: "none" }}>
       {/* <div className={styles.addressBar}>
