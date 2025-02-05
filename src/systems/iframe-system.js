@@ -15,8 +15,10 @@ export class IframeSystem {
     this.cssRenderer = new CSS3DRenderer();
 
     this.cssRenderer.domElement.style.position = "absolute";
-    this.cssRenderer.domElement.style.zIndex = -1;
+    this.cssRenderer.domElement.style.zIndex = 1;
     scene.appendChild(this.cssRenderer.domElement);
+
+    console.log("iframe: constructor");
 
     this.lastWidth = null;
     this.lastHeight = null;
@@ -25,6 +27,7 @@ export class IframeSystem {
   }
 
   onSpawnIframe = event => {
+    console.log("iframe: onSpawnIframe");
     const entity = document.createElement("a-entity");
     this.scene.appendChild(entity);
     //entity.setAttribute("page-thumbnail", { src: event.detail.src });
@@ -48,6 +51,8 @@ export class IframeSystem {
   };
 
   register(iframeComponent) {
+    console.log("iframe: iframeComponent");
+    console.log(iframeComponent);
     this.iframes.push(iframeComponent);
     this.cssScene.add(iframeComponent.cssObject);
   }
@@ -81,6 +86,8 @@ export class IframeSystem {
       cssObject.position.copy(webglObject.position);
       cssObject.rotation.copy(webglObject.rotation);
       cssObject.matrixNeedsUpdate = true;
+
+      this.cssScene.add(cssObject);
     }
 
     this.cssRenderer.render(this.cssScene, camera);
