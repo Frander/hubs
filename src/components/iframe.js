@@ -93,6 +93,7 @@ AFRAME.registerComponent("iframe", {
       const material = new THREE.MeshBasicMaterial({ map: texture });
       const plane = new THREE.Mesh(geometry, material);
       this.html2canvasItem = plane;
+      console.log(plane);
 
       this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
       this.iframeSystem.register(this);
