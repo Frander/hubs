@@ -54,7 +54,8 @@ export class IframeSystem {
     console.log("iframe: iframeComponent");
     console.log(iframeComponent);
     this.iframes.push(iframeComponent);
-    this.cssScene.add(iframeComponent.cssObject);
+    //this.cssScene.add(iframeComponent.cssObject);
+    this.scene.add(iframeComponent.html2canvasItem);
   }
 
   unregister(iframeComponent) {
@@ -64,7 +65,7 @@ export class IframeSystem {
       this.iframes.splice(index);
     }
 
-    this.cssScene.remove(iframeComponent.cssObject);
+    //this.cssScene.remove(iframeComponent.cssObject);
   }
 
   tick() {

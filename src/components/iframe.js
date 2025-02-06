@@ -1,5 +1,5 @@
 import { THREE } from "aframe";
-import React from "react";
+//import React from "react";
 import { render } from "react-dom";
 import PropTypes from "prop-types";
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
@@ -9,12 +9,27 @@ import { WebPageUrlModalContainer } from "../react-components/room/WebPageUrlMod
 
 import "three/examples/jsm/renderers/CSS3DRenderer";
 import styles from "./iframe.scss";
+import html2canvas from 'html2canvas';
+import React, { useEffect, useRef } from 'react';
 
 const IFRAME_WIDTH_M = 1.6;
 const IFRAME_HEIGHT_M = 0.9;
 const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
 function Browser({ scene, src, widht, height, onChangeSrc }) {
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+
+    const handleIframeLoad = () => {
+      if (iframeContainerRef.current) {
+        html2canvas(iframeContainerRef.current)
+          .then((capturedCanvas) => {
+            const texture = new THREE.CanvasTexture(capturedCanvas);
+          })
+      }
+    }
+  })
 
   const showModalIframe = () => {
     scene.emit("show_iframe", { src })
@@ -23,11 +38,11 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
   return (
     <div id={"htmlElement"} className={styles.browser} 
         onClick={() => showModalIframe()}>
-      <div style={{ pointerEvents: "none" }}>
+      <div ref={iframeContainerRef} style={{ pointerEvents: "none" }}>
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
       </div> */}
-        <iframe src={src} style={{ width: widht, height: height }} />
+        <iframe ref={iframeRef} src={src} style={{ width: widht, height: height }} />
       </div>
     </div>
     
@@ -66,9 +81,25 @@ AFRAME.registerComponent("iframe", {
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
     this.cssObject.scale.setScalar(webglToCSSScale);
-    this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
-    this.iframeSystem.register(this);
-    this.onChangeSrc = this.onChangeSrc.bind(this);
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://mokacreativa.com';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = '0';
+    html2canvas(iframe).then(function (capturedCanvas) {
+      // Crear la textura a partir del canvas capturado
+      const texture = new THREE.CanvasTexture(capturedCanvas);
+      const geometry = new THREE.PlaneGeometry(4, 3);
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const plane = new THREE.Mesh(geometry, material);
+      this.html2canvasItem = plane;
+
+      this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
+      this.iframeSystem.register(this);
+      this.onChangeSrc = this.onChangeSrc.bind(this);
+    })
+
+   
 
   },
   onChangeSrc(event) {
