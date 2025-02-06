@@ -59,10 +59,53 @@ AFRAME.registerComponent("iframe", {
     height: { type: "float" }
   },
   init: function() {
-    console.log("IFRAME DATA");
-    console.log(this.data);
+
+    //new Approch
+
+    // Crear un contenedor para el iframe fuera de la vista (oculto)
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.top = '-10000px';
+    container.style.left = '-10000px';
+
     let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
+
+    // Establecer dimensiones en píxeles para la captura
+    // Ajusta estos valores según la resolución deseada de la textura
+    container.style.width = width;
+    container.style.height = height;
+
+    // Crear el elemento iframe
+    const iframe = document.createElement('iframe');
+    iframe.src = this.data.src;
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+
+    container.appendChild(iframe);
+    document.body.appendChild(container);
+
+    iframe.addEventListener('load', () => {
+      html2canvas(container).then((canvas) => {
+        console.log(container);
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+
+        const geometry = new THREE.PlaneGeometry(data.width, data.height);
+        const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        this.el.setObject3D('mesh', mesh);
+      }).catch((err) => {
+        console.error("Error al capturar el iframe:", err);
+      });
+    });
+
+    console.log("IFRAME DATA");
+    console.log(this.data);
+    // let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
+    // let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
     const browserEl = document.createElement("div");
     browserEl.style.width = `${width}px`;
     browserEl.style.height = `${height}px`;
@@ -75,42 +118,15 @@ AFRAME.registerComponent("iframe", {
       side: THREE.DoubleSide
     });
     window.material = material;
-    const mesh = new THREE.Mesh(geometry, material);
-    this.el.setObject3D("mesh", mesh);
-    
-    const element = document.createElement('div');
-    element.style.width = '800px';
-    element.style.height = '600px';
-    element.style.backgroundColor = 'red';
-
-    
-
-    this.el.setObject3D("mesh", mesh);
+    //const mesh = new THREE.Mesh(geometry, material);
+    //this.el.setObject3D("mesh", mesh);
     
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://mokacreativa.com';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = '0';
-    console.log(iframe);
-
-    this.cssObject = new CSS3DObject(iframe);
+   
+    this.cssObject = new CSS3DObject();
     this.cssObject.scale.setScalar(webglToCSSScale);
-    this.el.object3D.add(this.cssObject);
 
-    // html2canvas(iframe).then(function (capturedCanvas) {
-    //   // Crear la textura a partir del canvas capturado
-    //   const texture = new THREE.CanvasTexture(capturedCanvas);
-    //   const geometry = new THREE.PlaneGeometry(4, 3);
-    //   const material = new THREE.MeshBasicMaterial({ map: texture });
-    //   const plane = new THREE.Mesh(geometry, material);
-    //   this.html2canvasItem = plane;
-    //   console.log(plane);
-
-    
-    // })
 
     // this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
     // this.iframeSystem.register(this);
