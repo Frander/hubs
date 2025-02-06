@@ -92,7 +92,7 @@ AFRAME.registerComponent("iframe", {
         const texture = new THREE.CanvasTexture(canvas);
         texture.needsUpdate = true;
 
-        const geometry = new THREE.PlaneGeometry(data.width, data.height);
+        const geometry = new THREE.PlaneGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M);
         const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
 
         const mesh = new THREE.Mesh(geometry, material);
