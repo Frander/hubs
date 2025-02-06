@@ -83,7 +83,7 @@ AFRAME.registerComponent("iframe", {
     element.style.height = '600px';
     element.style.backgroundColor = 'red';
 
-    this.cssObject = new CSS3DObject(element);
+    
 
     this.el.setObject3D("mesh", mesh);
     
@@ -96,19 +96,23 @@ AFRAME.registerComponent("iframe", {
     iframe.style.height = '100%';
     iframe.style.border = '0';
     console.log(iframe);
-    html2canvas(iframe).then(function (capturedCanvas) {
-      // Crear la textura a partir del canvas capturado
-      const texture = new THREE.CanvasTexture(capturedCanvas);
-      const geometry = new THREE.PlaneGeometry(4, 3);
-      const material = new THREE.MeshBasicMaterial({ map: texture });
-      const plane = new THREE.Mesh(geometry, material);
-      this.html2canvasItem = plane;
-      console.log(plane);
 
-      this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
-      this.iframeSystem.register(this);
-      this.onChangeSrc = this.onChangeSrc.bind(this);
-    })
+    this.cssObject = new CSS3DObject(iframe);
+    // html2canvas(iframe).then(function (capturedCanvas) {
+    //   // Crear la textura a partir del canvas capturado
+    //   const texture = new THREE.CanvasTexture(capturedCanvas);
+    //   const geometry = new THREE.PlaneGeometry(4, 3);
+    //   const material = new THREE.MeshBasicMaterial({ map: texture });
+    //   const plane = new THREE.Mesh(geometry, material);
+    //   this.html2canvasItem = plane;
+    //   console.log(plane);
+
+    
+    // })
+
+    this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
+    this.iframeSystem.register(this);
+    this.onChangeSrc = this.onChangeSrc.bind(this);
 
    
 
