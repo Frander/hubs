@@ -96,7 +96,7 @@ AFRAME.registerComponent("iframe", {
     this.el.object3D.add(this.plane);
 
     this.updateTexture();
-    this.interval = setInterval(() => this.updateTexture(), 1000);
+    this.interval = setInterval(() => this.updateTexture(), 50000);
 
     // iframe.addEventListener('load', () => {
     //   console.log("Loaded")
