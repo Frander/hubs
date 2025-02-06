@@ -89,7 +89,6 @@ AFRAME.registerComponent("iframe", {
     
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
-    this.cssObject.scale.setScalar(webglToCSSScale);
     const iframe = document.createElement('iframe');
     iframe.src = 'https://mokacreativa.com';
     iframe.style.width = '100%';
@@ -98,6 +97,8 @@ AFRAME.registerComponent("iframe", {
     console.log(iframe);
 
     this.cssObject = new CSS3DObject(iframe);
+    this.cssObject.scale.setScalar(webglToCSSScale);
+
     // html2canvas(iframe).then(function (capturedCanvas) {
     //   // Crear la textura a partir del canvas capturado
     //   const texture = new THREE.CanvasTexture(capturedCanvas);
