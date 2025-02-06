@@ -18,18 +18,18 @@ const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
 function Browser({ scene, src, widht, height, onChangeSrc }) {
 
-  useEffect(() => {
-    const iframe = iframeRef.current;
+  // useEffect(() => {
+  //   const iframe = iframeRef.current;
 
-    const handleIframeLoad = () => {
-      if (iframeContainerRef.current) {
-        html2canvas(iframeContainerRef.current)
-          .then((capturedCanvas) => {
-            const texture = new THREE.CanvasTexture(capturedCanvas);
-          })
-      }
-    }
-  })
+  //   const handleIframeLoad = () => {
+  //     if (iframeContainerRef.current) {
+  //       html2canvas(iframeContainerRef.current)
+  //         .then((capturedCanvas) => {
+  //           const texture = new THREE.CanvasTexture(capturedCanvas);
+  //         })
+  //     }
+  //   }
+  // })
 
   const showModalIframe = () => {
     scene.emit("show_iframe", { src })
@@ -38,11 +38,11 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
   return (
     <div id={"htmlElement"} className={styles.browser} 
         onClick={() => showModalIframe()}>
-      <div ref={iframeContainerRef} style={{ pointerEvents: "none" }}>
+      <div style={{ pointerEvents: "none" }}>
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
       </div> */}
-        <iframe ref={iframeRef} src={src} style={{ width: widht, height: height }} />
+        <iframe src={src} style={{ width: widht, height: height }} />
       </div>
     </div>
     
