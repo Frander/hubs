@@ -153,11 +153,7 @@ AFRAME.registerComponent("iframe", {
   },
   updateTexture: function () {
     // Usar html2canvas para capturar el iframe
-    html2canvas(this.iframe.contentDocument.body, {
-      allowTaint: true,
-      useCORS: true,
-      logging: true
-    }).then(canvas => {
+    html2canvas(this.container).then(canvas => {
       // Crear textura desde el canvas
       console.log(canvas);
       const texture = new THREE.CanvasTexture(canvas);
