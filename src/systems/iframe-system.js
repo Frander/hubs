@@ -55,7 +55,7 @@ export class IframeSystem {
     console.log(iframeComponent);
     this.iframes.push(iframeComponent);
     //this.cssScene.add(iframeComponent.cssObject);
-    this.scene.add(iframeComponent.html2canvasItem);
+    this.scene.add(iframeComponent.cssObject);
   }
 
   unregister(iframeComponent) {

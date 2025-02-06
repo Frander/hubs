@@ -77,7 +77,16 @@ AFRAME.registerComponent("iframe", {
     window.material = material;
     const mesh = new THREE.Mesh(geometry, material);
     this.el.setObject3D("mesh", mesh);
-    this.cssObject = new CSS3DObject(this.browserEl);
+    
+    const element = document.createElement('div');
+    element.style.width = '800px';
+    element.style.height = '600px';
+    element.style.backgroundColor = 'red';
+
+    //this.cssObject = new CSS3DObject(element);
+
+    this.el.setObject3D("mesh", mesh);
+    
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
     this.cssObject.scale.setScalar(webglToCSSScale);
@@ -86,6 +95,7 @@ AFRAME.registerComponent("iframe", {
     iframe.style.width = '100%';
     iframe.style.height = '100%';
     iframe.style.border = '0';
+    console.log(iframe);
     html2canvas(iframe).then(function (capturedCanvas) {
       // Crear la textura a partir del canvas capturado
       const texture = new THREE.CanvasTexture(capturedCanvas);
