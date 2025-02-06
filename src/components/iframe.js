@@ -79,8 +79,8 @@ AFRAME.registerComponent("iframe", {
     // Crear el elemento iframe
     this.iframe = document.createElement('iframe');
     this.iframe.src = this.data.src;
-    this.iframe.style.width = '100%';
-    this.iframe.style.height = '100%';
+    this.iframe.style.width = `${width}px`;
+    this.iframe.style.height = `${height}px`;
     this.iframe.style.border = 'none';
 
     this.container.appendChild(this.iframe);
@@ -158,13 +158,13 @@ AFRAME.registerComponent("iframe", {
       console.log(canvas);
       const texture = new THREE.CanvasTexture(canvas);
       console.log(texture);
-      texture.minFilter = THREE.LinearFilter;
+      //texture.minFilter = THREE.LinearFilter;
       texture.needsUpdate = true;
 
       // Actualizar material del plano
       this.plane.material.map = texture;
       this.plane.material.needsUpdate = true;
-      console.log(plane);
+      console.log(this.plane);
     }).catch(error => {
       console.error('Error al capturar iframe:', error);
     });
