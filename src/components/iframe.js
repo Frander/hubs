@@ -83,7 +83,7 @@ AFRAME.registerComponent("iframe", {
     element.style.height = '600px';
     element.style.backgroundColor = 'red';
 
-    //this.cssObject = new CSS3DObject(element);
+    this.cssObject = new CSS3DObject(element);
 
     this.el.setObject3D("mesh", mesh);
     
