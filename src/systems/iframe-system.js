@@ -78,17 +78,15 @@ export class IframeSystem {
       this.cssRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
     }
 
-    for (let i = 0; i < this.iframes.length; i++) {
-      const iframeComponent = this.iframes[i];
-      const webglObject = iframeComponent.el.object3D;
-      const cssObject = iframeComponent.cssObject;
-      webglObject.updateMatrixWorld(true);
-      cssObject.position.copy(webglObject.position);
-      cssObject.rotation.copy(webglObject.rotation);
-      cssObject.matrixNeedsUpdate = true;
-
-      this.cssScene.add(cssObject);
-    }
+    // for (let i = 0; i < this.iframes.length; i++) {
+    //   const iframeComponent = this.iframes[i];
+    //   const webglObject = iframeComponent.el.object3D;
+    //   const cssObject = iframeComponent.cssObject;
+    //   webglObject.updateMatrixWorld(true);
+    //   cssObject.position.copy(webglObject.position);
+    //   cssObject.rotation.copy(webglObject.rotation);
+    //   cssObject.matrixNeedsUpdate = true;
+    // }
 
     this.cssRenderer.render(this.cssScene, camera);
   }
