@@ -86,16 +86,21 @@ AFRAME.registerComponent("iframe", {
     container.appendChild(iframe);
     document.body.appendChild(container);
 
+    console.log(iframe);
+
     iframe.addEventListener('load', () => {
       html2canvas(container).then((canvas) => {
         console.log(container);
         const texture = new THREE.CanvasTexture(canvas);
+        console.log(texture);
         texture.needsUpdate = true;
 
         const geometry = new THREE.PlaneGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M);
         const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
 
         const mesh = new THREE.Mesh(geometry, material);
+
+        console.log(mesh);
         this.el.setObject3D('mesh', mesh);
       }).catch((err) => {
         console.error("Error al capturar el iframe:", err);
