@@ -98,7 +98,7 @@ AFRAME.registerComponent("iframe", {
 
     this.cssObject = new CSS3DObject(iframe);
     this.cssObject.scale.setScalar(webglToCSSScale);
-    this.el.object3D.add(cssObject);
+    this.el.object3D.add(this.cssObject);
 
     // html2canvas(iframe).then(function (capturedCanvas) {
     //   // Crear la textura a partir del canvas capturado
