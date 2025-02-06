@@ -63,49 +63,60 @@ AFRAME.registerComponent("iframe", {
     //new Approch
 
     // Crear un contenedor para el iframe fuera de la vista (oculto)
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.top = '-10000px';
-    container.style.left = '-10000px';
+    this.container = document.createElement('div');
+    this.container.style.position = 'absolute';
+    this.container.style.top = '-10000px';
+    this.container.style.left = '-10000px';
 
     let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
 
     // Establecer dimensiones en píxeles para la captura
     // Ajusta estos valores según la resolución deseada de la textura
-    container.style.width = width;
-    container.style.height = height;
+    this.container.style.width = width;
+    this.container.style.height = height;
 
     // Crear el elemento iframe
-    const iframe = document.createElement('iframe');
-    iframe.src = this.data.src;
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
+    this.iframe = document.createElement('iframe');
+    this.iframe.src = this.data.src;
+    this.iframe.style.width = '100%';
+    this.iframe.style.height = '100%';
+    this.iframe.style.border = 'none';
 
-    container.appendChild(iframe);
-    document.body.appendChild(container);
+    this.container.appendChild(this.iframe);
+    document.body.appendChild(this.container);
 
-    console.log(iframe);
+    //console.log(iframe);
 
-    iframe.addEventListener('load', () => {
-      html2canvas(container).then((canvas) => {
-        console.log(container);
-        const texture = new THREE.CanvasTexture(canvas);
-        console.log(texture);
-        texture.needsUpdate = true;
+    // Crear geometría del plano
+    this.plane = new THREE.Mesh(
+      new THREE.PlaneGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M),
+      new THREE.MeshBasicMaterial()
+    );
+    this.el.object3D.add(this.plane);
 
-        const geometry = new THREE.PlaneGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M);
-        const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+    this.updateTexture();
+    this.interval = setInterval(() => this.updateTexture(), 1000);
 
-        const mesh = new THREE.Mesh(geometry, material);
+    // iframe.addEventListener('load', () => {
+    //   console.log("Loaded")
+    //   html2canvas(container).then((canvas) => {
+    //     console.log(container);
+    //     const texture = new THREE.CanvasTexture(canvas);
+    //     console.log(texture);
+    //     texture.needsUpdate = true;
 
-        console.log(mesh);
-        this.el.setObject3D('mesh', mesh);
-      }).catch((err) => {
-        console.error("Error al capturar el iframe:", err);
-      });
-    });
+    //     const geometry = new THREE.PlaneGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M);
+    //     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+
+    //     const mesh = new THREE.Mesh(geometry, material);
+
+    //     console.log(mesh);
+    //     this.el.setObject3D('mesh', mesh);
+    //   }).catch((err) => {
+    //     console.error("Error al capturar el iframe:", err);
+    //   });
+    // });
 
     console.log("IFRAME DATA");
     console.log(this.data);
@@ -139,6 +150,28 @@ AFRAME.registerComponent("iframe", {
 
    
 
+  },
+  updateTexture: function () {
+    // Usar html2canvas para capturar el iframe
+    html2canvas(this.iframe.contentDocument.body, {
+      allowTaint: true,
+      useCORS: true,
+      logging: true
+    }).then(canvas => {
+      // Crear textura desde el canvas
+      console.log(canvas);
+      const texture = new THREE.CanvasTexture(canvas);
+      console.log(texture);
+      texture.minFilter = THREE.LinearFilter;
+      texture.needsUpdate = true;
+
+      // Actualizar material del plano
+      this.plane.material.map = texture;
+      this.plane.material.needsUpdate = true;
+      console.log(plane);
+    }).catch(error => {
+      console.error('Error al capturar iframe:', error);
+    });
   },
   onChangeSrc(event) {
     this.el.setAttribute("iframe", { src: event.target.value });
