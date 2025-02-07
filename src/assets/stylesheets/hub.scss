@@ -17,6 +17,7 @@ body.vr-mode-stretch {
   a-scene {
     .a-canvas {
       width: 200% !important;
+      z-index: 1;
     }
   }
 }

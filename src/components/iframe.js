@@ -106,7 +106,7 @@ AFRAME.registerComponent("iframe", {
     browserEl.style.height = `${height}px`;
     this.browserEl = browserEl;
 
-    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M, 1, 1);
+    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M*2, 1, 1);
     const material = new THREE.ShaderMaterial({
       fragmentShader: `void main() {
         gl_FragColor = vec4(0, 0, 0, 0);
