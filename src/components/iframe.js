@@ -155,7 +155,7 @@ AFRAME.registerComponent("iframe", {
     // Usar html2canvas para capturar el iframe
     html2canvas(this.container).then(canvas => {
       // Crear textura desde el canvas
-      console.log(canvas);
+      console.log(this.container);
       const texture = new THREE.CanvasTexture(canvas);
       console.log(texture);
       //texture.minFilter = THREE.LinearFilter;
