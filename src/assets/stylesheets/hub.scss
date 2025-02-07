@@ -4,6 +4,10 @@ html, body {
   height: 100%;
 }
 
+.a-canvas {
+  z-index: 1;
+}
+
 #ui-root {
   position: absolute;
   top: 0;
