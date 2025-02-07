@@ -118,12 +118,12 @@ AFRAME.registerComponent("iframe", {
     const mesh = new THREE.Mesh(geometry, material);
     this.el.setObject3D("mesh", mesh);
     
-    this.cssObject = new THREE.CSS3DObject(this.browserEl);
+    this.cssObject = new CSS3DObject(this.browserEl);
 
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
     this.cssObject.scale.setScalar(webglToCSSScale);
-    this.cssObject = new CSS3DObject();
+    //this.cssObject = new CSS3DObject();
 
 
     this.iframeSystem = this.el.sceneEl.systems["hubs-systems"].iframeSystem;
