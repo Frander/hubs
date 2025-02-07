@@ -32,7 +32,8 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
   // })
 
   const showModalIframe = () => {
-    scene.emit("show_iframe", { src })
+    console.log("test")
+    //scene.emit("show_iframe", { src })
   };
 
   return (
