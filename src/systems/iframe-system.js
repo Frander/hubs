@@ -54,8 +54,7 @@ export class IframeSystem {
     console.log("iframe: iframeComponent");
     console.log(iframeComponent);
     this.iframes.push(iframeComponent);
-    //this.cssScene.add(iframeComponent.cssObject);
-    //this.scene.add(iframeComponent.cssObject);
+    this.cssScene.add(iframeComponent.cssObject);
   }
 
   unregister(iframeComponent) {
@@ -65,7 +64,7 @@ export class IframeSystem {
       this.iframes.splice(index);
     }
 
-    //this.cssScene.remove(iframeComponent.cssObject);
+    this.cssScene.remove(iframeComponent.cssObject);
   }
 
   tick() {
@@ -79,15 +78,15 @@ export class IframeSystem {
       this.cssRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
     }
 
-    // for (let i = 0; i < this.iframes.length; i++) {
-    //   const iframeComponent = this.iframes[i];
-    //   const webglObject = iframeComponent.el.object3D;
-    //   const cssObject = iframeComponent.cssObject;
-    //   webglObject.updateMatrixWorld(true);
-    //   cssObject.position.copy(webglObject.position);
-    //   cssObject.rotation.copy(webglObject.rotation);
-    //   cssObject.matrixNeedsUpdate = true;
-    // }
+    for (let i = 0; i < this.iframes.length; i++) {
+      const iframeComponent = this.iframes[i];
+      const webglObject = iframeComponent.el.object3D;
+      const cssObject = iframeComponent.cssObject;
+      webglObject.updateMatrixWorld(true);
+      cssObject.position.copy(webglObject.position);
+      cssObject.rotation.copy(webglObject.rotation);
+      cssObject.matrixNeedsUpdate = true;
+    }
 
     this.cssRenderer.render(this.cssScene, camera);
   }
