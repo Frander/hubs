@@ -164,7 +164,7 @@ AFRAME.registerComponent("iframe", {
   },
   update(prevData) {
     let renderRoot = document.querySelector("#main-scene div")
-    renderRoot.style.zIndex = 0;
+    renderRoot.style.zIndex = -1;
     renderRoot.style.pointerEvents = "none";
     let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
