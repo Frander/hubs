@@ -91,7 +91,7 @@ AFRAME.registerComponent("iframe", {
     // Crear geometría del plano
     this.plane = new THREE.Mesh(
       new THREE.PlaneGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M),
-      new THREE.MeshBasicMaterial()
+      new THREE.MeshBasicMaterial({side: THREE.DoubleSide})
     );
     this.el.object3D.add(this.plane);
 
