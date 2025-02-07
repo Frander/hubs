@@ -59,6 +59,13 @@ AFRAME.registerComponent("iframe", {
     height: { type: "float" }
   },
   init: function() {
+    let src = this.data.src;
+    this.el.addEventListener('click', function (evt) {
+      console.log('Se hizo click en la entidad:', evt);
+      scene.emit("show_iframe", { src })
+      // Aquí puedes agregar la acción que desees (por ejemplo, cambiar color, reproducir animación, etc.)
+      // this.setAttribute('material', 'color', 'red'); // Ejemplo: cambiar color a rojo
+    });
 
     // //new aproach
     // // Crear un contenedor para el iframe fuera de la vista (oculto)
