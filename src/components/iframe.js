@@ -100,6 +100,8 @@ AFRAME.registerComponent("iframe", {
     const mouse = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
     const camera = this.el.cameraEl;
+    console.log(this.el)
+    console.log(this.el.cameraEl)
 
     // Click event listener
     this.el.sceneEl.renderer.domElement.addEventListener("click", (event) => {
