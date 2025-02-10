@@ -13,12 +13,17 @@ export class IframeSystem {
 
     this.cssScene = new THREE.Scene();
     this.cssRenderer = new CSS3DRenderer();
-
     this.cssRenderer.domElement.style.position = "absolute";
-    this.cssRenderer.domElement.style.zIndex = -100;
+    this.cssRenderer.domElement.style.zIndex = -1;
     scene.appendChild(this.cssRenderer.domElement);
 
-    console.log("iframe: constructor");
+
+    this.cssScene2 = new THREE.Scene();
+    this.cssRenderer2 = new CSS3DRenderer();
+    this.cssRenderer2.domElement.style.position = "absolute";
+    this.cssRenderer2.domElement.style.zIndex = 1;
+    scene.appendChild(this.cssRenderer2.domElement);
+
 
     this.lastWidth = null;
     this.lastHeight = null;
@@ -51,10 +56,9 @@ export class IframeSystem {
   };
 
   register(iframeComponent) {
-    console.log("iframe: iframeComponent");
-    console.log(iframeComponent);
     this.iframes.push(iframeComponent);
     this.cssScene.add(iframeComponent.cssObject);
+    this.cssScene2.add(iframeComponent.cssObject1);
   }
 
   unregister(iframeComponent) {
@@ -65,6 +69,8 @@ export class IframeSystem {
     }
 
     this.cssScene.remove(iframeComponent.cssObject);
+    this.cssScene2.remove(iframeComponent.cssObject2);
+
   }
 
   tick() {
@@ -76,18 +82,27 @@ export class IframeSystem {
 
     if (this.lastWidth !== canvasWidth || this.lastHeight !== canvasHeight) {
       this.cssRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      this.cssRenderer2.setSize(canvas.clientWidth, canvas.clientHeight);
     }
 
     for (let i = 0; i < this.iframes.length; i++) {
       const iframeComponent = this.iframes[i];
       const webglObject = iframeComponent.el.object3D;
       const cssObject = iframeComponent.cssObject;
+      const cssObject2 = iframeComponent.cssObject2;
+
       webglObject.updateMatrixWorld(true);
+
       cssObject.position.copy(webglObject.position);
       cssObject.rotation.copy(webglObject.rotation);
       cssObject.matrixNeedsUpdate = true;
+
+      cssObject2.position.copy(webglObject.position);
+      cssObject2.rotation.copy(webglObject.rotation);
+      cssObject2.matrixNeedsUpdate = true;
     }
 
     this.cssRenderer.render(this.cssScene, camera);
+    this.cssRenderer2.render(this.cssScene2, camera);
   }
 }

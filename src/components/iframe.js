@@ -33,7 +33,7 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
 
   const showModalIframe = () => {
     console.log("test")
-    //scene.emit("show_iframe", { src })
+    scene.emit("show_iframe", { src })
   };
 
   return (
@@ -127,6 +127,8 @@ AFRAME.registerComponent("iframe", {
     this.el.setObject3D("mesh", mesh);
     
     this.cssObject = new CSS3DObject(this.browserEl);
+
+    this.cssObject2 = new CSS3DObject(this.browserEl);
 
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
