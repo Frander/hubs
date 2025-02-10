@@ -83,12 +83,10 @@ AFRAME.registerComponent("iframe", {
     
     this.cssObject = new CSS3DObject(this.browserEl);
 
-    this.cssObject2 = new CSS3DObject(this.browserEl);
 
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
     this.cssObject.scale.setScalar(webglToCSSScale);
-    this.cssObject2.scale.setScalar(webglToCSSScale);
 
     //this.cssObject = new CSS3DObject();
 
@@ -100,14 +98,12 @@ AFRAME.registerComponent("iframe", {
     const mouse = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
     const camera = this.el.sceneEl.camera;
-    console.log(this.el.sceneEl)
-    console.log(this.el.cameraEl)
 
     // Click event listener
     this.el.sceneEl.renderer.domElement.addEventListener("click", (event) => {
       // Convert mouse click to normalized device coordinates
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      mouse.y = -(event.clientY / (window.innerHeight-96)) * 2 + 1;
 
       // Set raycaster from camera
       raycaster.setFromCamera(mouse, camera);
@@ -116,6 +112,7 @@ AFRAME.registerComponent("iframe", {
       const intersects = raycaster.intersectObject(mesh, true);
       if (intersects.length > 0) {
         console.log("Box clicked!");
+        scene.emit("show_iframe", { src })
       }
     });
 
