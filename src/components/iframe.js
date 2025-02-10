@@ -61,52 +61,7 @@ AFRAME.registerComponent("iframe", {
   },
   init: function() {
     let src = this.data.src;
-    this.el.addEventListener('click', function (evt) {
-      console.log('Se hizo click en la entidad:', evt);
-      scene.emit("show_iframe", { src })
-      // Aquí puedes agregar la acción que desees (por ejemplo, cambiar color, reproducir animación, etc.)
-      // this.setAttribute('material', 'color', 'red'); // Ejemplo: cambiar color a rojo
-    });
 
-    // //new aproach
-    // // Crear un contenedor para el iframe fuera de la vista (oculto)
-    // this.container = document.createElement('div');
-    // this.container.style.position = 'absolute';
-    // this.container.style.top = '-10000px';
-    // this.container.style.left = '-10000px';
-
-    // let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
-    // let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
-
-    // // Establecer dimensiones en píxeles para la captura
-    // // Ajusta estos valores según la resolución deseada de la textura
-    // this.container.style.width = width;
-    // this.container.style.height = height;
-
-    // // Crear el elemento iframe
-    // this.iframe = document.createElement('iframe');
-    // this.iframe.src = this.data.src;
-    // this.iframe.style.width = `${width}px`;
-    // this.iframe.style.height = `${height}px`;
-    // this.iframe.style.border = 'none';
-
-    // this.container.appendChild(this.iframe);
-    // document.body.appendChild(this.container);
-
-    //console.log(iframe);
-
-    // // Crear geometría del plano
-    // this.plane = new THREE.Mesh(
-    //   new THREE.PlaneGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M),
-    //   new THREE.MeshBasicMaterial({side: THREE.DoubleSide})
-    // );
-    // this.el.object3D.add(this.plane);
-
-    // this.updateTexture();
-    // this.interval = setInterval(() => this.updateTexture(), 50000);
-
-
-    
     let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
     const browserEl = document.createElement("div");
@@ -133,6 +88,8 @@ AFRAME.registerComponent("iframe", {
     
     const webglToCSSScale = IFRAME_WIDTH_M / IFRAME_WIDTH_PX;
     this.cssObject.scale.setScalar(webglToCSSScale);
+    this.cssObject2.scale.setScalar(webglToCSSScale);
+
     //this.cssObject = new CSS3DObject();
 
 
@@ -140,34 +97,32 @@ AFRAME.registerComponent("iframe", {
     this.iframeSystem.register(this);
     this.onChangeSrc = this.onChangeSrc.bind(this);
 
+    const mouse = new THREE.Vector2();
+    const raycaster = new THREE.Raycaster();
+
+    // Click event listener
+    this.el.sceneEl.renderer.domElement.addEventListener("click", (event) => {
+      // Convert mouse click to normalized device coordinates
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      // Set raycaster from camera
+      raycaster.setFromCamera(mouse, camera);
+
+      // Check intersection
+      const intersects = raycaster.intersectObject(mesh, true);
+      if (intersects.length > 0) {
+        console.log("Box clicked!");
+      }
+    });
+
    
 
   },
-  // updateTexture: function () {
-  //   // Usar html2canvas para capturar el iframe
-  //   html2canvas(this.container).then(canvas => {
-  //     // Crear textura desde el canvas
-  //     console.log(this.container);
-  //     const texture = new THREE.CanvasTexture(canvas);
-  //     console.log(texture);
-  //     //texture.minFilter = THREE.LinearFilter;
-  //     texture.needsUpdate = true;
-
-  //     // Actualizar material del plano
-  //     this.plane.material.map = texture;
-  //     this.plane.material.needsUpdate = true;
-  //     console.log(this.plane);
-  //   }).catch(error => {
-  //     console.error('Error al capturar iframe:', error);
-  //   });
-  // },
   onChangeSrc(event) {
     this.el.setAttribute("iframe", { src: event.target.value });
   },
   update(prevData) {
-    let renderRoot = document.querySelector("#main-scene div")
-    renderRoot.style.zIndex = -1;
-    renderRoot.style.pointerEvents = "none";
     let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
 

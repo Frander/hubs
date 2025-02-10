@@ -15,6 +15,7 @@ export class IframeSystem {
     this.cssRenderer = new CSS3DRenderer();
     this.cssRenderer.domElement.style.position = "absolute";
     this.cssRenderer.domElement.style.zIndex = -1;
+    this.cssRenderer.domElement.style.pointerEvents = "none";
     scene.appendChild(this.cssRenderer.domElement);
 
 
@@ -22,6 +23,8 @@ export class IframeSystem {
     this.cssRenderer2 = new CSS3DRenderer();
     this.cssRenderer2.domElement.style.position = "absolute";
     this.cssRenderer2.domElement.style.zIndex = 1;
+    this.cssRenderer2.domElement.style.pointerEvents = "none";
+
     scene.appendChild(this.cssRenderer2.domElement);
 
 
