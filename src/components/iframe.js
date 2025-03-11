@@ -64,14 +64,15 @@ AFRAME.registerComponent("iframe", {
     let src = this.data.src;
     let modal = this.data.modal;
 
-    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
-    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
+    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * 1
+    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * 1
+
     const browserEl = document.createElement("div");
     browserEl.style.width = `${width}px`;
     browserEl.style.height = `${height}px`;
     this.browserEl = browserEl;
 
-    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M, 1, 1);
+    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M*2, 1, 1);
     const material = new THREE.ShaderMaterial({
       fragmentShader: `void main() {
         gl_FragColor = vec4(0, 0, 0, 0);
@@ -127,8 +128,11 @@ AFRAME.registerComponent("iframe", {
     this.el.setAttribute("iframe", { src: event.target.value });
   },
   update(prevData) {
-    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
-    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
+    // let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
+    // let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
+
+    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * 1
+    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * 1
 
     if (this.data.src !== prevData.src) {
         render(<Browser scene={this.el.sceneEl} src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
