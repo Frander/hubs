@@ -56,11 +56,13 @@ Browser.propTypes = {
 AFRAME.registerComponent("iframe", {
   schema: {
     src: { type: "string" },
+    modal: { type: "boolean" },
     width: { type: "float" },
     height: { type: "float" }
   },
   init: function() {
     let src = this.data.src;
+    let modal = this.data.modal;
 
     let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
@@ -69,7 +71,7 @@ AFRAME.registerComponent("iframe", {
     browserEl.style.height = `${height}px`;
     this.browserEl = browserEl;
 
-    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M*2, 1, 1);
+    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M, 1, 1);
     const material = new THREE.ShaderMaterial({
       fragmentShader: `void main() {
         gl_FragColor = vec4(0, 0, 0, 0);
@@ -113,7 +115,8 @@ AFRAME.registerComponent("iframe", {
       const intersects = raycaster.intersectObject(mesh, true);
       if (intersects.length > 0) {
         console.log("Box clicked!");
-        scene.emit("show_iframe", { src })
+        if(!modal)
+          scene.emit("show_iframe", { src })
       }
     });
 
