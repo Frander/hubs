@@ -43,7 +43,7 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
       </div> */}
-        <iframe src={src}  allow="autoplay" style={{ width: widht, height: height }} />
+        <iframe src={src} frameborder="0"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style={{ width: widht, height: height }} />
       </div>
     </div>
     

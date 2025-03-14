@@ -1,0 +1,252 @@
+{
+    "id_activity": 1,
+    "id_company": 6,
+    "name": "Cosecha - Contadores de Fruta",
+    "description": "test",
+    "unity": "Resultados",
+    "cycle": 60,
+    "module": "COSECHA",
+    "activity_steps": 
+    [
+        {
+            "id_activity_step": 1,
+            "id_activity": 1,
+            "name_step": "Tipo de labor",
+            "type_step": "OPCION UNICA",
+            "id_parent_status": null,
+            "unity": "",
+            "calculation": "PORCENTAJE POR OPCION",
+            "activity_status":[
+                {
+                    "id_status": 1,
+                    "id_step_parent": 1,
+                    "id_status_parent": null,
+                    "name_status": "Conteo RFF - Cajas",
+                    "factor": 1,
+                    "type_status": "LISTA UNICA",
+                    "order_status": 0,
+                    "default": "0",
+                    "status": "Active",
+                    "activity_status":[
+                        {
+                            "id_status": 2,
+                            "id_status_parent": 1,
+                            "name_status": "Codigo de operador",
+                            "factor": 1,
+                            "type_status": "NUMBER",
+                            "order_status": 0,
+                            "default": "0",
+                            "status": "Active",
+                            "activity_steps": [],
+                            "activity_status": []
+                        },
+                        {
+                            "id_status": 3,
+                            "id_status_parent": 1,
+                            "name_status": "Cantidad de racimos",
+                            "factor": 1,
+                            "type_status": "NUMBER",
+                            "order_status": 3,
+                            "default": "0",
+                            "status": "Active",
+                            "activity_steps": [],
+                            "activity_status": []
+                        }
+                    ],
+                    "activity_steps": [
+                        {
+                            "id_activity_step": 2,
+                            "id_activity": 1,
+                            "name_step": "Zonas",
+                            "id_parent_status": 1,
+                            "type_step": "LISTA UNICA",
+                            "unity": "",
+                            "calculation": "PORCENTAJE POR OPCION",
+                            "order_step": 1,
+                            "activity_status": [
+                                {
+                                    "id_status": 6,
+                                    "id_status_parent": null,
+                                    "name_status": "Araki",
+                                    "factor": 1,
+                                    "type_status": "OPCIÓN UNICA",
+                                    "order_status": 0,
+                                    "default": "0",
+                                    "status": "Active",
+                                    "activity_steps": [
+                                        {
+                                            "id_activity_step": 3,
+                                            "id_activity": 1,
+                                            "name_step": "Lotes",
+                                            "id_parent_status": 6,
+                                            "type_step": "LISTA UNICA",
+                                            "unity": "",
+                                            "calculation": "PORCENTAJE POR OPCION",
+                                            "order_step": 1,
+                                            "activity_steps": [],
+                                            "activity_status": [
+                                                {
+                                                    "id_status": 7,
+                                                    "id_status_parent": null,
+                                                    "name_status": "QA1",
+                                                    "factor": 1,
+                                                    "type_status": "OPCIÓN UNICA",
+                                                    "order_status": 0,
+                                                    "default": "0",
+                                                    "status": "Active",
+                                                    "activity_steps": [],
+                                                    "activity_status": []
+                                                },
+                                                {
+                                                    "id_status": 7,
+                                                    "id_status_parent": null,
+                                                    "name_status": "QA2",
+                                                    "factor": 1,
+                                                    "type_status": "OPCIÓN UNICA",
+                                                    "order_status": 1,
+                                                    "default": "0",
+                                                    "status": "Active",
+                                                    "activity_steps": [],
+                                                    "activity_status": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "activity_status": []
+                                },
+                                {
+                                    "id_status": 7,
+                                    "id_status_parent": null,
+                                    "name_status": "Palmeiras",
+                                    "factor": 1,
+                                    "type_status": "OPCIÓN UNICA",
+                                    "order_status": 1,
+                                    "default": "0",
+                                    "status": "Active",
+                                    "activity_steps": [
+                                        {
+                                            "id_activity_step": 4,
+                                            "id_activity": 1,
+                                            "name_step": "Lotes",
+                                            "id_parent_status": 7,
+                                            "type_step": "LISTA UNICA",
+                                            "unity": "",
+                                            "calculation": "PORCENTAJE POR OPCION",
+                                            "order_step": 1,
+                                            "activity_steps": [],
+                                            "activity_status": [
+                                                {
+                                                    "id_status": 7,
+                                                    "id_status_parent": null,
+                                                    "name_status": "JP01",
+                                                    "factor": 1,
+                                                    "type_status": "QA1",
+                                                    "order_status": 0,
+                                                    "default": "0",
+                                                    "status": "Active",
+                                                    "activity_steps": [],
+                                                    "activity_status": []
+                                                },
+                                                {
+                                                    "id_status": 7,
+                                                    "id_status_parent": null,
+                                                    "name_status": "JP02",
+                                                    "factor": 1,
+                                                    "type_status": "OPCIÓN UNICA",
+                                                    "order_status": 1,
+                                                    "default": "0",
+                                                    "status": "Active",
+                                                    "activity_steps": [],
+                                                    "activity_status": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "activity_status": []
+                                }
+                            ],
+                            "activity_steps": []
+                        },
+                        {
+                            "id_activity_step": 3,
+                            "id_activity": 1,
+                            "name_step": "Cajas",
+                            "id_parent_status": 1,
+                            "type_step": "LISTA UNICA",
+                            "unity": "",
+                            "calculation": "PORCENTAJE POR OPCION",
+                            "order_step": 2,
+                            "activity_status": [
+                                {
+                                    "id_status": 5,
+                                    "id_status_parent": null,
+                                    "name_status": "Caja 9",
+                                    "factor": 1,
+                                    "type_status": "OPCIÓN UNICA",
+                                    "order_status": 0,
+                                    "default": "0",
+                                    "status": "Active",
+                                    "activity_steps": [],
+                                    "activity_status": []
+                                },
+                                {
+                                    "id_status": 6,
+                                    "id_status_parent": null,
+                                    "name_status": "Caja 12",
+                                    "factor": 1,
+                                    "type_status": "OPCIÓN UNICA",
+                                    "order_status": 1,
+                                    "default": "0",
+                                    "status": "Active",
+                                    "activity_steps": [],
+                                    "activity_status": []
+                                }
+                            ],
+                            "activity_steps": []
+                        },
+                        {
+                            "id_activity_step": 4,
+                            "id_activity": 1,
+                            "name_step": "Estado del lote",
+                            "id_parent_status": 1,
+                            "type_step": "LISTA UNICA",
+                            "unity": "",
+                            "calculation": "PORCENTAJE POR OPCION",
+                            "order_step": 4,
+                            "activity_status": [
+                                {
+                                    "id_status": 4,
+                                    "id_status_parent": null,
+                                    "name_status": "Lote cerrado",
+                                    "factor": 1,
+                                    "type_status": "OPCIÓN UNICA",
+                                    "order_status": 0,
+                                    "default": "0",
+                                    "status": "Active",
+                                    "activity_steps": [],
+                                    "activity_status": []
+                                },
+                                {
+                                    "id_status": 5,
+                                    "id_status_parent": null,
+                                    "name_status": "Lote pendiente",
+                                    "factor": 1,
+                                    "type_status": "OPCIÓN UNICA",
+                                    "order_status": 1,
+                                    "default": "0",
+                                    "status": "Active",
+                                    "activity_steps": [],
+                                    "activity_status": []
+                                }
+                            ],
+                            "activity_steps": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "activity_status":[]
+    
+}
+
