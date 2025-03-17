@@ -188,22 +188,23 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
 
   let permsTokenRefreshInterval;
 
-  if (configs.POSTGREST_SERVER) {
+  //if (configs.POSTGREST_SERVER) {
     console.log("POSTGREST_SERVER")
-    dataProvider = postgrestClient(configs.POSTGREST_SERVER);
+    //dataProvider = postgrestClient(configs.POSTGREST_SERVER);
+    dataProvider = postgrestClient("subastas-pgsql-prod-do-user-10594547-0.d.db.ondigitalocean.com:25060");
     authProvider = postgrestAuthenticatior.createAuthProvider(retPhxChannel);
     await postgrestAuthenticatior.refreshPermsToken();
 
     // Refresh perms regularly
     permsTokenRefreshInterval = setInterval(() => postgrestAuthenticatior.refreshPermsToken(), 60000);
-  } else {
-    console.log("NO POSTGREST_SERVER")
-    const server = configs.RETICULUM_SERVER || document.location.host;
-    dataProvider = postgrestClient("//" + server + "/api/postgrest");
-    authProvider = postgrestAuthenticatior.createAuthProvider();
-    console.log(store.state.credentials.token)
-    postgrestAuthenticatior.setAuthToken(store.state.credentials.token);
-  }
+  // } else {
+  //   console.log("NO POSTGREST_SERVER")
+  //   const server = configs.RETICULUM_SERVER || document.location.host;
+  //   dataProvider = postgrestClient("//" + server + "/api/postgrest");
+  //   authProvider = postgrestAuthenticatior.createAuthProvider();
+  //   console.log(store.state.credentials.token)
+  //   postgrestAuthenticatior.setAuthToken(store.state.credentials.token);
+  // }
 
   window.APP.dataProvider = dataProvider;
   window.APP.authProvider = authProvider;
