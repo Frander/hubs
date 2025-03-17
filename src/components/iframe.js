@@ -18,19 +18,6 @@ const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
 function Browser({ scene, src, widht, height, onChangeSrc }) {
 
-  // useEffect(() => {
-  //   const iframe = iframeRef.current;
-
-  //   const handleIframeLoad = () => {
-  //     if (iframeContainerRef.current) {
-  //       html2canvas(iframeContainerRef.current)
-  //         .then((capturedCanvas) => {
-  //           const texture = new THREE.CanvasTexture(capturedCanvas);
-  //         })
-  //     }
-  //   }
-  // })
-
   const showModalIframe = () => {
     console.log("test")
     scene.emit("show_iframe", { src })
@@ -64,8 +51,8 @@ AFRAME.registerComponent("iframe", {
     let src = this.data.src;
     let modal = this.data.modal;
 
-    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * 1
-    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * 1
+    let width3d = this.el.object3D.scale.x === undefined ? IFRAME_WIDTH_M : IFRAME_WIDTH_M * this.el.object3D.scale.x;
+    let height3d = this.el.object3D.scale.y === undefined ?  IFRAME_HEIGHT_M*2 : (IFRAME_HEIGHT_M*2) * this.el.object3D.scale.y;
 
     console.log(this.data);
     console.log(this);
@@ -134,8 +121,8 @@ AFRAME.registerComponent("iframe", {
     // let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     // let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
 
-    let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * 1
-    let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * 1
+    let width = this.el.object3D.scale.x === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.el.object3D.scale.x;
+    let height = this.el.object3D.scale.y === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.el.object3D.scale.y;
 
     if (this.data.src !== prevData.src) {
         render(<Browser scene={this.el.sceneEl} src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
