@@ -78,7 +78,7 @@ module.exports = (env, argv) => {
       NON_CORS_PROXY_DOMAINS: "hubs.local,dev.reticulum.io",
       BASE_ASSETS_PATH: "https://hubs.local:8989/",
       RETICULUM_SERVER: "hubs.local:4000",
-      POSTGREST_SERVER: "",
+      POSTGREST_SERVER: "subastas-pgsql-prod-do-user-10594547-0.d.db.ondigitalocean.com:25060",
       ITA_SERVER: "turkey",
       TIER: "p1"
     });
