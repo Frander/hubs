@@ -189,6 +189,7 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
   let permsTokenRefreshInterval;
 
   if (configs.POSTGREST_SERVER) {
+    console.log("POSTGREST_SERVER")
     dataProvider = postgrestClient(configs.POSTGREST_SERVER);
     authProvider = postgrestAuthenticatior.createAuthProvider(retPhxChannel);
     await postgrestAuthenticatior.refreshPermsToken();
@@ -196,9 +197,11 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
     // Refresh perms regularly
     permsTokenRefreshInterval = setInterval(() => postgrestAuthenticatior.refreshPermsToken(), 60000);
   } else {
+    console.log("NO POSTGREST_SERVER")
     const server = configs.RETICULUM_SERVER || document.location.host;
     dataProvider = postgrestClient("//" + server + "/api/postgrest");
     authProvider = postgrestAuthenticatior.createAuthProvider();
+    console.log(store.state.credentials.token)
     postgrestAuthenticatior.setAuthToken(store.state.credentials.token);
   }
 
