@@ -68,6 +68,7 @@ AFRAME.registerComponent("iframe", {
     let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * 1
 
     console.log(this.data);
+    console.log(this);
 
     const browserEl = document.createElement("div");
     browserEl.style.width = `${width}px`;
