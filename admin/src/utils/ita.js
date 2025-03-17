@@ -92,11 +92,11 @@ function getServiceDisplayName(service) {
 }
 
 function getEndpoint(path) {
-  // if (configs.ITA_SERVER) {
-  //   return `${configs.ITA_SERVER}/${path}`;
-  // } else {
+  if (configs.ITA_SERVER) {
+    return `${configs.ITA_SERVER}/${path}`;
+  } else {
     return `/api/ita/${path}`;
-  //}
+  }
 }
 
 function fetchWithAuth(req) {
