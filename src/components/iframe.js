@@ -54,6 +54,10 @@ AFRAME.registerComponent("iframe", {
     let width3d = this.el.object3D.scale.x === undefined ? IFRAME_WIDTH_M : IFRAME_WIDTH_M * this.el.object3D.scale.x;
     let height3d = this.el.object3D.scale.y === undefined ?  IFRAME_HEIGHT_M*2 : (IFRAME_HEIGHT_M*2) * this.el.object3D.scale.y;
 
+    let width = this.el.object3D.scale.x === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.el.object3D.scale.x;
+    let height = this.el.object3D.scale.y === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.el.object3D.scale.y;
+
+
     console.log(this.data);
     console.log(this);
 
@@ -62,7 +66,7 @@ AFRAME.registerComponent("iframe", {
     browserEl.style.height = `${height}px`;
     this.browserEl = browserEl;
 
-    const geometry = new THREE.PlaneBufferGeometry(IFRAME_WIDTH_M, IFRAME_HEIGHT_M*2, 1, 1);
+    const geometry = new THREE.PlaneBufferGeometry(width3d, height3d, 1, 1);
     const material = new THREE.ShaderMaterial({
       fragmentShader: `void main() {
         gl_FragColor = vec4(0, 0, 0, 0);
