@@ -12,7 +12,7 @@ import styles from "./iframe.scss";
 import html2canvas from 'html2canvas';
 import React, { useEffect, useRef } from 'react';
 
-const IFRAME_WIDTH_M = 1.6;
+const IFRAME_WIDTH_M = 1.9;
 const IFRAME_HEIGHT_M = 0.9;
 const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
