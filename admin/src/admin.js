@@ -191,7 +191,9 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
   //if (configs.POSTGREST_SERVER) {
     console.log("POSTGREST_SERVER")
     //dataProvider = postgrestClient(configs.POSTGREST_SERVER);
-    dataProvider = postgrestClient("subastas-pgsql-prod-do-user-10594547-0.d.db.ondigitalocean.com:25060");
+    //dataProvider = postgrestClient("subastas-pgsql-prod-do-user-10594547-0.d.db.ondigitalocean.com:25060");
+    dataProvider = postgrestClient("//" + server + "/api/postgrest");
+
     authProvider = postgrestAuthenticatior.createAuthProvider(retPhxChannel);
     await postgrestAuthenticatior.refreshPermsToken();
 
@@ -203,6 +205,8 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
   //   dataProvider = postgrestClient("//" + server + "/api/postgrest");
   //   authProvider = postgrestAuthenticatior.createAuthProvider();
   //   console.log(store.state.credentials.token)
+  //   console.log(dataProvider)
+  //   console.log(authProvider)
   //   postgrestAuthenticatior.setAuthToken(store.state.credentials.token);
   // }
 
