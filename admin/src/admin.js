@@ -192,6 +192,8 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
     console.log("POSTGREST_SERVER")
     //dataProvider = postgrestClient(configs.POSTGREST_SERVER);
     //dataProvider = postgrestClient("subastas-pgsql-prod-do-user-10594547-0.d.db.ondigitalocean.com:25060");
+    const server = configs.RETICULUM_SERVER || document.location.host;
+
     dataProvider = postgrestClient("//" + server + "/api/postgrest");
 
     authProvider = postgrestAuthenticatior.createAuthProvider(retPhxChannel);
