@@ -186,31 +186,24 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
   // If POSTGREST_SERVER is set, we're talking directly to PostgREST over a tunnel, and will be managing the
   // perms token ourselves. If we're not, we talk to reticulum and presume it will handle perms token forwarding.
 
+  // If POSTGREST_SERVER is set, we're talking directly to PostgREST over a tunnel, and will be managing the
+  // perms token ourselves. If we're not, we talk to reticulum and presume it will handle perms token forwarding.
+
   let permsTokenRefreshInterval;
 
-  //if (configs.POSTGREST_SERVER) {
-    console.log("POSTGREST_SERVER")
-    //dataProvider = postgrestClient(configs.POSTGREST_SERVER);
-    //dataProvider = postgrestClient("subastas-pgsql-prod-do-user-10594547-0.d.db.ondigitalocean.com:25060");
-    const server = configs.RETICULUM_SERVER || document.location.host;
-
-    dataProvider = postgrestClient("//" + server + "/api/postgrest");
-
+  if (configs.POSTGREST_SERVER) {
+    dataProvider = postgrestClient(configs.POSTGREST_SERVER);
     authProvider = postgrestAuthenticatior.createAuthProvider(retPhxChannel);
     await postgrestAuthenticatior.refreshPermsToken();
 
     // Refresh perms regularly
     permsTokenRefreshInterval = setInterval(() => postgrestAuthenticatior.refreshPermsToken(), 60000);
-  // } else {
-  //   console.log("NO POSTGREST_SERVER")
-  //   const server = configs.RETICULUM_SERVER || document.location.host;
-  //   dataProvider = postgrestClient("//" + server + "/api/postgrest");
-  //   authProvider = postgrestAuthenticatior.createAuthProvider();
-  //   console.log(store.state.credentials.token)
-  //   console.log(dataProvider)
-  //   console.log(authProvider)
-  //   postgrestAuthenticatior.setAuthToken(store.state.credentials.token);
-  // }
+  } else {
+    const server = configs.RETICULUM_SERVER || document.location.host;
+    dataProvider = postgrestClient("//" + server + "/api/postgrest");
+    authProvider = postgrestAuthenticatior.createAuthProvider();
+    postgrestAuthenticatior.setAuthToken(store.state.credentials.token);
+  }
 
   window.APP.dataProvider = dataProvider;
   window.APP.authProvider = authProvider;
