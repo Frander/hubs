@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "../input/Button";
 import { FormattedMessage } from "react-intl";
 import { Column } from "../layout/Column";
+import styles from "./WebPageUrlModal.scss";
+
 export function WebPageUrlModal({ onSubmit, onClose, url, title = "" }) {
   const { isSubmitting, handleSubmit, register, errors } = useForm();
   return (
@@ -15,7 +17,7 @@ export function WebPageUrlModal({ onSubmit, onClose, url, title = "" }) {
       title={title}
       beforeTitle={<CloseButton onClick={onClose} />}
     >
-      <iframe src={url} width="100%" height="500px" allow="camera;microphone" style="width: 86vw;">
+      <iframe src={url} width="100%" height="500px" allow="camera;microphone" className={styles.iframe}>
       </iframe>
       {/* <Column as="form" padding center onSubmit={handleSubmit(onSubmit)}> */}
       
