@@ -15,7 +15,7 @@ export function WebPageUrlModal({ onSubmit, onClose, url, title = "" }) {
       title={title}
       beforeTitle={<CloseButton onClick={onClose} />}
     >
-      <iframe src={url} width="100%" height="500px" allow="camera;microphone">
+      <iframe src={url} width="85vw" height="500px" allow="camera;microphone">
       </iframe>
       {/* <Column as="form" padding center onSubmit={handleSubmit(onSubmit)}> */}
       
