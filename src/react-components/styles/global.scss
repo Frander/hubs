@@ -22,7 +22,7 @@
   --text4-color: #{theme.$darkgrey};
   --text4-color-hover: var(--text4-color);
   --text4-color-pressed: var(--text4-color);
-  --text5-color: #{theme.$white};
+  --text5-color: #000000;
   --text5-color-hover: var(--text5-color);
   --text5-color-pressed: var(--text5-color);
   --text-inverted-color: #{theme.$white};
@@ -55,7 +55,7 @@
   --accent3-color-hover: #{theme.$green-hover};
   --accent3-color-pressed: #{theme.$green-pressed};
 
-  --accent4-color: #{theme.$blue};
+  --accent4-color: #2e6ae9;
   --accent4-border-color: var(--accent4-color);
   --accent4-color-hover: #{theme.$blue-hover};
   --accent4-color-pressed: #{theme.$blue-pressed};
@@ -75,12 +75,12 @@
 
   --secondary-color: #{theme.$lightgrey};
 
-  --background1-color: #ffffff;
-  --background2-color: #ffffff;
+  --background1-color: #f0f0f2;
+  --background2-color: #f0f0f2;
   --background3-color: #{theme.$lightgrey};
   --background4-color: #{theme.$grey};
 
-  --loading-screen-background: #fff;
+  --loading-screen-background: #f0f0f2;
 
   --border1-color: #{theme.$lightgrey};
   --border2-color: #{theme.$grey};
@@ -90,7 +90,7 @@
   --shadow-color: rgba(0, 0, 0, 0.2);
 
   --basic-color: #fff;
-  --basic-color-hover: #c3a254;
+  --basic-color-hover: #2e6ae9;
   --basic-color-pressed: #{theme.$white-pressed};
   --basic-border-color: var(--border1-color);
 

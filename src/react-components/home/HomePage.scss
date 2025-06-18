@@ -59,7 +59,7 @@
 :local(.button) {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #c3a254;
+  background-color: #2e6ae9;
   color: #333; /* Dark color for good contrast */
   border: none;
   border-radius: 4px;
@@ -71,7 +71,7 @@
   margin: 5px;
 
   :hover {
-    background-color: #c3a254; /* Lighter gold on hover */
+    background-color: #2e6ae9; /* Lighter gold on hover */
   }
 
   :active {
@@ -164,7 +164,7 @@
   text-align: center;
   margin: 0 24px 20px 24px;
   line-height: 1.25;
-  color: #c3a254;
+  color: #2e6ae9;
 
   @media (min-width: theme.$breakpoint-lg) {
     text-align: left;
