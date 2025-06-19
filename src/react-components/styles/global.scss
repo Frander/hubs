@@ -22,7 +22,7 @@
   --text4-color: #{theme.$darkgrey};
   --text4-color-hover: var(--text4-color);
   --text4-color-pressed: var(--text4-color);
-  --text5-color: #000000;
+  --text5-color: #ffff;
   --text5-color-hover: var(--text5-color);
   --text5-color-pressed: var(--text5-color);
   --text-inverted-color: #{theme.$white};
@@ -40,7 +40,7 @@
   --cancel-color-hover: #{theme.$red-hover};
   --cancel-color-pressed: #{theme.$red-pressed};
 
-  --accent1-color: #{theme.$red};
+  --accent1-color: #{theme.$blue};
   --accent1-border-color: var(--accent1-color);
   --accent1-color-hover: #{theme.$red-hover};
   --accent1-color-pressed: #{theme.$red-pressed};
@@ -90,7 +90,7 @@
   --shadow-color: rgba(0, 0, 0, 0.2);
 
   --basic-color: #fff;
-  --basic-color-hover: #2e6ae9;
+  --basic-color-hover: #c7c8c8;
   --basic-color-pressed: #{theme.$white-pressed};
   --basic-border-color: var(--border1-color);
 
