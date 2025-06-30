@@ -1575,7 +1575,7 @@ class UIRoot extends Component {
                       />
                     )} */}
                     {!isLockedDownDemo && (
-                      <ChatToolbarButton
+                      <Chat
                         onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
                         selected={this.state.sidebarId === "chat"}
                       />

@@ -77,14 +77,14 @@ export function PlacePopoverContainer({ scene, mediaSearchStore, showNonHistorie
           {
             id: "avatar",
             icon: AvatarIcon,
-            color: "accent1",
+            color: "accent3",
             label: <FormattedMessage id="place-popover.item-type.avatar" defaultMessage="Avatar" />,
             onSelect: () => mediaSearchStore.sourceNavigate("avatars")
           },
           {
             id: "scene",
             icon: SceneIcon,
-            color: "accent1",
+            color: "accent3",
             label: <FormattedMessage id="place-popover.item-type.scene" defaultMessage="Scene" />,
             onSelect: () => mediaSearchStore.sourceNavigate("scenes")
           },
