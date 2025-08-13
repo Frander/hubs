@@ -3,4 +3,8 @@
 
 :local(.iframe) {
   width: 85vw;
+  @media (width: 992px) {
+    width: 100vw;
+    height: 100vh;
+  }
 }
