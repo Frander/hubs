@@ -352,9 +352,11 @@ const qsVREntryType = qs.get("vr_entry_type");
 
 function mountUI(props = {}) {
   const scene = document.querySelector("a-scene");
-  const disableAutoExitOnIdle =
-    qsTruthy("allow_idle") || (process.env.NODE_ENV === "development" && !qs.get("idle_timeout"));
-  const forcedVREntryType = qsVREntryType;
+  // const disableAutoExitOnIdle =
+  //   qsTruthy("allow_idle") || (process.env.NODE_ENV === "development" && !qs.get("idle_timeout"));
+  // const forcedVREntryType = qsVREntryType;
+
+  const disableAutoExitOnIdle = true;
 
   root.render(
     <WrappedIntlProvider>
