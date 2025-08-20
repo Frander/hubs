@@ -1134,7 +1134,8 @@ class UIRoot extends Component {
 
     const isLockedDownDemo = isLockedDownDemoRoom();
 
-    const showObjectList = enteredOrWatching && !isLockedDownDemo;
+    //const showObjectList = enteredOrWatching && !isLockedDownDemo;
+    const showObjectList = false;
     const showECSObjectsMenuButton = qsTruthy("ecsDebug");
 
     const streamer = getCurrentStreamer();
