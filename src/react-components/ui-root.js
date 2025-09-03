@@ -553,7 +553,7 @@ class UIRoot extends Component {
       }
 
       this.setState({ secondsRemainingBeforeAutoExit });
-      this.checkForAutoExit();
+      //this.checkForAutoExit();
     }, 500);
 
     this.setState({ autoExitTimerStartedAt: new Date(), autoExitTimerInterval, autoExitReason });
