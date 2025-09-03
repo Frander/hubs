@@ -318,7 +318,7 @@ class UIRoot extends Component {
     window.addEventListener("show_iframe", this.showIframe);
 
     window.addEventListener("concurrentload", this.onConcurrentLoad);
-    window.addEventListener("idle_detected", this.onIdleDetected);
+    //window.addEventListener("idle_detected", this.onIdleDetected);
     window.addEventListener("activity_detected", this.onActivityDetected);
     window.addEventListener("focus_chat", this.onFocusChat);
     document.querySelector(".a-canvas").addEventListener("mouseup", () => {
@@ -424,7 +424,7 @@ class UIRoot extends Component {
     this.props.scene.removeEventListener("action_media_tweet", this.onTweet);
     this.props.store.removeEventListener("statechanged", this.storeUpdated);
     window.removeEventListener("concurrentload", this.onConcurrentLoad);
-    window.removeEventListener("idle_detected", this.onIdleDetected);
+    //window.removeEventListener("idle_detected", this.onIdleDetected);
     window.removeEventListener("activity_detected", this.onActivityDetected);
     window.removeEventListener("focus_chat", this.onFocusChat);
   }
