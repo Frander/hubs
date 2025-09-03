@@ -984,9 +984,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     subscriptions,
     enterScene: entryManager.enterScene,
     exitScene: reason => {
-      entryManager.exitScene();
       console.log("Exiting scene, reason:", reason);
-      remountUI({ roomUnavailableReason: reason || ExitReason.exited });
+
+      return;
+      // entryManager.exitScene();
+      // console.log("Exiting scene, reason:", reason);
+      // remountUI({ roomUnavailableReason: reason || ExitReason.exited });
     }
   });
 
