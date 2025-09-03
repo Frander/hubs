@@ -562,6 +562,7 @@ class UIRoot extends Component {
   checkForAutoExit = () => {
     if (this.state.secondsRemainingBeforeAutoExit !== 0) return;
     this.endAutoExitTimer();
+    console.log("Auto exiting due to " + this.state.autoExitTimerInterval);
     this.props.exitScene();
   };
 

@@ -59,7 +59,7 @@ export function ExitedRoomScreen({ reason, showTerms, termsUrl, showSourceLink }
   const intl = useIntl();
 
   let subtitle = null;
-  console.log("ExitedRoomScreen reason", reason);
+  console.log("ExitedRoomScreen reason v2", reason);
   if (reason === ExitReason.closed) {
     const contactEmail = intl.formatMessage({ id: "contact-email" });
 
