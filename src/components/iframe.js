@@ -77,6 +77,7 @@ AFRAME.registerComponent("iframe", {
     window.material = material;
     const mesh = new THREE.Mesh(geometry, material);
     this.el.setObject3D("mesh", mesh);
+    this.mesh = mesh; // guardar referencia
     
     this.cssObject = new CSS3DObject(this.browserEl);
 
