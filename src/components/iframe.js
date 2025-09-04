@@ -94,6 +94,7 @@ AFRAME.registerComponent("iframe", {
 
     const mouse = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
+    const canvas = this.el.sceneEl.renderer.domElement;
     const camera = this.el.sceneEl.camera;
     const scene = this.el.sceneEl;
 
