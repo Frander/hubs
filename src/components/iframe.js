@@ -25,7 +25,7 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
 
   return (
     <div id={"htmlElement"} className={styles.browser} 
-        onClick={() => showModalIframe()}>
+        onClick={() => showModalIframe()} style={{ pointerEvents: "none" }}>
       <div style={{ pointerEvents: "none" }}>
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
@@ -97,23 +97,71 @@ AFRAME.registerComponent("iframe", {
     const camera = this.el.sceneEl.camera;
     const scene = this.el.sceneEl;
 
-    // Click event listener
-    this.el.sceneEl.renderer.domElement.addEventListener("click", (event) => {
-      // Convert mouse click to normalized device coordinates
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / (window.innerHeight-96)) * 2 + 1;
 
-      // Set raycaster from camera
-      raycaster.setFromCamera(mouse, camera);
+    //==================================================================================
+    // para distinguir click de drag
+    let downPos = null;
+    let downTime = 0;
+    const DRAG_PX = 4;
+    const CLICK_MS = 400;
 
-      // Check intersection
-      const intersects = raycaster.intersectObject(mesh, true);
-      if (intersects.length > 0) {
-        console.log("Box clicked!");
-        if(!modal)
-          scene.emit("show_iframe", { src })
-      }
-    });
+    const toNDC = (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      this._ndc.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+      this._ndc.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+    };
+
+    const onPointerDown = (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      downPos = { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
+      downTime = performance.now();
+    };
+
+    const onPointerUp = (ev) => {
+      if (!downPos) return;
+      const rect = canvas.getBoundingClientRect();
+      const upPos = { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
+      const moved = Math.hypot(upPos.x - downPos.x, upPos.y - downPos.y);
+      const took = performance.now() - downTime;
+      downPos = null;
+
+      if (moved > DRAG_PX || took > CLICK_MS) return; // no fue click
+
+      toNDC(ev);
+      this._raycaster.setFromCamera(this._ndc, camera);
+
+      // intersecar SOLO contra tu mesh (recursivo por si tiene hijos)
+      const hits = this._raycaster.intersectObject(this.mesh, true);
+      if (!hits.length) return;
+
+      // ¡Click dentro del objeto!
+      if (!modal) scene.emit("show_iframe", { src });
+    };
+
+    // Guardar refs para limpieza
+    this._handlers = { onPointerDown, onPointerUp };
+
+    // Usar pointer events (mouse+touch+stylus)
+    canvas.addEventListener("pointerdown", onPointerDown, { passive: true });
+    canvas.addEventListener("pointerup",   onPointerUp,   { passive: true });
+
+    // // Click event listener
+    // this.el.sceneEl.renderer.domElement.addEventListener("click", (event) => {
+    //   // Convert mouse click to normalized device coordinates
+    //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    //   mouse.y = -(event.clientY / (window.innerHeight-96)) * 2 + 1;
+
+    //   // Set raycaster from camera
+    //   raycaster.setFromCamera(mouse, camera);
+
+    //   // Check intersection
+    //   const intersects = raycaster.intersectObject(mesh, true);
+    //   if (intersects.length > 0) {
+    //     console.log("Box clicked!");
+    //     if(!modal)
+    //       scene.emit("show_iframe", { src })
+    //   }
+    // });
 
    
 
@@ -135,5 +183,13 @@ AFRAME.registerComponent("iframe", {
 
   remove() {
     this.iframeSystem.unregister(this);
+    const canvas = this.el?.sceneEl?.renderer?.domElement;
+    if (canvas && this._handlers) {
+      canvas.removeEventListener("pointerdown", this._handlers.onPointerDown);
+      canvas.removeEventListener("pointerup",   this._handlers.onPointerUp);
+    }
+    this._handlers = null;
+    // quitar mesh
+    this.el.setObject3D("mesh", null);
   }
 });
