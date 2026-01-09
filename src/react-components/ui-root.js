@@ -71,6 +71,8 @@ import { ReactComponent as LeaveIcon } from "./icons/Leave.svg";
 import { ReactComponent as EnterIcon } from "./icons/Enter.svg";
 import { ReactComponent as InviteIcon } from "./icons/Invite.svg";
 import hubsLogo from "../assets/images/hubs-logo.png";
+import { WordPressLoginModal } from "./auth/WordPressLoginModal";
+import { createWordPressAuthChannel } from "../utils/wordpress-auth-channel";
 import { PeopleSidebarContainer, userFromPresence } from "./room/PeopleSidebarContainer";
 import { ObjectListProvider } from "./room/hooks/useObjectList";
 import { ObjectsSidebarContainer } from "./room/ObjectsSidebarContainer";
@@ -210,6 +212,12 @@ class UIRoot extends Component {
     videoShareMediaSource: null,
     showVideoShareFailed: false,
 
+    // WordPress authentication state
+    wpLoggedIn: false,
+    wpUser: null,
+    wpAuthChannel: null,
+    showWpLoginModal: false,
+
     objectInfo: null,
     objectSrc: "",
     sidebarId: null,
@@ -226,6 +234,9 @@ class UIRoot extends Component {
     // An exit handler that discards event arguments and can be cleaned up.
     this.exitEventHandler = () => this.props.exitScene();
     this.mediaDevicesManager = APP.mediaDevicesManager;
+
+    // Inicializar WordPress AuthChannel
+    this.initializeWordPressAuth();
   }
 
   componentDidUpdate(prevProps) {
@@ -818,6 +829,113 @@ class UIRoot extends Component {
     }
   };
 
+  // WordPress Authentication Methods
+  initializeWordPressAuth = () => {
+    try {
+      const wpAuthChannel = createWordPressAuthChannel(this.props.store, {
+        debug: process.env.NODE_ENV === 'development'
+      });
+      
+      this.setState({ wpAuthChannel });
+      
+      // Intentar detectar autenticación existente
+      this.detectExistingWordPressAuth(wpAuthChannel);
+    } catch (error) {
+      console.error("Error inicializando WordPress auth:", error);
+    }
+  };
+
+  detectExistingWordPressAuth = async (wpAuthChannel) => {
+    try {
+      const result = await wpAuthChannel.detectExistingWordPressAuth();
+      if (result && result.user) {
+        this.setState({
+          wpLoggedIn: true,
+          wpUser: result.user,
+          signedIn: true
+        });
+        console.log("Usuario WordPress detectado:", result.user.display_name);
+      }
+    } catch (error) {
+      // Silenciosamente fallar si no hay autenticación existente
+      console.log("No hay autenticación WordPress existente");
+    }
+  };
+
+  handleWordPressLogin = () => {
+    if (this.state.wpLoggedIn) {
+      // Si está logueado, hacer logout
+      this.handleWordPressLogout();
+    } else {
+      // Si no está logueado, mostrar modal de login
+      this.setState({ showWpLoginModal: true });
+    }
+  };
+
+  handleWordPressLoginSuccess = (result) => {
+    this.setState({
+      wpLoggedIn: true,
+      wpUser: result.user,
+      signedIn: true,
+      showWpLoginModal: false
+    });
+
+    // Opcional: También setear en el sistema Hubs existente
+    if (this.props.hubChannel) {
+      this.props.hubChannel.signedIn = true;
+    }
+
+    console.log("Login WordPress exitoso:", result.user.display_name);
+  };
+
+  handleWordPressLogout = async () => {
+    try {
+      if (this.state.wpAuthChannel) {
+        await this.state.wpAuthChannel.logoutFromWordPress();
+      }
+      
+      this.setState({
+        wpLoggedIn: false,
+        wpUser: null,
+        signedIn: false
+      });
+
+      // También hacer logout del sistema Hubs si está conectado
+      if (this.props.hubChannel && this.props.hubChannel.signedIn) {
+        await this.signOut();
+      }
+
+      console.log("Logout WordPress exitoso");
+    } catch (error) {
+      console.error("Error en logout WordPress:", error);
+    }
+  };
+
+  closeWordPressLoginModal = () => {
+    this.setState({ showWpLoginModal: false });
+  };
+
+  // Modificar showIframe para usar token de WordPress
+  showIframeWithWordPressToken = (e) => {
+    if (this.state.wpAuthChannel && this.state.wpLoggedIn) {
+      const enhancedUrl = this.state.wpAuthChannel.generateIframeUrl(e.detail.src || '/mi-cuenta/');
+      
+      this.setState({
+        dialog: <WebPageUrlModalContainer 
+          {...{ 
+            onClose: this.closeDialog, 
+            scene: this.props.scene, 
+            url: enhancedUrl,
+            title: e.detail.title || "Mi Cuenta" 
+          }} 
+        />
+      });
+    } else {
+      // Fallback al método original
+      this.showIframe(e);
+    }
+  };
+
   renderInterstitialPrompt = () => {
     return (
       <div className={styles.interstitial} onClick={() => this.props.onInterstitialPromptClicked()}>
@@ -887,6 +1005,10 @@ class UIRoot extends Component {
               SignInMessages.roomSettings
             );
           }}
+          showLogin={true}
+          onLogin={this.handleWordPressLogin}
+          isLoggedIn={this.state.wpLoggedIn}
+          userDisplayName={this.state.wpUser?.display_name}
         />
         {!this.state.waitingOnAudio && (
           <EntryStartPanel
@@ -1635,6 +1757,16 @@ class UIRoot extends Component {
                 defaultMessage="This page will be reloaded in five seconds because the room owner toggled the bitECS based client activation flag."
               />
             </div>
+          )}
+          
+          {/* WordPress Login Modal */}
+          {this.state.showWpLoginModal && this.state.wpAuthChannel && (
+            <WordPressLoginModal
+              wpAuthChannel={this.state.wpAuthChannel}
+              onLogin={this.handleWordPressLoginSuccess}
+              onClose={this.closeWordPressLoginModal}
+              testConnection={true}
+            />
           )}
         </ReactAudioContext.Provider>
       </MoreMenuContextProvider>

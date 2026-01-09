@@ -25,6 +25,10 @@ export function RoomEntryModal({
   onSpectate,
   showRoomSettings,
   onRoomSettings,
+  showLogin,
+  onLogin,
+  isLoggedIn,
+  userDisplayName,
   ...rest
 }) {
   const breakpoint = useCssBreakpoints();
@@ -39,11 +43,44 @@ export function RoomEntryModal({
           <p>{roomName}</p>
         </div>
         <Column center className={styles.buttons}>
+          {/* Mostrar información de usuario logueado */}
+          {isLoggedIn && userDisplayName && (
+            <div className={styles.userInfo}>
+              <p>
+                <FormattedMessage 
+                  id="room-entry-modal.welcome-user" 
+                  defaultMessage="Bienvenido, {name}"
+                  values={{ name: userDisplayName }}
+                />
+              </p>
+            </div>
+          )}
+
+          {/* Botón de login/logout */}
+          {showLogin && (
+            <Button 
+              preset={isLoggedIn ? "transparent" : "accent3"} 
+              onClick={onLogin}
+              className={isLoggedIn ? styles.loggedInButton : styles.loginButton}
+            >
+              <span>
+                {isLoggedIn ? (
+                  <FormattedMessage id="room-entry-modal.logout-button" defaultMessage="Cerrar Sesión" />
+                ) : (
+                  <FormattedMessage id="room-entry-modal.login-button" defaultMessage="Iniciar Sesión" />
+                )}
+              </span>
+            </Button>
+          )}
+
           {showJoinRoom && (
             <Button preset="accent4" onClick={onJoinRoom}>
               <EnterIcon />
               <span>
-                <FormattedMessage id="room-entry-modal.join-room-button" defaultMessage="Entrar en SpaceMall" />
+                <FormattedMessage 
+                  id="room-entry-modal.join-room-button" 
+                  defaultMessage={isLoggedIn ? "Entrar en SpaceMall" : "Entrar como Invitado"} 
+                />
               </span>
             </Button>
           )}
@@ -90,12 +127,19 @@ RoomEntryModal.propTypes = {
   showSpectate: PropTypes.bool,
   onSpectate: PropTypes.func,
   showRoomSettings: PropTypes.bool,
-  onRoomSettings: PropTypes.func
+  onRoomSettings: PropTypes.func,
+  showLogin: PropTypes.bool,
+  onLogin: PropTypes.func,
+  isLoggedIn: PropTypes.bool,
+  userDisplayName: PropTypes.string
 };
 
 RoomEntryModal.defaultProps = {
   showJoinRoom: true,
   showEnterOnDevice: true,
   showSpectate: true,
-  showRoomSettings: true
+  showRoomSettings: true,
+  showLogin: true,
+  isLoggedIn: false,
+  userDisplayName: null
 };
