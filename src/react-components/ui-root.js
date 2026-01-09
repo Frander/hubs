@@ -833,12 +833,18 @@ class UIRoot extends Component {
   initializeWordPressAuth = () => {
     try {
       console.log('Inicializando WordPress auth...');
+      console.log('this.props.store:', this.props.store);
+      
       const wpAuthChannel = createWordPressAuthChannel(this.props.store, {
         debug: process.env.NODE_ENV === 'development'
       });
       
-      console.log('wpAuthChannel creado:', wpAuthChannel);
-      this.setState({ wpAuthChannel });
+      console.log('wpAuthChannel creado exitosamente:', wpAuthChannel);
+      console.log('wpAuthChannel.wpBaseUrl:', wpAuthChannel?.wpBaseUrl);
+      
+      this.setState({ wpAuthChannel }, () => {
+        console.log('Estado actualizado, wpAuthChannel en state:', this.state.wpAuthChannel);
+      });
       
       // Intentar detectar autenticación existente
       this.detectExistingWordPressAuth(wpAuthChannel);
@@ -865,17 +871,20 @@ class UIRoot extends Component {
   };
 
   handleWordPressLogin = () => {
-    console.log('handleWordPressLogin clicked', { 
-      wpLoggedIn: this.state.wpLoggedIn, 
-      wpAuthChannel: this.state.wpAuthChannel 
-    });
+    console.log('handleWordPressLogin clicked');
+    console.log('wpLoggedIn:', this.state.wpLoggedIn);
+    console.log('wpAuthChannel:', this.state.wpAuthChannel ? 'exists' : 'null');
+    console.log('showWpLoginModal:', this.state.showWpLoginModal);
     
     if (this.state.wpLoggedIn) {
       // Si está logueado, hacer logout
       this.handleWordPressLogout();
     } else {
       // Si no está logueado, mostrar modal de login
-      this.setState({ showWpLoginModal: true });
+      console.log('Setting showWpLoginModal to true');
+      this.setState({ showWpLoginModal: true }, () => {
+        console.log('State updated, showWpLoginModal:', this.state.showWpLoginModal);
+      });
     }
   };
 
@@ -1767,13 +1776,23 @@ class UIRoot extends Component {
           )}
           
           {/* WordPress Login Modal */}
-          {this.state.showWpLoginModal && this.state.wpAuthChannel && (
-            <WordPressLoginModal
-              wpAuthChannel={this.state.wpAuthChannel}
-              onLogin={this.handleWordPressLoginSuccess}
-              onClose={this.closeWordPressLoginModal}
-              testConnection={true}
-            />
+          {this.state.showWpLoginModal && (
+            <div>
+              <p>Modal Debug: showWpLoginModal={this.state.showWpLoginModal ? 'true' : 'false'}, wpAuthChannel={this.state.wpAuthChannel ? 'exists' : 'null'}</p>
+              {this.state.wpAuthChannel ? (
+                <WordPressLoginModal
+                  wpAuthChannel={this.state.wpAuthChannel}
+                  onLogin={this.handleWordPressLoginSuccess}
+                  onClose={this.closeWordPressLoginModal}
+                  testConnection={true}
+                />
+              ) : (
+                <div style={{position: 'fixed', top: '50px', left: '50px', background: 'red', color: 'white', padding: '10px', zIndex: 9999}}>
+                  Error: wpAuthChannel no está inicializado
+                  <button onClick={this.closeWordPressLoginModal}>Cerrar</button>
+                </div>
+              )}
+            </div>
           )}
         </ReactAudioContext.Provider>
       </MoreMenuContextProvider>
