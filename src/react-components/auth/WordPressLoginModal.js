@@ -283,7 +283,7 @@ export function WordPressLoginModal({
     if (testConnection && currentView === 'connection') {
       handleConnectionTest();
     }
-  }, [testConnection, currentView]);
+  }, [testConnection, currentView, handleConnectionTest]);
 
   /**
    * Manejar test de conexión

@@ -307,7 +307,7 @@ export default class WordPressAuthChannel extends AuthChannel {
     try {
       const response = await fetch(url, {
         ...options,
-        signal: controller.abort,
+        signal: controller.signal,
         credentials: options.credentials || 'omit'
       });
       
