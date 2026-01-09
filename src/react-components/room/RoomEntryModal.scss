@@ -69,7 +69,7 @@
 :local(.logged-in-button) {
   background-color: transparent;
   color: theme.$text2-color;
-  border: 1px solid theme.$border-color;
+  border: 1px solid theme.$border1-color;
   
   &:hover {
     background-color: rgba(theme.$text2-color, 0.1);
