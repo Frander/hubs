@@ -77,10 +77,17 @@ export function RoomEntryModal({
             <Button preset="accent4" onClick={onJoinRoom}>
               <EnterIcon />
               <span>
-                <FormattedMessage 
-                  id="room-entry-modal.join-room-button" 
-                  defaultMessage={isLoggedIn ? "Entrar en SpaceMall" : "Entrar como Invitado"} 
-                />
+                {isLoggedIn ? (
+                  <FormattedMessage 
+                    id="room-entry-modal.join-room-button-logged-in" 
+                    defaultMessage="Entrar en SpaceMall" 
+                  />
+                ) : (
+                  <FormattedMessage 
+                    id="room-entry-modal.join-room-button-guest" 
+                    defaultMessage="Entrar como Invitado" 
+                  />
+                )}
               </span>
             </Button>
           )}
