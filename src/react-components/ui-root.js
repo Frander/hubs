@@ -832,10 +832,12 @@ class UIRoot extends Component {
   // WordPress Authentication Methods
   initializeWordPressAuth = () => {
     try {
+      console.log('Inicializando WordPress auth...');
       const wpAuthChannel = createWordPressAuthChannel(this.props.store, {
         debug: process.env.NODE_ENV === 'development'
       });
       
+      console.log('wpAuthChannel creado:', wpAuthChannel);
       this.setState({ wpAuthChannel });
       
       // Intentar detectar autenticación existente
@@ -863,6 +865,11 @@ class UIRoot extends Component {
   };
 
   handleWordPressLogin = () => {
+    console.log('handleWordPressLogin clicked', { 
+      wpLoggedIn: this.state.wpLoggedIn, 
+      wpAuthChannel: this.state.wpAuthChannel 
+    });
+    
     if (this.state.wpLoggedIn) {
       // Si está logueado, hacer logout
       this.handleWordPressLogout();

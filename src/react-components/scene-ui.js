@@ -236,10 +236,10 @@ class SceneUI extends Component {
                 )}
               </IfFeature>
               <a href={tweetLink} rel="noopener noreferrer" target="_blank" className={styles.scenePreviewButton}>
-                <Twitter />
+                {/* <Twitter />
                 <div>
                   <FormattedMessage id="scene-page.tweet-button" defaultMessage="Share on Twitter" />
-                </div>
+                </div> */}
               </a>
             </div>
           </div>
