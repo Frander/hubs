@@ -71,7 +71,7 @@ import { ReactComponent as LeaveIcon } from "./icons/Leave.svg";
 import { ReactComponent as EnterIcon } from "./icons/Enter.svg";
 import { ReactComponent as InviteIcon } from "./icons/Invite.svg";
 import hubsLogo from "../assets/images/hubs-logo.png";
-import { WordPressLoginModal } from "./auth/WordPressLoginModal";
+import { WordPressIframeLoginModal } from "./auth/WordPressIframeLoginModal";
 import { createWordPressAuthChannel } from "../utils/wordpress-auth-channel";
 import { PeopleSidebarContainer, userFromPresence } from "./room/PeopleSidebarContainer";
 import { ObjectListProvider } from "./room/hooks/useObjectList";
@@ -216,7 +216,6 @@ class UIRoot extends Component {
     wpLoggedIn: false,
     wpUser: null,
     wpAuthChannel: null,
-    showWpLoginModal: false,
 
     objectInfo: null,
     objectSrc: "",
@@ -905,16 +904,21 @@ class UIRoot extends Component {
     console.log('handleWordPressLogin clicked');
     console.log('wpLoggedIn:', this.state.wpLoggedIn);
     console.log('wpAuthChannel:', this.state.wpAuthChannel ? 'exists' : 'null');
-    console.log('showWpLoginModal:', this.state.showWpLoginModal);
-    
+
     if (this.state.wpLoggedIn) {
       // Si está logueado, hacer logout
       this.handleWordPressLogout();
     } else {
-      // Si no está logueado, mostrar modal de login
-      console.log('Setting showWpLoginModal to true');
-      this.setState({ showWpLoginModal: true }, () => {
-        console.log('State updated, showWpLoginModal:', this.state.showWpLoginModal);
+      // Si no está logueado, mostrar modal de login con iframe usando this.state.dialog
+      console.log('Opening WordPress iframe login modal');
+      this.setState({
+        dialog: (
+          <WordPressIframeLoginModal
+            wpAuthChannel={this.state.wpAuthChannel}
+            onLogin={this.handleWordPressLoginSuccess}
+            onClose={this.closeDialog}
+          />
+        )
       });
     }
   };
@@ -924,7 +928,7 @@ class UIRoot extends Component {
       wpLoggedIn: true,
       wpUser: result.user,
       signedIn: true,
-      showWpLoginModal: false
+      dialog: null // Cerrar el modal
     });
 
     // Opcional: También setear en el sistema Hubs existente
@@ -958,9 +962,7 @@ class UIRoot extends Component {
     }
   };
 
-  closeWordPressLoginModal = () => {
-    this.setState({ showWpLoginModal: false });
-  };
+  // Ya no necesitamos este método, usamos closeDialog directamente
 
   // Modificar showIframe para usar token de WordPress
   showIframeWithWordPressToken = (e) => {
@@ -1805,26 +1807,8 @@ class UIRoot extends Component {
               />
             </div>
           )}
-          
-          {/* WordPress Login Modal */}
-          {this.state.showWpLoginModal && (
-            <div>
-              <p>Modal Debug: showWpLoginModal={this.state.showWpLoginModal ? 'true' : 'false'}, wpAuthChannel={this.state.wpAuthChannel ? 'exists' : 'null'}</p>
-              {this.state.wpAuthChannel ? (
-                <WordPressLoginModal
-                  wpAuthChannel={this.state.wpAuthChannel}
-                  onLogin={this.handleWordPressLoginSuccess}
-                  onClose={this.closeWordPressLoginModal}
-                  testConnection={true}
-                />
-              ) : (
-                <div style={{position: 'fixed', top: '50px', left: '50px', background: 'red', color: 'white', padding: '10px', zIndex: 9999}}>
-                  Error: wpAuthChannel no está inicializado
-                  <button onClick={this.closeWordPressLoginModal}>Cerrar</button>
-                </div>
-              )}
-            </div>
-          )}
+
+          {/* WordPress Login Modal - Ahora se renderiza a través de this.state.dialog */}
         </ReactAudioContext.Provider>
       </MoreMenuContextProvider>
     );
