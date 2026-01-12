@@ -182,20 +182,28 @@ export default class WordPressAuthChannel extends AuthChannel {
    */
   async testConnection() {
     this._debugLog('Probando conexión con WordPress');
-    
+
     try {
+      // Usar POST con token dummy para verificar que el endpoint responde
       const response = await this._makeRequest('/wp-json/hubs/v1/verify', {
-        method: 'OPTIONS',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: '__connection_test__' }),
         timeout: 5000
       });
 
-      const isConnected = response.ok || response.status === 405; // OPTIONS puede devolver 405
-      
-      this._debugLog('Test de conexión WordPress', { 
-        connected: isConnected, 
-        status: response.status 
+      // Si recibimos cualquier respuesta JSON (incluso error), la conexión funciona
+      const data = await response.json();
+      const isConnected = response.ok || (data && typeof data === 'object');
+
+      this._debugLog('Test de conexión WordPress', {
+        connected: isConnected,
+        status: response.status,
+        hasResponse: !!data
       });
-      
+
       return {
         connected: isConnected,
         baseUrl: this.wpBaseUrl,
