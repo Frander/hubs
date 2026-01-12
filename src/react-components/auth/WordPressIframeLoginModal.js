@@ -71,17 +71,37 @@ export function WordPressIframeLoginModal({
           throw new Error('Datos de usuario incompletos');
         }
 
-        // Generar token JWT desde WordPress
-        const result = await wpAuthChannel.generateTokenFromWordPress();
+        let token = data.token;
 
-        console.log('[WP Iframe] Token generado:', result);
+        // Si el token viene en el PostMessage, usarlo directamente
+        if (token) {
+          console.log('[WP Iframe] Token recibido en PostMessage');
 
-        // Notificar al componente padre
-        onLogin({
-          success: true,
-          user: result.user,
-          token: result.token
-        });
+          // Guardar credenciales usando el AuthChannel
+          await wpAuthChannel.handleAuthCredentials(data.user.email, token);
+
+          // Notificar al componente padre
+          onLogin({
+            success: true,
+            user: data.user,
+            token: token
+          });
+
+        } else {
+          // Fallback: intentar generar el token desde Hubs (probablemente falle por cookies)
+          console.log('[WP Iframe] Token no recibido, intentando generar desde Hubs...');
+
+          const result = await wpAuthChannel.generateTokenFromWordPress();
+
+          console.log('[WP Iframe] Token generado:', result);
+
+          // Notificar al componente padre
+          onLogin({
+            success: true,
+            user: result.user,
+            token: result.token
+          });
+        }
 
       } catch (error) {
         console.error('[WP Iframe] Error procesando login:', error);
