@@ -278,13 +278,6 @@ export function WordPressLoginModal({
   const [loginResult, setLoginResult] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState(null);
 
-  // Test de conexión al montar si está habilitado
-  useEffect(() => {
-    if (testConnection && currentView === 'connection') {
-      handleConnectionTest();
-    }
-  }, [testConnection, currentView, handleConnectionTest]);
-
   /**
    * Manejar test de conexión
    */
@@ -295,7 +288,7 @@ export function WordPressLoginModal({
     try {
       const result = await wpAuthChannel.testConnection();
       setConnectionStatus(result);
-      
+
       if (result.connected) {
         // Auto-continuar después de 2 segundos si la conexión es exitosa
         setTimeout(() => {
@@ -370,6 +363,13 @@ export function WordPressLoginModal({
   const handleContinueToLogin = useCallback(() => {
     setCurrentView('login');
   }, []);
+
+  // Test de conexión al montar si está habilitado
+  useEffect(() => {
+    if (testConnection && currentView === 'connection') {
+      handleConnectionTest();
+    }
+  }, [testConnection, currentView, handleConnectionTest]);
 
   // Determinar título del modal
   const getModalTitle = () => {
