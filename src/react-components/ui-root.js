@@ -229,14 +229,16 @@ class UIRoot extends Component {
   constructor(props) {
     super(props);
 
+    console.log('[UIRoot CONSTRUCTOR] Constructor iniciado');
+    console.log('[UIRoot CONSTRUCTOR] props.store existe?', !!props.store);
+
     props.mediaSearchStore.setHistory(props.history);
 
     // An exit handler that discards event arguments and can be cleaned up.
     this.exitEventHandler = () => this.props.exitScene();
     this.mediaDevicesManager = APP.mediaDevicesManager;
 
-    // Inicializar WordPress AuthChannel
-    this.initializeWordPressAuth();
+    console.log('[UIRoot CONSTRUCTOR] Constructor completado - NO inicializando WordPress aquí');
   }
 
   componentDidUpdate(prevProps) {
@@ -326,6 +328,13 @@ class UIRoot extends Component {
   };
 
   componentDidMount() {
+    console.log('[UIRoot MOUNT] componentDidMount iniciado');
+    console.log('[UIRoot MOUNT] props.store:', this.props.store);
+
+    // Inicializar WordPress AuthChannel aquí (después de que el componente esté montado)
+    console.log('[UIRoot MOUNT] Llamando a initializeWordPressAuth...');
+    this.initializeWordPressAuth();
+
     window.addEventListener("show_iframe", this.showIframe);
 
     window.addEventListener("concurrentload", this.onConcurrentLoad);
@@ -831,25 +840,47 @@ class UIRoot extends Component {
 
   // WordPress Authentication Methods
   initializeWordPressAuth = () => {
+    console.log('[WP INIT] ===== INICIO INICIALIZACIÓN WORDPRESS =====');
+
     try {
-      console.log('Inicializando WordPress auth...');
-      console.log('this.props.store:', this.props.store);
-      
+      console.log('[WP INIT] Step 1: Verificando props.store');
+      console.log('[WP INIT] this.props.store:', this.props.store);
+
+      if (!this.props.store) {
+        console.error('[WP INIT] ERROR: this.props.store es undefined o null');
+        return;
+      }
+
+      console.log('[WP INIT] Step 2: Verificando createWordPressAuthChannel');
+      console.log('[WP INIT] typeof createWordPressAuthChannel:', typeof createWordPressAuthChannel);
+
+      console.log('[WP INIT] Step 3: Creando wpAuthChannel...');
       const wpAuthChannel = createWordPressAuthChannel(this.props.store, {
-        debug: process.env.NODE_ENV === 'development'
+        debug: true // Siempre en debug para ver qué pasa
       });
-      
-      console.log('wpAuthChannel creado exitosamente:', wpAuthChannel);
-      console.log('wpAuthChannel.wpBaseUrl:', wpAuthChannel?.wpBaseUrl);
-      
+
+      console.log('[WP INIT] Step 4: wpAuthChannel creado');
+      console.log('[WP INIT] wpAuthChannel:', wpAuthChannel);
+      console.log('[WP INIT] wpAuthChannel es null?:', wpAuthChannel === null);
+      console.log('[WP INIT] wpAuthChannel es undefined?:', wpAuthChannel === undefined);
+      console.log('[WP INIT] wpAuthChannel.wpBaseUrl:', wpAuthChannel?.wpBaseUrl);
+
+      console.log('[WP INIT] Step 5: Actualizando state...');
       this.setState({ wpAuthChannel }, () => {
-        console.log('Estado actualizado, wpAuthChannel en state:', this.state.wpAuthChannel);
+        console.log('[WP INIT] Step 6: State actualizado');
+        console.log('[WP INIT] this.state.wpAuthChannel:', this.state.wpAuthChannel);
+        console.log('[WP INIT] this.state.wpAuthChannel es null?:', this.state.wpAuthChannel === null);
       });
-      
-      // Intentar detectar autenticación existente
+
+      console.log('[WP INIT] Step 7: Detectando autenticación existente...');
       this.detectExistingWordPressAuth(wpAuthChannel);
+
+      console.log('[WP INIT] ===== FIN INICIALIZACIÓN WORDPRESS (ÉXITO) =====');
     } catch (error) {
-      console.error("Error inicializando WordPress auth:", error);
+      console.error('[WP INIT] ===== ERROR EN INICIALIZACIÓN WORDPRESS =====');
+      console.error('[WP INIT] Error:', error);
+      console.error('[WP INIT] Error.message:', error.message);
+      console.error('[WP INIT] Error.stack:', error.stack);
     }
   };
 
