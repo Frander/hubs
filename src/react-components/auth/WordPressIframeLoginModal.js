@@ -64,48 +64,41 @@ export function WordPressIframeLoginModal({
      */
     const handleLoginSuccess = async (data) => {
       console.log('[WP Iframe] Login exitoso recibido:', data);
+      console.log('[WP Iframe] Token presente:', !!data.token);
+      console.log('[WP Iframe] Datos del usuario:', data.user);
 
       try {
         // Verificar que tenemos los datos del usuario
         if (!data || !data.user) {
+          console.error('[WP Iframe] Error: Datos de usuario incompletos', data);
           throw new Error('Datos de usuario incompletos');
         }
 
-        let token = data.token;
-
-        // Si el token viene en el PostMessage, usarlo directamente
-        if (token) {
-          console.log('[WP Iframe] Token recibido en PostMessage');
-
-          // Guardar credenciales usando el AuthChannel
-          await wpAuthChannel.handleAuthCredentials(data.user.email, token);
-
-          // Notificar al componente padre
-          onLogin({
-            success: true,
-            user: data.user,
-            token: token
-          });
-
-        } else {
-          // Fallback: intentar generar el token desde Hubs (probablemente falle por cookies)
-          console.log('[WP Iframe] Token no recibido, intentando generar desde Hubs...');
-
-          const result = await wpAuthChannel.generateTokenFromWordPress();
-
-          console.log('[WP Iframe] Token generado:', result);
-
-          // Notificar al componente padre
-          onLogin({
-            success: true,
-            user: result.user,
-            token: result.token
-          });
+        // Verificar que tenemos el token
+        if (!data.token) {
+          console.error('[WP Iframe] Error: Token no recibido en PostMessage');
+          throw new Error('Token no recibido. Por favor intenta de nuevo.');
         }
 
+        console.log('[WP Iframe] ✅ Token recibido correctamente');
+
+        // Guardar credenciales usando el AuthChannel
+        await wpAuthChannel.handleAuthCredentials(data.user.email, data.token);
+
+        console.log('[WP Iframe] ✅ Credenciales guardadas en store');
+
+        // Notificar al componente padre
+        onLogin({
+          success: true,
+          user: data.user,
+          token: data.token
+        });
+
+        console.log('[WP Iframe] ✅ Login completado exitosamente');
+
       } catch (error) {
-        console.error('[WP Iframe] Error procesando login:', error);
-        alert('Error al procesar el login. Por favor intenta de nuevo.');
+        console.error('[WP Iframe] ❌ Error procesando login:', error);
+        alert('Error al procesar el login: ' + error.message + '\n\nPor favor intenta de nuevo o contacta soporte.');
       }
     };
 
