@@ -1,14 +1,22 @@
 .wordpressLoginModal {
-  min-width: 400px;
-  max-width: 500px;
+  min-width: 80%;
+  max-width: 90%;
+  width: 90vw;
+
+  @media(min-width: 768px) {
+    min-width: 800px;
+    max-width: 1000px;
+    width: 80vw;
+  }
 }
 
 /* Estilos para el iframe container */
 .iframeContainer {
   position: relative;
   width: 100%;
-  height: 600px;
-  max-height: 80vh;
+  height: 80vh;
+  min-height: 600px;
+  max-height: 90vh;
   background-color: #ffffff;
   border-radius: 8px;
   overflow: hidden;

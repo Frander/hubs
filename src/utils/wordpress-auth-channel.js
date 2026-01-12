@@ -105,21 +105,30 @@ export default class WordPressAuthChannel extends AuthChannel {
    */
   async generateTokenFromWordPress() {
     this._debugLog('Generando token desde WordPress actual');
-    
+
     try {
       const response = await this._makeRequest('/wp-json/hubs/v1/generate-token', {
         method: 'POST',
-        credentials: 'include' // Incluir cookies de WordPress
+        credentials: 'include', // IMPORTANTE: Incluir cookies de WordPress
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        this._debugLog('Error response:', { status: response.status, text: errorText });
+        throw new Error(`Error ${response.status}: ${errorText || 'No se pudo generar token'}`);
+      }
+
       const data = await response.json();
-      
+
       if (data.success) {
         this._debugLog('Token generado desde WordPress', { user: data.user });
-        
+
         // Manejar credenciales
         await this.handleAuthCredentials(data.user.email, data.token);
-        
+
         return {
           success: true,
           user: data.user,
@@ -308,27 +317,32 @@ export default class WordPressAuthChannel extends AuthChannel {
   async _makeRequest(endpoint, options = {}) {
     const url = `${this.wpBaseUrl}${endpoint}`;
     const timeout = options.timeout || this.timeout;
-    
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
-    
+
     try {
-      const response = await fetch(url, {
+      // IMPORTANTE: Usar credentials del options, por defecto 'include' para mantener sesión
+      const fetchOptions = {
         ...options,
         signal: controller.signal,
-        credentials: options.credentials || 'omit'
-      });
-      
+        credentials: options.credentials || 'include' // Cambio: por defecto 'include' en lugar de 'omit'
+      };
+
+      this._debugLog('Haciendo request a:', url, { credentials: fetchOptions.credentials });
+
+      const response = await fetch(url, fetchOptions);
+
       clearTimeout(timeoutId);
       return response;
-      
+
     } catch (error) {
       clearTimeout(timeoutId);
-      
+
       if (error.name === 'AbortError') {
         throw new Error('Timeout de conexión');
       }
-      
+
       throw error;
     }
   }
