@@ -98,7 +98,7 @@ export function WordPressIframeLoginModal({
 
       } catch (error) {
         console.error('[WP Iframe] ❌ Error procesando login:', error);
-        alert('Error al procesar el login: ' + error.message + '\n\nPor favor intenta de nuevo o contacta soporte.');
+        // El error se registra en consola pero no se muestra alert para no interrumpir al usuario
       }
     };
 
