@@ -1,12 +1,12 @@
 .wordpressLoginModal {
   min-width: 90%;
-  max-width: 95%;
+  max-width: 95vw !important; // Sobrescribe el max-width: 85vw del Modal base
   width: 95vw;
 
   @media(min-width: 768px) {
-    min-width: 1000px;
-    max-width: 1400px;
-    width: 90vw;
+    min-width: 70vw;
+    max-width: 90vw !important; // Sobrescribe el max-width: 85vw del Modal base
+    width: 75vw; // 75% es un buen punto medio entre 70% mínimo y 90% máximo
   }
 }
 
@@ -14,9 +14,9 @@
 .iframeContainer {
   position: relative;
   width: 100%;
-  height: 85vh;
-  min-height: 700px;
-  max-height: 95vh;
+  height: 80vh;
+  min-height: 60vh;
+  max-height: 90vh;
   background-color: #ffffff;
   border-radius: 8px;
   overflow: hidden;
