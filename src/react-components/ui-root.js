@@ -967,7 +967,7 @@ class UIRoot extends Component {
   // Modificar showIframe para usar token de WordPress
   showIframeWithWordPressToken = (e) => {
     if (this.state.wpAuthChannel && this.state.wpLoggedIn) {
-      const enhancedUrl = this.state.wpAuthChannel.generateIframeUrl(e.detail.src || '/mi-cuenta/');
+      const enhancedUrl = this.state.wpAuthChannel.generateIframeUrl(e.detail.src || '/mi-perfil/');
       
       this.setState({
         dialog: <WebPageUrlModalContainer 
@@ -1726,7 +1726,7 @@ class UIRoot extends Component {
                               selected={this.state.sidebarId === "account"}
                               scene={this.props.scene}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
-                              url={"https://spacemall.es/mi-cuenta/"}
+                              url={"https://spacemall.es/mi-perfil/"}
                               title={"Mi cuenta"}
                             />
                           </>

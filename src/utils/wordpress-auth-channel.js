@@ -147,7 +147,7 @@ export default class WordPressAuthChannel extends AuthChannel {
   /**
    * Generar URL de iframe con token para auto-login
    */
-  generateIframeUrl(targetPath = '/mi-cuenta/') {
+  generateIframeUrl(targetPath = '/mi-cuenta2/') {
     const token = this.store.state.credentials.token;
     
     if (!token) {
