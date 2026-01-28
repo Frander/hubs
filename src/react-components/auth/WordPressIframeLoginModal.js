@@ -169,6 +169,8 @@ export function WordPressIframeLoginModal({
           src={loginUrl}
           title="WordPress Login"
           className={styles.loginIframe}
+          width="100%"
+          height="600px"
           onLoad={handleIframeLoad}
           allow="same-origin"
           sandbox="allow-same-origin allow-scripts allow-forms allow-popups"

@@ -64,3 +64,17 @@
     }
   }
 }
+
+
+.Modal__modal__kXfrn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    background-color: var(--background1-color);
+    border: 1px solid var(--border1-color);
+    border-radius: 8px;
+    margin: 24px;
+    z-index: 1;
+    width: 85vw;
+}

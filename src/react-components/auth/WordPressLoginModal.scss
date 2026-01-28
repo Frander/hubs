@@ -1,12 +1,8 @@
 .wordpressLoginModal {
-  min-width: 90%;
   max-width: 95vw !important; // Sobrescribe el max-width: 85vw del Modal base
-  width: 95vw;
 
   @media(min-width: 768px) {
-    min-width: 70vw;
     max-width: 90vw !important; // Sobrescribe el max-width: 85vw del Modal base
-    width: 75vw; // 75% es un buen punto medio entre 70% mínimo y 90% máximo
   }
 }
 
@@ -14,19 +10,24 @@
 .iframeContainer {
   position: relative;
   width: 100%;
-  height: 80vh;
-  min-height: 60vh;
-  max-height: 90vh;
   background-color: #ffffff;
   border-radius: 8px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .loginIframe {
-  width: 100%;
-  height: 100%;
+  width: 70vw;
+  height: 60vh;
   border: none;
   background-color: #ffffff;
+  display: block;
+
+  @media (max-width: 768px) {
+    width: 95vw;
+    height: 70vh;
+  }
 }
 
 .loadingOverlay {
@@ -65,14 +66,12 @@
 }
 
 .iframeFooter {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
   padding: 12px;
   background-color: #f5f5f5;
   border-top: 1px solid #e0e0e0;
   text-align: center;
+  margin-top: 16px;
 }
 
 .footerText {
