@@ -18,7 +18,7 @@ export function WordPressIframeLoginModal({
   const [loginUrl] = useState(() => {
     // URL de login de WordPress
     // Agregar parámetros para indicar que está en iframe
-    const url = new URL(`${wpAuthChannel.wpBaseUrl}/wp-login.php`);
+    const url = new URL(`${wpAuthChannel.wpBaseUrl}/mi-cuenta2/`);
     url.searchParams.append('hubs_iframe', '1');
     url.searchParams.append('redirect_to', wpAuthChannel.wpBaseUrl);
     return url.toString();

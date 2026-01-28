@@ -13,7 +13,7 @@ import {
   setAuthToken as setItaAuthToken,
   getAdminInfo
 } from "./utils/ita";
-import { detectIdle } from "./utils/idle-detector";
+//import { detectIdle } from "./utils/idle-detector";
 import { connectToReticulum } from "hubs/src/utils/phoenix-utils";
 import { AppBar, Admin, Layout, Resource } from "react-admin";
 import { postgrestClient, postgrestAuthenticatior } from "./utils/postgrest-data-provider";
@@ -82,9 +82,9 @@ class AdminUI extends Component {
   };
 
   async componentDidMount() {
-    if (process.env.NODE_ENV !== "development" || qs.get("idle_timeout")) detectIdle();
-    window.addEventListener("idle_detected", this.onIdleDetected);
-    window.addEventListener("activity_detected", this.onActivityDetected);
+    //if (process.env.NODE_ENV !== "development" || qs.get("idle_timeout")) detectIdle();
+    // window.addEventListener("idle_detected", this.onIdleDetected);
+    // window.addEventListener("activity_detected", this.onActivityDetected);
     const adminInfo = await getAdminInfo();
     // Unauthorized account
     if (adminInfo.error && adminInfo.code === 401) this.setState({ auth: false });
@@ -93,8 +93,8 @@ class AdminUI extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("idle_detected", this.onIdleDetected);
-    window.removeEventListener("activity_detected", this.onActivityDetected);
+    //window.removeEventListener("idle_detected", this.onIdleDetected);
+    //window.removeEventListener("activity_detected", this.onActivityDetected);
   }
 
   onIdleDetected = () => {
