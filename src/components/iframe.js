@@ -16,7 +16,7 @@ const IFRAME_WIDTH_M = 1.9;
 const IFRAME_HEIGHT_M = 0.9;
 const IFRAME_WIDTH_PX = 1280;
 const IFRAME_HEIGHT_PX = 1280;
-function Browser({ scene, src, widht, height, onChangeSrc }) {
+function Browser({ scene, src, pathname ,widht, height, onChangeSrc }) {
 
   const showModalIframe = () => {
     console.log("test")
@@ -30,7 +30,7 @@ function Browser({ scene, src, widht, height, onChangeSrc }) {
       {/* <div className={styles.addressBar}>
         <input className={styles.addressField} value={src} onChange={onChangeSrc} />
       </div> */}
-        <iframe src={src} frameborder="0"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style={{ width: widht, height: height }} />
+        <iframe src={`${src}?store=${pathname}`} frameborder="0"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style={{ width: widht, height: height }} />
       </div>
     </div>
     
@@ -80,6 +80,7 @@ AFRAME.registerComponent("iframe", {
     this.mesh = mesh; // guardar referencia
     
     this.cssObject = new CSS3DObject(this.browserEl);
+    
 
 
     
@@ -101,6 +102,7 @@ AFRAME.registerComponent("iframe", {
     const canvas = this.el.sceneEl.renderer.domElement;
     const camera = this.el.sceneEl.camera;
     const scene = this.el.sceneEl;
+
 
 
     //==================================================================================
@@ -177,12 +179,12 @@ AFRAME.registerComponent("iframe", {
   update(prevData) {
     // let width = this.data.width === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.data.width
     // let height = this.data.height === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.data.height
+    const pathname = window.location.pathname; // Solo la ruta (/ruta)
 
     let width = this.el.object3D.scale.x === undefined ? IFRAME_WIDTH_PX : IFRAME_WIDTH_PX * this.el.object3D.scale.x;
     let height = this.el.object3D.scale.y === undefined ? IFRAME_HEIGHT_PX : IFRAME_HEIGHT_PX * this.el.object3D.scale.y;
-
     if (this.data.src !== prevData.src) {
-        render(<Browser scene={this.el.sceneEl} src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
+        render(<Browser scene={this.el.sceneEl} pathname={pathname} src={this.data.src} widht={width} height={height} onChangeSrc={this.onChangeSrc} />, this.browserEl);
     }
   },
 
