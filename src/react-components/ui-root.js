@@ -1763,6 +1763,9 @@ class UIRoot extends Component {
                         onClick={() => exit2DInterstitialAndEnterVR(true)}
                       />
                     )}
+                    { entered (
+                      <MoreMenuPopoverButton menu={moreMenu} />
+                    )}
                   </>
                 }
                 toolbarRight={
@@ -1775,7 +1778,7 @@ class UIRoot extends Component {
                         onClick={() => exit2DInterstitialAndEnterVR(true)}
                       />
                     )}
-                    {entered && (
+                    {/* {entered && (
                       <ToolbarButton
                         icon={<img src={LeaveIconBtn} width="100%"/>}
                         preset="cancel"
@@ -1792,8 +1795,7 @@ class UIRoot extends Component {
                           });
                         }}
                       />
-                    )}
-                    <MoreMenuPopoverButton menu={moreMenu} />
+                    )} */}
                   </>
                 }
               />

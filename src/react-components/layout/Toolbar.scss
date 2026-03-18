@@ -1,7 +1,7 @@
 @use "../styles/theme";
 
 :local(.toolbar) {
-  height: 50px;
+  height: 60px;
   display: flex;
   padding: 8px 100px;
   background-color: #ffffff;
@@ -10,7 +10,7 @@
   position: relative;
   width: 80vw;
   margin: auto;
-  bottom: 70px;
+  bottom: 90px;
 }
 
 :local(.content) {
