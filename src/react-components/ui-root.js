@@ -1763,41 +1763,42 @@ class UIRoot extends Component {
                         onClick={() => exit2DInterstitialAndEnterVR(true)}
                       />
                     )}
-                    { entered (
+                    <>
+                      {entered && isMobileVR && (
+                        <ToolbarButton
+                          icon={<VRIcon />}
+                          preset="accept"
+                          label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
+                          onClick={() => exit2DInterstitialAndEnterVR(true)}
+                        />
+                      )}
+                      {/* {entered && (
+                        <ToolbarButton
+                          icon={<img src={LeaveIconBtn} width="100%"/>}
+                          preset="cancel"
+                          selected={!!this.state.leaving}
+                          onClick={() => {
+                            this.setState({ leaving: true });
+                            this.showNonHistoriedDialog(LeaveRoomModal, {
+                              destinationUrl: "/",
+                              reason: LeaveReason.leaveRoom,
+                              onClose: () => {
+                                this.setState({ leaving: false });
+                                this.closeDialog();
+                              }
+                            });
+                          }}
+                        />
+                      )} */}
                       <MoreMenuPopoverButton menu={moreMenu} />
-                    )}
+                    </>
                   </>
+                  
+                  
                 }
-                toolbarRight={
-                  <>
-                    {entered && isMobileVR && (
-                      <ToolbarButton
-                        icon={<VRIcon />}
-                        preset="accept"
-                        label={<FormattedMessage id="toolbar.enter-vr-button" defaultMessage="Enter VR" />}
-                        onClick={() => exit2DInterstitialAndEnterVR(true)}
-                      />
-                    )}
-                    {/* {entered && (
-                      <ToolbarButton
-                        icon={<img src={LeaveIconBtn} width="100%"/>}
-                        preset="cancel"
-                        selected={!!this.state.leaving}
-                        onClick={() => {
-                          this.setState({ leaving: true });
-                          this.showNonHistoriedDialog(LeaveRoomModal, {
-                            destinationUrl: "/",
-                            reason: LeaveReason.leaveRoom,
-                            onClose: () => {
-                              this.setState({ leaving: false });
-                              this.closeDialog();
-                            }
-                          });
-                        }}
-                      />
-                    )} */}
-                  </>
-                }
+                // toolbarRight={
+                  
+                // }
               />
             )}
           </div>
