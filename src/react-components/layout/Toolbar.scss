@@ -1,20 +1,16 @@
 @use "../styles/theme";
 
 :local(.toolbar) {
-  height: 58px;
+  height: 50px;
   display: flex;
-  padding: 8px 12px;
-  background-color: rgba(15, 15, 15, 0.9);
+  padding: 8px 100px;
+  background-color: #ffffff;
   border-top: none;
   border-radius: 14px 14px 0 0;
-  margin: 0 16px;
   position: relative;
-
-  @media (min-width: theme.$breakpoint-lg) {
-    padding: 8px 24px;
-    justify-content: space-between;
-    margin: 0 24px;
-  }
+  width: 80vw;
+  margin: auto;
+  bottom: 70px;
 }
 
 :local(.content) {
@@ -32,7 +28,7 @@
 :local(.center_content) {
   position: absolute;
   display: flex;
-  width: calc(100% - 24px);
+  width: calc(100% - 200px);
   justify-content: center;
   z-index: -1;
 
