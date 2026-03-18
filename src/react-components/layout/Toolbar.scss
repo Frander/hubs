@@ -1,16 +1,19 @@
 @use "../styles/theme";
 
 :local(.toolbar) {
-  height: 96px;
+  height: 58px;
   display: flex;
-  padding: 12px;
-  background-color: theme.$background1-color;
-  border-top: 1px solid theme.$border1-color;
+  padding: 8px 12px;
+  background-color: rgba(15, 15, 15, 0.9);
+  border-top: none;
+  border-radius: 14px 14px 0 0;
+  margin: 0 16px;
   position: relative;
 
   @media (min-width: theme.$breakpoint-lg) {
-    padding: 12px 24px;
+    padding: 8px 24px;
     justify-content: space-between;
+    margin: 0 24px;
   }
 }
 
@@ -29,7 +32,7 @@
 :local(.center_content) {
   position: absolute;
   display: flex;
-  width: calc(100% - 48px);
+  width: calc(100% - 24px);
   justify-content: center;
   z-index: -1;
 

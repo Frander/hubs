@@ -8,9 +8,7 @@
     [main] auto
     [sidebar] minmax(0, min-content);
 
-  grid-template-rows:
-    [viewport] auto
-    [toolbar] min-content;
+  grid-template-rows: [viewport] 1fr;
 
   overflow: hidden;
   position: relative;
@@ -52,10 +50,13 @@
 }
 
 :local(.toolbar) {
-  grid-row-start: toolbar;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   grid-column-end: -1;
   pointer-events: auto;
-  z-index: 0;
+  z-index: 1;
 }
 
 :local(.modal-container) {
