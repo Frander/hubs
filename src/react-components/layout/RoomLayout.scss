@@ -167,3 +167,10 @@
 :local(.streaming) {
   box-shadow: inset 0 0 0 3px theme.$red;
 }
+
+// Collapses the sidebar grid column when chat renders as a floating portal
+:local(.chat-sidebar-hidden) {
+  width: 0 !important;
+  overflow: visible;
+  pointer-events: none;
+}

@@ -1482,6 +1482,7 @@ class UIRoot extends Component {
                 store={this.props.store}
                 objectFocused={!!this.props.selectedObject}
                 streaming={streaming}
+                sidebarClassName={this.state.sidebarId === "chat" ? roomLayoutStyles.chatSidebarHidden : undefined}
                 viewport={
                   <>
                     {!this.state.dialog && renderEntryFlow ? entryDialog : undefined}

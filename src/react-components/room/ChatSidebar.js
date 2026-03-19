@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, forwardRef } from "react";
+import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { Sidebar } from "../sidebar/Sidebar";
@@ -473,16 +474,19 @@ ChatMessageList.propTypes = {
 ChatMessageList.displayName = "ChatMessageList";
 
 export function ChatSidebar({ onClose, children, ...rest }) {
-  return (
-    <Sidebar
-      title={<FormattedMessage id="chat-sidebar.title" defaultMessage="Chat" />}
-      beforeTitle={<CloseButton onClick={onClose} />}
-      contentClassName={styles.content}
-      disableOverflowScroll
-      {...rest}
-    >
-      {children}
-    </Sidebar>
+  return ReactDOM.createPortal(
+    <div className={styles.chatModal} {...rest}>
+      <div className={styles.chatModalHeader}>
+        <CloseButton onClick={onClose} />
+        <h5>
+          <FormattedMessage id="chat-sidebar.title" defaultMessage="Chat" />
+        </h5>
+      </div>
+      <div className={styles.chatModalContent}>
+        {children}
+      </div>
+    </div>,
+    document.body
   );
 }
 

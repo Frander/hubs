@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import styles from "./FloatingIconColumns.scss";
 import { AppLogo } from "../misc/AppLogo";
-import asistente from "../../assets/newSkin/asistente.svg";
-import calendario from "../../assets/newSkin/calendario.svg";
-import carrito from "../../assets/newSkin/carrito.svg";
-import comunity from "../../assets/newSkin/comunity.svg";
-import correo from "../../assets/newSkin/correo.svg";
-import cuenta from "../../assets/newSkin/cuenta.svg";
-import inventario from "../../assets/newSkin/inventario.svg";
-import mapa from "../../assets/newSkin/mapa.svg";
+import asistente from "../../assets/newSkin/asistente.png";
+import calendario from "../../assets/newSkin/calendario.png";
+import carrito from "../../assets/newSkin/carrito.png";
+import comunity from "../../assets/newSkin/community.png";
+import correo from "../../assets/newSkin/correo.png";
+import cuenta from "../../assets/newSkin/cuenta.png";
+import inventario from "../../assets/newSkin/inventario.png";
+import mapa from "../../assets/newSkin/mapa.png";
 import personas from "../../assets/newSkin/personas.svg";
-import tareas from "../../assets/newSkin/tareas.svg";
+import tareas from "../../assets/newSkin/tareas.png";
 
 const LEFT_ICONS = [
   { size: "medium", src: personas,  alt: "Personas" },
