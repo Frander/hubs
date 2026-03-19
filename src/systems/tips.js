@@ -89,8 +89,19 @@ AFRAME.registerSystem("tips", {
   init: function () {
     this.activeTip = null;
     this._performStep = this._performStep.bind(this);
-    // Tour disabled — always skip all tips on init.
-    this.skipTips();
+
+    const storeData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (storeData === null) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({}));
+    } else {
+      const currentKeys = Object.keys(storeData);
+      const isOldTips = !currentKeys.every(item => platformTips.includes(item));
+      // If they have old tips we just complete the tour.
+      if (isOldTips) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({}));
+        this.skipTips();
+      }
+    }
   },
 
   resetTips: function () {
