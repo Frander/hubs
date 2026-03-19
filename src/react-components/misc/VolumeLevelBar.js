@@ -25,8 +25,8 @@ export function VolumeLevelBar({ scene, type, className }) {
   useVolumeMeter({
     analyser:
       type == "mic"
-        ? scene.systems["hubs-systems"].audioSystem.outboundAnalyser
-        : scene.systems["hubs-systems"].audioSystem.mixerAnalyser,
+        ? scene.systems["hubs-systems"]?.audioSystem?.outboundAnalyser
+        : scene.systems["hubs-systems"]?.audioSystem?.mixerAnalyser,
     update
   });
 

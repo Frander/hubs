@@ -37,14 +37,14 @@ export function ToolbarMicButton({ scene, disabled, ...rest }) {
     }
   }, []);
   useVolumeMeter({
-    analyser: scene.systems["hubs-systems"]?.audioSystem?.outboundAnalyser,
+    analyser: scene.systems["hubs-systems"].audioSystem.outboundAnalyser,
     update: !disabled && update
   });
   const intl = useIntl();
   return (
     <ToolbarButton
       ref={setRef}
-      // label={intl.formatMessage(micButtonMessages["label"])}
+      label={intl.formatMessage(micButtonMessages["label"])}
       preset="basic"
       type={"right"}
       title={disabled ? intl.formatMessage(micButtonMessages["title"]) : undefined}
