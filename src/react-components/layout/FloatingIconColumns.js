@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import styles from "./FloatingIconColumns.scss";
+import { ReactComponent as Logo } from "../../assets/newSkin/logo.svg";
 import { ReactComponent as asistente } from "../../assets/newSkin/asistente.svg";
 import { ReactComponent as calendario } from "../../assets/newSkin/calendario.svg";
 import { ReactComponent as carrito } from "../../assets/newSkin/carrito.svg";
 import { ReactComponent as comunity } from "../../assets/newSkin/comunity.svg";
 import { ReactComponent as correo } from "../../assets/newSkin/correo.svg";
 import { ReactComponent as cuenta } from "../../assets/newSkin/cuenta.svg";
-import { ReactComponent as inventario } from "../../assets/newSkin/asistente.svg";
-import { ReactComponent as mapa } from "../../assets/newSkin/asistente.svg";
-import { ReactComponent as personas } from "../../assets/newSkin/asistente.svg";
+import { ReactComponent as inventario } from "../../assets/newSkin/inventario.svg";
+import { ReactComponent as mapa } from "../../assets/newSkin/mapa.svg";
+import { ReactComponent as personas } from "../../assets/newSkin/personas.svg";
 import { ReactComponent as tareas } from "../../assets/newSkin/tareas.svg";
 
 const LEFT_ICONS = [
@@ -64,6 +65,11 @@ export function FloatingIconColumns() {
 
   return (
     <>
+      {/* ── LOGO (always visible, top-left) ── */}
+      <div className={styles.logo}>
+        <Logo aria-label="Logo" />
+      </div>
+
       {/* ── LEFT SIDE ── */}
       <div className={`${styles.wrapper} ${styles.wrapperLeft}`}>
         {/* Toggle button — only visible on mobile */}

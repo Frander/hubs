@@ -1,5 +1,23 @@
 @use "../styles/theme";
 
+// ── Logo (always visible, top-left) ──────────────────────────────────────────
+
+:local(.logo) {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 60px;
+  height: 60px;
+  z-index: 5;
+  pointer-events: none;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
 // ── Wrapper ──────────────────────────────────────────────────────────────────
 // Positions the toggle + column together on each side
 
@@ -134,16 +152,16 @@
 // ── Size variants ─────────────────────────────────────────────────────────────
 
 :local(.small) {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
 }
 
 :local(.medium) {
-  width: 56px;
-  height: 56px;
+  width: 86px;
+  height: 86px;
 }
 
 :local(.large) {
-  width: 72px;
-  height: 72px;
+  width: 120px;
+  height: 120px;
 }
