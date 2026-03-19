@@ -63,7 +63,7 @@ export const ToolbarButton = forwardRef(
           {statusColor && <div className={classNames(styles.statusIndicator, styles["status-" + statusColor])} />}
           {children}
         </div>
-        {label && <label disabled={disabled}>{label}</label>}
+        {/* {label && <label disabled={disabled}>{label}</label>} */}
       </button>
     );
   }
