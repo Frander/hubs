@@ -594,13 +594,20 @@ function handleHubChannelJoined(entryManager, hubChannel, messageDispatch, data)
 
   // Mute media until the scene has been fully loaded.
   // We intentionally want voice to be unmuted.
-  const audioSystem = scene.systems["hubs-systems"].audioSystem;
-  audioSystem.setMediaGainOverride(0);
+  const applyAudioGain = () => {
+    const audioSystem = scene.systems["hubs-systems"]?.audioSystem;
+    if (audioSystem) audioSystem.setMediaGainOverride(0);
+    return audioSystem;
+  };
+  const audioSystem = scene.hasLoaded ? applyAudioGain() : (() => {
+    scene.addEventListener("loaded", applyAudioGain, { once: true });
+    return null;
+  })();
   remountUI({
     messageDispatch: messageDispatch,
     onSendMessage: messageDispatch.dispatch,
     onLoaded: () => {
-      audioSystem.setMediaGainOverride(1);
+      scene.systems["hubs-systems"]?.audioSystem?.setMediaGainOverride(1);
       store.executeOnLoadActions(scene);
     },
     onMediaSearchResultEntrySelected: (entry, selectAction) =>
