@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./FloatingIconColumns.scss";
 import { AppLogo } from "../misc/AppLogo";
+import { WebPageUrlModalContainer } from "../room/WebPageUrlModalContainer";
 import asistente from "../../assets/newSkin/asistente.png";
 import calendario from "../../assets/newSkin/calendario.png";
 import carrito from "../../assets/newSkin/carrito.png";
@@ -15,7 +16,7 @@ import tareas from "../../assets/newSkin/tareas.png";
 const LEFT_ICONS = [
   { size: "medium", src: personas,  alt: "Personas" },
   { size: "small",  src: tareas,    alt: "Tareas" },
-  { size: "small",  src: asistente, alt: "Asistente" },
+  { size: "small",  src: asistente, alt: "Asistente", iframeUrl: "https://cloudxrserver.com/spacemall/", iframeTitle: "Avatar IA" },
   { size: "small",  src: comunity,  alt: "Comunidad" },
   { size: "large",  src: mapa,      alt: "Mapa" },
 ];
@@ -25,12 +26,12 @@ const RIGHT_ICONS = [
   { size: "small",  src: correo,     alt: "Correo" },
   { size: "small",  src: carrito,    alt: "Carrito" },
   { size: "small",  src: inventario, alt: "Inventario" },
-  { size: "large",  src: cuenta,     alt: "Cuenta" },
+  { size: "large",  src: cuenta,     alt: "Cuenta", iframeUrl: "https://spacemall.es/mi-perfil/", iframeTitle: "Mi cuenta" },
 ];
 
-function FloatingIcon({ size, src, alt }) {
+function FloatingIcon({ size, src, alt, onClick }) {
   return (
-    <button className={`${styles.iconBtn} ${styles[size]}`} title={alt}>
+    <button className={`${styles.iconBtn} ${styles[size]}`} title={alt} onClick={onClick}>
       <img src={src} alt={alt} />
     </button>
   );
@@ -52,12 +53,18 @@ function ChevronSVG({ direction }) {
   );
 }
 
-export function FloatingIconColumns() {
+export function FloatingIconColumns({ scene, showNonHistoriedDialog }) {
   // null | "left" | "right" — only one side open at a time on mobile
   const [openSide, setOpenSide] = useState(null);
 
   function toggle(side) {
     setOpenSide(prev => (prev === side ? null : side));
+  }
+
+  function handleIconClick(icon) {
+    if (icon.iframeUrl && showNonHistoriedDialog && scene) {
+      showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url: icon.iframeUrl, title: icon.iframeTitle });
+    }
   }
 
   const leftOpen  = openSide === "left";
@@ -84,7 +91,7 @@ export function FloatingIconColumns() {
         {/* Icon column */}
         <div className={`${styles.column} ${styles.left} ${leftOpen ? styles.columnOpen : ""}`}>
           {LEFT_ICONS.map((icon, i) => (
-            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} />
+            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} onClick={() => handleIconClick(icon)} />
           ))}
         </div>
       </div>
@@ -103,7 +110,7 @@ export function FloatingIconColumns() {
         {/* Icon column */}
         <div className={`${styles.column} ${styles.right} ${rightOpen ? styles.columnOpen : ""}`}>
           {RIGHT_ICONS.map((icon, i) => (
-            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} />
+            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} onClick={() => handleIconClick(icon)} />
           ))}
         </div>
       </div>

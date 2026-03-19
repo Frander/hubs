@@ -1391,12 +1391,6 @@ class UIRoot extends Component {
         id: "support",
         label: <FormattedMessage id="more-menu.support" defaultMessage="Support" />,
         items: [
-          entered && {
-            id: "start-tour",
-            label: <FormattedMessage id="more-menu.start-tour" defaultMessage="Start Tour" />,
-            icon: SupportIcon,
-            onClick: () => this.props.scene.systems.tips.resetTips()
-          },
           configs.feature("show_terms") && {
             id: "tos",
             label: <FormattedMessage id="more-menu.tos" defaultMessage="Terms of Service" />,
@@ -1482,6 +1476,7 @@ class UIRoot extends Component {
                 store={this.props.store}
                 objectFocused={!!this.props.selectedObject}
                 streaming={streaming}
+                showNonHistoriedDialog={this.showNonHistoriedDialog}
                 sidebarClassName={this.state.sidebarId === "chat" ? roomLayoutStyles.chatSidebarHidden : undefined}
                 viewport={
                   <>
@@ -1535,18 +1530,6 @@ class UIRoot extends Component {
                       />
                     )}
                     <NotificationsContainer>
-                      {(this.state.hide || this.state.hideUITip || !this.props.activeObject) && (
-                        <TipContainer
-                          inLobby={watching}
-                          inRoom={entered}
-                          isEmbedded={this.props.embed}
-                          isStreaming={streaming}
-                          hubId={this.props.hub.hub_id}
-                          presences={this.props.presences}
-                          scene={this.props.scene}
-                          store={this.props.store}
-                        />
-                      )}
                       {!isMobile && !this.state.hide && (
                         <PresenceLog
                           preset={"Notifications"}
