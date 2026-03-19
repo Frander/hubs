@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import styles from "./FloatingIconColumns.scss";
-import asistente from "../../assets/newSkin/asistente.svg";
-import calendario from "../../assets/newSkin/calendario.svg";
-import carrito from "../../assets/newSkin/carrito.svg";
-import comunity from "../../assets/newSkin/comunity.svg";
-import correo from "../../assets/newSkin/correo.svg";
-import cuenta from "../../assets/newSkin/cuenta.svg";
-import inventario from "../../assets/newSkin/asistente.svg";
-import mapa from "../../assets/newSkin/asistente.svg";
-import personas from "../../assets/newSkin/asistente.svg";
-import tareas from "../../assets/newSkin/tareas.svg";
+import { ReactComponent as asistente } from "../../assets/newSkin/asistente.svg";
+import { ReactComponent as calendario } from "../../assets/newSkin/calendario.svg";
+import { ReactComponent as carrito } from "../../assets/newSkin/carrito.svg";
+import { ReactComponent as comunity } from "../../assets/newSkin/comunity.svg";
+import { ReactComponent as correo } from "../../assets/newSkin/correo.svg";
+import { ReactComponent as cuenta } from "../../assets/newSkin/cuenta.svg";
+import { ReactComponent as inventario } from "../../assets/newSkin/asistente.svg";
+import { ReactComponent as mapa } from "../../assets/newSkin/asistente.svg";
+import { ReactComponent as personas } from "../../assets/newSkin/asistente.svg";
+import { ReactComponent as tareas } from "../../assets/newSkin/tareas.svg";
 
 const LEFT_ICONS = [
   { size: "medium", SvgComponent: personas,  alt: "Personas" },
