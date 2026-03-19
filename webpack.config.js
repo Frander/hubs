@@ -517,7 +517,7 @@ module.exports = async (env, argv) => {
         },
         {
           test: /\.svg$/,
-          include: [path.resolve(__dirname, "src", "react-components")],
+          include: [path.resolve(__dirname, "src", "react-components"), path.resolve(__dirname, "src", "assets")],
           use: [
             {
               loader: "@svgr/webpack",
