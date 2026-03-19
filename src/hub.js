@@ -786,8 +786,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const scene = document.querySelector("a-scene");
 
   const onSceneLoaded = () => {
-    const physicsSystem = scene.systems["hubs-systems"].physicsSystem;
-    physicsSystem.setDebug(isDebug || physicsSystem.debug);
+    const hubsSystems = scene.systems["hubs-systems"];
+    if (hubsSystems) {
+      hubsSystems.physicsSystem.setDebug(isDebug || hubsSystems.physicsSystem.debug);
+      APP.mediaDevicesManager = new MediaDevicesManager(scene, store, hubsSystems.audioSystem);
+    }
   };
   if (scene.hasLoaded) {
     onSceneLoaded();
@@ -817,12 +820,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     remountUI({ roomUnavailableReason: ExitReason.connectError });
     APP.entryManager.exitScene();
   });
-
-  console.log(scene)
-  console.log(scene.systems["hubs-systems"])
-
-  const audioSystem = scene.systems["hubs-systems"].audioSystem;
-  APP.mediaDevicesManager = new MediaDevicesManager(scene, store, audioSystem);
 
   const performConditionalSignIn = async (predicate, action, signInMessage, onFailure) => {
     if (predicate()) return action();

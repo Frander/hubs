@@ -90,7 +90,7 @@ AFRAME.registerComponent("visibility-while-frozen", {
     }
 
     const isTransforming = this.el.sceneEl.systems["transform-selected-object"].transforming;
-    const isHoldingAnything = this.el.sceneEl.systems.interaction.isHoldingAnything();
+    const isHoldingAnything = this.el.sceneEl.systems.interaction?.isHoldingAnything() ?? false;
 
     if (this.data.withPermission && this.data.withoutPermission) {
       throw new Error(
