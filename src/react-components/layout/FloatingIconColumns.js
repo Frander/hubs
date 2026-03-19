@@ -9,7 +9,7 @@ import correo from "../../assets/newSkin/correo.png";
 import cuenta from "../../assets/newSkin/cuenta.png";
 import inventario from "../../assets/newSkin/inventario.png";
 import mapa from "../../assets/newSkin/mapa.png";
-import personas from "../../assets/newSkin/personas.svg";
+import personas from "../../assets/newSkin/personas.png";
 import tareas from "../../assets/newSkin/tareas.png";
 
 const LEFT_ICONS = [
