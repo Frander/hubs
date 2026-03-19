@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import styles from "./RoomLayout.scss";
 import { Toolbar } from "./Toolbar";
+import { LeftIconColumn, RightIconColumn } from "./FloatingIconColumns";
 
 export function RoomLayout({
   className,
@@ -32,6 +33,8 @@ export function RoomLayout({
           right={toolbarRight}
         />
       )}
+      <LeftIconColumn />
+      <RightIconColumn />
       <div
         className={classNames(styles.main, styles.viewport, { [styles.streaming]: streaming }, viewportClassName)}
         ref={viewportRef}
