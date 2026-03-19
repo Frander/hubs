@@ -1,37 +1,37 @@
 import React, { useState } from "react";
 import styles from "./FloatingIconColumns.scss";
-import { ReactComponent as Logo } from "../../assets/newSkin/logo.svg";
-import { ReactComponent as asistente } from "../../assets/newSkin/asistente.svg";
-import { ReactComponent as calendario } from "../../assets/newSkin/calendario.svg";
-import { ReactComponent as carrito } from "../../assets/newSkin/carrito.svg";
-import { ReactComponent as comunity } from "../../assets/newSkin/comunity.svg";
-import { ReactComponent as correo } from "../../assets/newSkin/correo.svg";
-import { ReactComponent as cuenta } from "../../assets/newSkin/cuenta.svg";
-import { ReactComponent as inventario } from "../../assets/newSkin/inventario.svg";
-import { ReactComponent as mapa } from "../../assets/newSkin/mapa.svg";
-import { ReactComponent as personas } from "../../assets/newSkin/personas.svg";
-import { ReactComponent as tareas } from "../../assets/newSkin/tareas.svg";
+import { AppLogo } from "../misc/AppLogo";
+import asistente from "../../assets/newSkin/asistente.svg";
+import calendario from "../../assets/newSkin/calendario.svg";
+import carrito from "../../assets/newSkin/carrito.svg";
+import comunity from "../../assets/newSkin/comunity.svg";
+import correo from "../../assets/newSkin/correo.svg";
+import cuenta from "../../assets/newSkin/cuenta.svg";
+import inventario from "../../assets/newSkin/inventario.svg";
+import mapa from "../../assets/newSkin/mapa.svg";
+import personas from "../../assets/newSkin/personas.svg";
+import tareas from "../../assets/newSkin/tareas.svg";
 
 const LEFT_ICONS = [
-  { size: "medium", SvgComponent: personas,  alt: "Personas" },
-  { size: "small",  SvgComponent: tareas,    alt: "Tareas" },
-  { size: "small",  SvgComponent: asistente, alt: "Asistente" },
-  { size: "small",  SvgComponent: comunity,  alt: "Comunidad" },
-  { size: "large",  SvgComponent: mapa,      alt: "Mapa" },
+  { size: "medium", src: personas,  alt: "Personas" },
+  { size: "small",  src: tareas,    alt: "Tareas" },
+  { size: "small",  src: asistente, alt: "Asistente" },
+  { size: "small",  src: comunity,  alt: "Comunidad" },
+  { size: "large",  src: mapa,      alt: "Mapa" },
 ];
 
 const RIGHT_ICONS = [
-  { size: "medium", SvgComponent: calendario, alt: "Calendario" },
-  { size: "small",  SvgComponent: correo,     alt: "Correo" },
-  { size: "small",  SvgComponent: carrito,    alt: "Carrito" },
-  { size: "small",  SvgComponent: inventario, alt: "Inventario" },
-  { size: "large",  SvgComponent: cuenta,     alt: "Cuenta" },
+  { size: "medium", src: calendario, alt: "Calendario" },
+  { size: "small",  src: correo,     alt: "Correo" },
+  { size: "small",  src: carrito,    alt: "Carrito" },
+  { size: "small",  src: inventario, alt: "Inventario" },
+  { size: "large",  src: cuenta,     alt: "Cuenta" },
 ];
 
-function FloatingIcon({ size, SvgComponent, alt }) {
+function FloatingIcon({ size, src, alt }) {
   return (
     <button className={`${styles.iconBtn} ${styles[size]}`} title={alt}>
-      <SvgComponent aria-label={alt} />
+      <img src={src} alt={alt} />
     </button>
   );
 }
@@ -67,7 +67,7 @@ export function FloatingIconColumns() {
     <>
       {/* ── LOGO (always visible, top-left) ── */}
       <div className={styles.logo}>
-        <Logo aria-label="Logo" />
+        <AppLogo className={styles.logoImg} />
       </div>
 
       {/* ── LEFT SIDE ── */}
@@ -84,7 +84,7 @@ export function FloatingIconColumns() {
         {/* Icon column */}
         <div className={`${styles.column} ${styles.left} ${leftOpen ? styles.columnOpen : ""}`}>
           {LEFT_ICONS.map((icon, i) => (
-            <FloatingIcon key={i} size={icon.size} SvgComponent={icon.SvgComponent} alt={icon.alt} />
+            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} />
           ))}
         </div>
       </div>
@@ -103,7 +103,7 @@ export function FloatingIconColumns() {
         {/* Icon column */}
         <div className={`${styles.column} ${styles.right} ${rightOpen ? styles.columnOpen : ""}`}>
           {RIGHT_ICONS.map((icon, i) => (
-            <FloatingIcon key={i} size={icon.size} SvgComponent={icon.SvgComponent} alt={icon.alt} />
+            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} />
           ))}
         </div>
       </div>

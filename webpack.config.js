@@ -516,8 +516,15 @@ module.exports = async (env, argv) => {
           ]
         },
         {
+          // SVGs in src/assets are used as <img src> — keep them as plain URL assets
+          // so that Figma-exported features (foreignObject blur, embedded images) are preserved.
           test: /\.svg$/,
-          include: [path.resolve(__dirname, "src", "react-components"), path.resolve(__dirname, "src", "assets")],
+          include: [path.resolve(__dirname, "src", "assets")],
+          type: "asset/resource"
+        },
+        {
+          test: /\.svg$/,
+          include: [path.resolve(__dirname, "src", "react-components")],
           use: [
             {
               loader: "@svgr/webpack",
