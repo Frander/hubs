@@ -159,6 +159,22 @@
   }
 }
 
+:local(.icon-overlay) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:local(.icon-overlay-svg) {
+  width: 28px;
+  height: 28px;
+}
+
 :local(.icon-badge) {
   position: absolute;
   top: 84%;

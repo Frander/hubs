@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./FloatingIconColumns.scss";
 import { AppLogo } from "../misc/AppLogo";
 import { WebPageUrlModalContainer } from "../room/WebPageUrlModalContainer";
+import { ReactComponent as AvatarIcon } from "../icons/Avatar.svg";
 import asistente from "../../assets/newSkin/asistente.png";
 import calendario from "../../assets/newSkin/calendario.png";
 import carrito from "../../assets/newSkin/carrito.png";
@@ -29,11 +30,12 @@ const RIGHT_ICONS = [
   { size: "large",  src: cuenta,     alt: "Cuenta", iframeUrl: "https://spacemall.es/mi-perfil/", iframeTitle: "Mi cuenta" },
 ];
 
-function FloatingIcon({ size, src, alt, onClick, badge }) {
+function FloatingIcon({ size, src, alt, onClick, badge, overlay }) {
   return (
     <button className={`${styles.iconBtn} ${styles[size]}`} title={alt} onClick={onClick}>
       <img src={src} alt={alt} />
       {badge != null && <span className={styles.iconBadge}>{badge}</span>}
+      {overlay && <span className={styles.iconOverlay}>{overlay}</span>}
     </button>
   );
 }
@@ -120,7 +122,14 @@ export function FloatingIconColumns({ scene, showNonHistoriedDialog, onPersonasC
         {/* Icon column */}
         <div className={`${styles.column} ${styles.right} ${rightOpen ? styles.columnOpen : ""}`}>
           {RIGHT_ICONS.map((icon, i) => (
-            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} onClick={() => handleIconClick(icon)} />
+            <FloatingIcon
+              key={i}
+              size={icon.size}
+              src={icon.src}
+              alt={icon.alt}
+              onClick={() => handleIconClick(icon)}
+              overlay={icon.alt === "Cuenta" ? <AvatarIcon className={styles.iconOverlaySvg} /> : undefined}
+            />
           ))}
         </div>
       </div>
