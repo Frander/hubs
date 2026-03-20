@@ -144,6 +144,7 @@
   border-radius: 8px;
   transition: transform 0.15s ease, opacity 0.15s ease;
   overflow: hidden;
+  position: relative;
 
   img {
     width: 100%;
@@ -158,19 +159,32 @@
   }
 }
 
+:local(.icon-badge) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
 // ── Size variants ─────────────────────────────────────────────────────────────
 
 :local(.small) {
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
 }
 
 :local(.medium) {
-  width: 86px;
-  height: 86px;
+  width: 120px;
+  height: 120px;
 }
 
 :local(.large) {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
 }

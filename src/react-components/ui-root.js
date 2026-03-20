@@ -1483,6 +1483,8 @@ class UIRoot extends Component {
                 objectFocused={!!this.props.selectedObject}
                 streaming={streaming}
                 showNonHistoriedDialog={this.showNonHistoriedDialog}
+                onPersonasClick={() => this.toggleSidebar("people")}
+                personasCount={this.occupantCount()}
                 sidebarClassName={this.state.sidebarId === "chat" ? roomLayoutStyles.chatSidebarHidden : undefined}
                 viewport={
                   <>

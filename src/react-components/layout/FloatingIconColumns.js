@@ -29,10 +29,11 @@ const RIGHT_ICONS = [
   { size: "large",  src: cuenta,     alt: "Cuenta", iframeUrl: "https://spacemall.es/mi-perfil/", iframeTitle: "Mi cuenta" },
 ];
 
-function FloatingIcon({ size, src, alt, onClick }) {
+function FloatingIcon({ size, src, alt, onClick, badge }) {
   return (
     <button className={`${styles.iconBtn} ${styles[size]}`} title={alt} onClick={onClick}>
       <img src={src} alt={alt} />
+      {badge != null && <span className={styles.iconBadge}>{badge}</span>}
     </button>
   );
 }
@@ -53,7 +54,7 @@ function ChevronSVG({ direction }) {
   );
 }
 
-export function FloatingIconColumns({ scene, showNonHistoriedDialog }) {
+export function FloatingIconColumns({ scene, showNonHistoriedDialog, onPersonasClick, personasCount }) {
   // null | "left" | "right" — only one side open at a time on mobile
   const [openSide, setOpenSide] = useState(null);
 
@@ -62,7 +63,9 @@ export function FloatingIconColumns({ scene, showNonHistoriedDialog }) {
   }
 
   function handleIconClick(icon) {
-    if (icon.iframeUrl && showNonHistoriedDialog && scene) {
+    if (icon.alt === "Personas" && onPersonasClick) {
+      onPersonasClick();
+    } else if (icon.iframeUrl && showNonHistoriedDialog && scene) {
       showNonHistoriedDialog(WebPageUrlModalContainer, { scene, url: icon.iframeUrl, title: icon.iframeTitle });
     }
   }
@@ -91,7 +94,14 @@ export function FloatingIconColumns({ scene, showNonHistoriedDialog }) {
         {/* Icon column */}
         <div className={`${styles.column} ${styles.left} ${leftOpen ? styles.columnOpen : ""}`}>
           {LEFT_ICONS.map((icon, i) => (
-            <FloatingIcon key={i} size={icon.size} src={icon.src} alt={icon.alt} onClick={() => handleIconClick(icon)} />
+            <FloatingIcon
+              key={i}
+              size={icon.size}
+              src={icon.src}
+              alt={icon.alt}
+              onClick={() => handleIconClick(icon)}
+              badge={icon.alt === "Personas" ? personasCount : undefined}
+            />
           ))}
         </div>
       </div>

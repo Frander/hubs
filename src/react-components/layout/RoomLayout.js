@@ -35,6 +35,8 @@ export function RoomLayout({
   viewportRef,
   scene,
   showNonHistoriedDialog,
+  onPersonasClick,
+  personasCount,
   ...rest
 }) {
   const [toolbarOpen, setToolbarOpen] = useState(false);
@@ -61,7 +63,7 @@ export function RoomLayout({
           </div>
         </div>
       )}
-      <FloatingIconColumns scene={scene} showNonHistoriedDialog={showNonHistoriedDialog} />
+      <FloatingIconColumns scene={scene} showNonHistoriedDialog={showNonHistoriedDialog} onPersonasClick={onPersonasClick} personasCount={personasCount} />
       <div
         className={classNames(styles.main, styles.viewport, { [styles.streaming]: streaming }, viewportClassName)}
         ref={viewportRef}

@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { RoomLayout } from "../layout/RoomLayout";
 import { useResizeViewport } from "./hooks/useResizeViewport";
 
-export function RoomLayoutContainer({ store, scene, showNonHistoriedDialog, ...rest }) {
+export function RoomLayoutContainer({ store, scene, showNonHistoriedDialog, onPersonasClick, personasCount, ...rest }) {
   const viewportRef = useRef();
 
   useResizeViewport(viewportRef, store, scene);
 
-  return <RoomLayout viewportRef={viewportRef} scene={scene} showNonHistoriedDialog={showNonHistoriedDialog} {...rest} />;
+  return <RoomLayout viewportRef={viewportRef} scene={scene} showNonHistoriedDialog={showNonHistoriedDialog} onPersonasClick={onPersonasClick} personasCount={personasCount} {...rest} />;
 }
 
 RoomLayoutContainer.propTypes = {
