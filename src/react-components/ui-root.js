@@ -1717,7 +1717,7 @@ class UIRoot extends Component {
                               mediaSearchStore={this.props.mediaSearchStore}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
                             />
-                            <AvatarToolbarButton
+                            {/* <AvatarToolbarButton
                               onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
                               selected={this.state.sidebarId === "avatar"}
                               scene={this.props.scene}
@@ -1732,7 +1732,7 @@ class UIRoot extends Component {
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
                               url={"https://spacemall.es/mi-perfil/"}
                               title={"Mi cuenta"}
-                            />
+                            /> */}
                           </>
                         )}
                         {this.props.hubChannel.can("spawn_emoji") && (
