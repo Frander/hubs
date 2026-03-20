@@ -1499,12 +1499,7 @@ class UIRoot extends Component {
                             onClick={() => this.toggleSidebar("objects")}
                           />
                         )}
-                        <PeopleMenuButton
-                          active={this.state.sidebarId === "people"}
-                          disabled={isLockedDownDemo}
-                          onClick={!isLockedDownDemo ? () => this.toggleSidebar("people") : null}
-                          presencecount={this.state.presenceCount}
-                        />
+                        {/* PeopleMenuButton hidden — using floating Personas button instead */}
                         {showECSObjectsMenuButton && (
                           <ECSDebugMenuButton
                             active={this.state.sidebarId === "ecs-debug"}
@@ -1674,12 +1669,7 @@ class UIRoot extends Component {
                 modal={this.state.dialog}
                 toolbarLeft={
                   <>
-                    <InvitePopoverContainer
-                      hub={this.props.hub}
-                      hubChannel={this.props.hubChannel}
-                      scene={this.props.scene}
-                      store={this.props.store}
-                    />
+                    
                     {isLockedDownDemo && <SeePlansCTA />}
                   </>
                 }
@@ -1709,7 +1699,14 @@ class UIRoot extends Component {
                       <>
                         {!isLockedDownDemo && (
                           <>
+                            
                             <AudioPopoverButtonContainer scene={this.props.scene} />
+                            <InvitePopoverContainer
+                              hub={this.props.hub}
+                              hubChannel={this.props.hubChannel}
+                              scene={this.props.scene}
+                              store={this.props.store}
+                            />
                             <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
                             <PlacePopoverContainer
                               scene={this.props.scene}

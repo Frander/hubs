@@ -1,16 +1,16 @@
 @use "../styles/theme";
 
 :local(.toolbar) {
-  height: 60px;
+  height: 54px;
   display: flex;
-  padding: 0px 100px;
+  padding: 5px 100px;
   background-color: #ffffff;
   border-top: none;
   border-radius: 14px;
   position: relative;
   width: 70vw;
   margin: auto;
-  bottom: 90px;
+  bottom: 30px;
 }
 
 :local(.content) {
