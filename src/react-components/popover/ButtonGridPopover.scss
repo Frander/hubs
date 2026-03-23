@@ -2,6 +2,7 @@
 
 
 :local(.button-grid-popover) {
+  --toolbar-icon-color: var(--primary-color);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
   gap: 16px;
