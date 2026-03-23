@@ -3,39 +3,43 @@
 :local(.toolbar) {
   height: 54px;
   display: flex;
-  padding: 5px 100px;
+  align-items: center;
+  padding: 5px 16px;
   background-color: #ffffff;
-  border-top: none;
   border-radius: 14px;
-  position: relative;
   width: 70vw;
-  margin: auto;
+  margin: 0 auto;
   bottom: 30px;
 }
 
+// Base para las tres secciones
 :local(.content) {
   display: flex;
-  flex: 1;
-  justify-content: space-around;
   align-items: center;
-  gap: 0 24px;
+  gap: 0 8px;
+}
 
-  @media (min-width: theme.$breakpoint-lg) {
-    flex: 0;
+// Left: ocupa la mitad del espacio libre, botones pegados a la izquierda
+:local(.left_content) {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+// Center: solo toma el espacio que necesita, siempre centrado
+:local(.center_content) {
+  flex: 0 0 auto;
+  justify-content: center;
+  gap: 0 8px;
+
+  // Mobile: ocupa todo el ancho disponible y distribuye los botones
+  @media (max-width: #{theme.$breakpoint-lg - 1}) {
+    flex: 1;
+    justify-content: space-around;
   }
 }
 
-:local(.center_content) {
-  position: absolute;
-  display: flex;
-  width: calc(100% - 200px);
-  justify-content: center;
-  z-index: 1;
-
-  @media (max-width: theme.$breakpoint-lg) {
-    width: 100%;
-    position: relative;
-    justify-content: space-around;
-    gap: unset;
-  }
+// Right: ocupa la mitad del espacio libre, botones pegados a la derecha
+:local(.right_content) {
+  flex: 1;
+  justify-content: flex-end;
 }

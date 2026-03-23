@@ -1670,7 +1670,16 @@ class UIRoot extends Component {
                 toolbarLeft={
                   <>
                     
-                    {isLockedDownDemo && <SeePlansCTA />}
+                    {/* {isLockedDownDemo && <SeePlansCTA />} */}
+
+                    <AudioPopoverButtonContainer scene={this.props.scene} />
+                            {/* <InvitePopoverContainer
+                              hub={this.props.hub}
+                              hubChannel={this.props.hubChannel}
+                              scene={this.props.scene}
+                              store={this.props.store}
+                            /> */}
+                    <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
                   </>
                 }
                 toolbarCenter={
@@ -1699,21 +1708,14 @@ class UIRoot extends Component {
                       <>
                         {!isLockedDownDemo && (
                           <>
+                            <h3>SPACECHAT</h3>
                             
-                            <AudioPopoverButtonContainer scene={this.props.scene} />
-                            <InvitePopoverContainer
-                              hub={this.props.hub}
-                              hubChannel={this.props.hubChannel}
-                              scene={this.props.scene}
-                              store={this.props.store}
-                            />
-                            <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-                            <PlacePopoverContainer
+                            {/* <PlacePopoverContainer
                               scene={this.props.scene}
                               hubChannel={this.props.hubChannel}
                               mediaSearchStore={this.props.mediaSearchStore}
                               showNonHistoriedDialog={this.showNonHistoriedDialog}
-                            />
+                            /> */}
                             {/* <AvatarToolbarButton
                               onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
                               selected={this.state.sidebarId === "avatar"}
@@ -1732,12 +1734,12 @@ class UIRoot extends Component {
                             /> */}
                           </>
                         )}
-                        {this.props.hubChannel.can("spawn_emoji") && (
+                        {/* {this.props.hubChannel.can("spawn_emoji") && (
                           <ReactionPopoverContainer
                             scene={this.props.scene}
                             initialPresence={getPresenceProfileForSession(this.props.presences, this.props.sessionId)}
                           />
-                        )}
+                        )} */}
                       </>
                     )}
                     {/* {!isLockedDownDemo && (
@@ -1749,12 +1751,7 @@ class UIRoot extends Component {
 
                       />
                     )} */}
-                    {!isLockedDownDemo && (
-                      <ChatToolbarButton
-                        onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
-                        selected={this.state.sidebarId === "chat"}
-                      />
-                    )}         
+                        
                     {entered && isMobileVR && (
                       <ToolbarButton
                         className={styleUtils.hideLg}
@@ -1791,15 +1788,24 @@ class UIRoot extends Component {
                           }}
                         />
                       )} */}
-                      <MoreMenuPopoverButton menu={moreMenu} />
                     </>
                   </>
                   
                   
                 }
-                // toolbarRight={
-                  
-                // }
+                toolbarRight={
+                  <>
+                   {!isLockedDownDemo && (
+                      <ChatToolbarButton
+                        onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
+                        selected={this.state.sidebarId === "chat"}
+                      />
+                    )} 
+
+                    <MoreMenuPopoverButton menu={moreMenu} />
+   
+                  </>
+                }
               />
             )}
           </div>
