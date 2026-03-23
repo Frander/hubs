@@ -7,6 +7,8 @@ import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ToolTip } from "@mozilla/lilypad-ui";
 import  ChatIconBtn from "../../../../assets/newSkin/chatBtn.png";
+// @ts-ignore
+import styles from "./ChatToolbarButton.scss";
 
 const chatTooltipDescription = defineMessage({
   id: "chat-tooltip.description",
@@ -33,6 +35,7 @@ const ChatToolbarButton = ({ onClick, selected }: ChatToolbarButtonProps) => {
         icon={<img src={ChatIconBtn} width="100%"/>}
         preset="accent4"
         selected={selected}
+        iconContainerClassName={styles.smallIconContainer}
       />
     </ToolTip>
   );

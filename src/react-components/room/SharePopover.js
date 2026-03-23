@@ -6,6 +6,7 @@ import { ToolbarButton } from "../input/ToolbarButton";
 import { defineMessage, useIntl } from "react-intl";
 import { ToolTip } from "@mozilla/lilypad-ui";
 import  ShareIconBtn from "../../assets/newSkin/shareBtn.png";
+import styles from "./SharePopover.scss";
 
 const shareTooltipDescription = defineMessage({
   id: "share-tooltip.description",
@@ -66,6 +67,7 @@ export function SharePopoverButton({ items }) {
             selected={popoverVisible}
             onClick={togglePopover}
             preset="accent5"
+            iconContainerClassName={styles.smallIconContainer}
           />
         </ToolTip>
       )}
