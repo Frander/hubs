@@ -37,6 +37,7 @@ export function RoomLayout({
   showNonHistoriedDialog,
   onPersonasClick,
   personasCount,
+  chatOpen,
   ...rest
 }) {
   const [toolbarOpen, setToolbarOpen] = useState(false);
@@ -46,7 +47,10 @@ export function RoomLayout({
       {sidebar && <div className={classNames(styles.sidebar, sidebarClassName)}>{sidebar}</div>}
       <div className={classNames(styles.modalContainer, styles.viewport)}>{modal}</div>
       {(toolbarLeft || toolbarCenter || toolbarRight) && (
-        <div className={classNames(styles.main, styles.toolbar, toolbarClassName)}>
+        <div
+          className={classNames(styles.main, styles.toolbar, toolbarClassName)}
+          style={{ bottom: chatOpen ? "36%" : "2%", transition: "bottom 0.3s ease" }}
+        >
           <button
             className={classNames(styles.toolbarToggle, { [styles.toolbarToggleOpen]: toolbarOpen })}
             onClick={() => setToolbarOpen(prev => !prev)}
@@ -87,5 +91,6 @@ RoomLayout.propTypes = {
   viewport: PropTypes.node,
   objectFocused: PropTypes.bool,
   streaming: PropTypes.bool,
-  viewportRef: PropTypes.any
+  viewportRef: PropTypes.any,
+  chatOpen: PropTypes.bool
 };

@@ -1485,6 +1485,7 @@ class UIRoot extends Component {
                 showNonHistoriedDialog={this.showNonHistoriedDialog}
                 onPersonasClick={() => this.toggleSidebar("people")}
                 personasCount={this.occupantCount()}
+                chatOpen={this.state.sidebarId === "chat"}
                 sidebarClassName={this.state.sidebarId === "chat" ? roomLayoutStyles.chatSidebarHidden : undefined}
                 viewport={
                   <>

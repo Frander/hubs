@@ -24,6 +24,7 @@
   height: 100%;
   overflow: hidden;
   width: 450px;
+  z-index: 9;
 
   @media (max-width: theme.$breakpoint-lg - 1), (max-height: theme.$breakpoint-vr - 1) {
     position: fixed;
@@ -51,7 +52,7 @@
 
 :local(.toolbar) {
   position: absolute;
-  bottom: 20px;
+  bottom: 2%;
   left: 0;
   right: 0;
   grid-column-end: -1;

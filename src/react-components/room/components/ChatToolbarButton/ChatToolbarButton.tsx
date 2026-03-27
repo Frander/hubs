@@ -1,18 +1,22 @@
 import { ToolbarButton } from "../../../input/ToolbarButton";
-// TO DO: look into changing icon theme handling to work with TS
 // @ts-ignore
-import { ReactComponent as ChatIcon } from "../../../icons/Chat.svg";
-import { FormattedMessage, defineMessage, useIntl } from "react-intl";
+import { ReactComponent as CloseIcon } from "../../../icons/Close.svg";
+import { defineMessage, useIntl } from "react-intl";
 import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ToolTip } from "@mozilla/lilypad-ui";
-import  ChatIconBtn from "../../../../assets/newSkin/chatBtn.png";
+import ChatIconBtn from "../../../../assets/newSkin/chatBtn.png";
 // @ts-ignore
 import styles from "./ChatToolbarButton.scss";
 
 const chatTooltipDescription = defineMessage({
   id: "chat-tooltip.description",
   defaultMessage: "Open the chat sidebar (T)"
+});
+
+const chatCloseTooltipDescription = defineMessage({
+  id: "chat-close-tooltip.description",
+  defaultMessage: "Close the chat sidebar (T)"
 });
 
 type ChatToolbarButtonProps = {
@@ -23,7 +27,11 @@ type ChatToolbarButtonProps = {
 const ChatToolbarButton = ({ onClick, selected }: ChatToolbarButtonProps) => {
   const { unreadMessages } = useContext(ChatContext);
   const intl = useIntl();
-  const description = intl.formatMessage(chatTooltipDescription);
+  const description = intl.formatMessage(selected ? chatCloseTooltipDescription : chatTooltipDescription);
+
+  const icon = selected
+    ? <CloseIcon style={{ stroke: "white", width: "60%", height: "60%" }} />
+    : <img src={ChatIconBtn} width="100%" />;
 
   return (
     <ToolTip description={description}>
@@ -32,7 +40,7 @@ const ChatToolbarButton = ({ onClick, selected }: ChatToolbarButtonProps) => {
         // @ts-ignore
         onClick={onClick}
         statusColor={unreadMessages ? "unread" : undefined}
-        icon={<img src={ChatIconBtn} width="100%"/>}
+        icon={icon}
         preset="accent4"
         selected={selected}
         iconContainerClassName={styles.smallIconContainer}
