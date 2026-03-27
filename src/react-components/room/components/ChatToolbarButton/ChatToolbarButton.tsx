@@ -1,11 +1,10 @@
 import { ToolbarButton } from "../../../input/ToolbarButton";
-// @ts-ignore
-import { ReactComponent as CloseIcon } from "../../../icons/Close.svg";
 import { defineMessage, useIntl } from "react-intl";
 import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
 import { ToolTip } from "@mozilla/lilypad-ui";
 import ChatIconBtn from "../../../../assets/newSkin/chatBtn.png";
+import ChatIconBtnClose from "../../../../assets/newSkin/chatBtnClose.png";
 // @ts-ignore
 import styles from "./ChatToolbarButton.scss";
 
@@ -30,7 +29,7 @@ const ChatToolbarButton = ({ onClick, selected }: ChatToolbarButtonProps) => {
   const description = intl.formatMessage(selected ? chatCloseTooltipDescription : chatTooltipDescription);
 
   const icon = selected
-    ? <CloseIcon style={{ stroke: "white", width: "60%", height: "60%" }} />
+    ? <img src={ChatIconBtnClose} width="100%" />
     : <img src={ChatIconBtn} width="100%" />;
 
   return (
