@@ -24,7 +24,7 @@
   height: 100%;
   overflow: hidden;
   width: 450px;
-  z-index: 9;
+  z-index: 1000;
 
   @media (max-width: theme.$breakpoint-lg - 1), (max-height: theme.$breakpoint-vr - 1) {
     position: fixed;
