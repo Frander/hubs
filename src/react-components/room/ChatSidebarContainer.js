@@ -7,7 +7,6 @@ import {
   ChatMessageList,
   ChatInput,
   MessageAttachmentButton,
-  SpawnMessageButton,
   SendMessageButton,
   EmojiPickerPopoverButton,
   PlaceChatButton,
@@ -15,7 +14,7 @@ import {
   PermissionMessageGroup
 } from "./ChatSidebar";
 import { useMaintainScrollPosition } from "../misc/useMaintainScrollPosition";
-import { spawnChatMessage } from "../chat-message";
+// import { spawnChatMessage } from "../chat-message";
 import { discordBridgesForPresences } from "../../utils/phoenix-utils";
 import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 import { MAX_MESSAGE_LENGTH } from "../../utils/chat-message";
@@ -187,11 +186,6 @@ export function ChatSidebarContainer({
     setMessage("");
   }, [message, sendMessage, setMessage]);
 
-  const onSpawnMessage = () => {
-    spawnChatMessage(message);
-    setMessage("");
-  };
-
   const onUploadAttachments = useCallback(
     e => {
       // TODO: Right now there's no way to upload files to the chat only.
@@ -297,13 +291,6 @@ export function ChatSidebarContainer({
             {hubChannel && <PlaceChatButton items={placeItems} />}
             {canSpawnMessages && (
               <MessageAttachmentButton onChange={onUploadAttachments} />
-            )}
-            {canSpawnMessages && (
-              <SpawnMessageButton
-                disabled={isDisabled}
-                onClick={onSpawnMessage}
-                title={isDisabled ? intl.formatMessage(chatSidebarMessages["textChatOff"]) : undefined}
-              />
             )}
             <SendMessageButton
               onClick={onSendMessage}

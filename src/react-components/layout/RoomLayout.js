@@ -68,7 +68,7 @@ export function RoomLayout({
               left={toolbarLeft}
               center={toolbarCenter}
               right={toolbarRight}
-              style={chatExpanded ? { width: "95vw" } : undefined}
+              style={chatExpanded ? { width: "95vw", margin: "auto" } : undefined}
             />
           </div>
         </div>
