@@ -53,6 +53,7 @@ export function RoomLayout({
           style={{
             bottom: chatOpen ? (chatExpanded ? "91%" : "36%") : "2%",
             width: chatExpanded ? "95vw" : undefined,
+            margin: chatExpanded ? "auto" : undefined,
             transition: "bottom 0.3s ease, width 0.3s ease"
           }}
         >
