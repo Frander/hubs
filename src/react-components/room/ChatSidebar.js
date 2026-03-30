@@ -8,10 +8,12 @@ import { ReactComponent as WandIcon } from "../icons/Wand.svg";
 import { ReactComponent as AttachIcon } from "../icons/Attach.svg";
 import { ReactComponent as SendIcon } from "../icons/Send.svg";
 import { ReactComponent as ReactionIcon } from "../icons/Reaction.svg";
+import { ReactComponent as AddIcon } from "../icons/Add.svg";
 import { IconButton } from "../input/IconButton";
 import { TextAreaInput } from "../input/TextAreaInput";
 import { Popover } from "../popover/Popover";
 import { EmojiPicker } from "./EmojiPicker";
+import { ButtonGridPopover } from "../popover/ButtonGridPopover";
 import styles from "./ChatSidebar.scss";
 import { formatMessageBody } from "../../utils/chat-message";
 import { FormattedMessage, useIntl, defineMessages, FormattedRelativeTime } from "react-intl";
@@ -97,6 +99,35 @@ EmojiPickerPopoverButton.propTypes = {
 };
 
 EmojiPickerPopoverButton.displayName = "EmojiPickerPopoverButton";
+
+export function PlaceChatButton({ items }) {
+  const filteredItems = items.filter(item => !!item);
+  if (filteredItems.length === 0) return null;
+
+  return (
+    <Popover
+      title="Place"
+      content={props => <ButtonGridPopover items={filteredItems} {...props} />}
+      placement="top"
+      offsetDistance={28}
+    >
+      {({ togglePopover, popoverVisible, triggerRef }) => (
+        <IconButton
+          ref={triggerRef}
+          className={styles.chatInputIcon}
+          selected={popoverVisible}
+          onClick={togglePopover}
+        >
+          <AddIcon />
+        </IconButton>
+      )}
+    </Popover>
+  );
+}
+
+PlaceChatButton.propTypes = {
+  items: PropTypes.array.isRequired
+};
 
 export function MessageAttachmentButton(props) {
   return (
@@ -473,9 +504,13 @@ ChatMessageList.propTypes = {
 
 ChatMessageList.displayName = "ChatMessageList";
 
-export function ChatSidebar({ onClose, children, ...rest }) {
+export function ChatSidebar({ onClose, children, chatExpanded, ...rest }) {
   return ReactDOM.createPortal(
-    <div className={styles.chatModal} {...rest}>
+    <div
+      className={styles.chatModal}
+      style={chatExpanded ? { width: "95vw", height: "95vh", transition: "width 0.3s ease, height 0.3s ease" } : { transition: "width 0.3s ease, height 0.3s ease" }}
+      {...rest}
+    >
       <div className={styles.chatModalHeader}>
         <CloseButton onClick={onClose} />
         <h5>

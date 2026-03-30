@@ -38,6 +38,7 @@ export function RoomLayout({
   onPersonasClick,
   personasCount,
   chatOpen,
+  chatExpanded,
   ...rest
 }) {
   const [toolbarOpen, setToolbarOpen] = useState(false);
@@ -49,7 +50,11 @@ export function RoomLayout({
       {(toolbarLeft || toolbarCenter || toolbarRight) && (
         <div
           className={classNames(styles.main, styles.toolbar, toolbarClassName)}
-          style={{ bottom: chatOpen ? "36%" : "2%", transition: "bottom 0.3s ease" }}
+          style={{
+            bottom: chatOpen ? (chatExpanded ? "91%" : "36%") : "2%",
+            width: chatExpanded ? "95vw" : undefined,
+            transition: "bottom 0.3s ease, width 0.3s ease"
+          }}
         >
           <button
             className={classNames(styles.toolbarToggle, { [styles.toolbarToggleOpen]: toolbarOpen })}
@@ -63,6 +68,7 @@ export function RoomLayout({
               left={toolbarLeft}
               center={toolbarCenter}
               right={toolbarRight}
+              style={chatExpanded ? { width: "95vw" } : undefined}
             />
           </div>
         </div>
@@ -92,5 +98,6 @@ RoomLayout.propTypes = {
   objectFocused: PropTypes.bool,
   streaming: PropTypes.bool,
   viewportRef: PropTypes.any,
-  chatOpen: PropTypes.bool
+  chatOpen: PropTypes.bool,
+  chatExpanded: PropTypes.bool
 };

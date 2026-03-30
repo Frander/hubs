@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { AudioPopoverButton } from "./AudioPopoverButton";
 import { useMicrophoneStatus } from "./hooks/useMicrophoneStatus";
 import { ToolbarMicButton } from "../input/ToolbarMicButton";
-import { ReactComponent as MicrophoneIcon } from "../icons/Microphone.svg";
-import { ReactComponent as MicrophoneMutedIcon } from "../icons/MicrophoneMuted.svg";
+import micIconPng from "../../assets/newSkin/mic.png";
 import { FormattedMessage, defineMessages, useIntl } from "react-intl";
 import { useCan } from "./hooks/useCan";
 import { PermissionStatus } from "../../utils/media-devices-utils";
@@ -44,7 +43,7 @@ export const AudioPopoverButtonContainer = ({ scene, initiallyVisible }) => {
         <ToolTip description={description}>
           <ToolbarMicButton
             scene={scene}
-            icon={isMicMuted || !canVoiceChat || micPermissionDenied ? <MicrophoneMutedIcon /> : <MicrophoneIcon />}
+            icon={<img src={micIconPng} alt="mic" style={{ width: 28, height: 28 }} />}
             // label={<FormattedMessage id="voice-button-container.label" defaultMessage="Voice" />}
             preset="basic"
             onClick={toggleMute}

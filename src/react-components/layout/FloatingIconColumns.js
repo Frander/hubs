@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./FloatingIconColumns.scss";
 import { AppLogo } from "../misc/AppLogo";
 import { WebPageUrlModalContainer } from "../room/WebPageUrlModalContainer";
-import { ReactComponent as AvatarIcon } from "../icons/Avatar.svg";
+import user2Icon from "../../assets/newSkin/user2.png";
 import asistente from "../../assets/newSkin/asistente.png";
 import calendario from "../../assets/newSkin/calendario.png";
 import carrito from "../../assets/newSkin/carrito.png";
@@ -128,7 +128,7 @@ export function FloatingIconColumns({ scene, showNonHistoriedDialog, onPersonasC
               src={icon.src}
               alt={icon.alt}
               onClick={() => handleIconClick(icon)}
-              overlay={icon.alt === "Cuenta" ? <AvatarIcon className={styles.iconOverlaySvg} /> : undefined}
+              overlay={icon.alt === "Cuenta" ? <img src={user2Icon} alt="User" className={styles.iconOverlaySvg} /> : undefined}
             />
           ))}
         </div>

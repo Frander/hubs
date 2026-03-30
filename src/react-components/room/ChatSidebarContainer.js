@@ -10,19 +10,29 @@ import {
   SpawnMessageButton,
   SendMessageButton,
   EmojiPickerPopoverButton,
+  PlaceChatButton,
   ChatLengthWarning,
   PermissionMessageGroup
 } from "./ChatSidebar";
 import { useMaintainScrollPosition } from "../misc/useMaintainScrollPosition";
 import { spawnChatMessage } from "../chat-message";
 import { discordBridgesForPresences } from "../../utils/phoenix-utils";
-import { defineMessages, useIntl } from "react-intl";
+import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 import { MAX_MESSAGE_LENGTH } from "../../utils/chat-message";
 import { PermissionNotification } from "./PermissionNotifications";
 import { usePermissions } from "./hooks/usePermissions";
 import { useRoomPermissions } from "./hooks/useRoomPermissions";
 import { useRole } from "./hooks/useRole";
 import { ChatContext } from "./contexts/ChatContext";
+import { ReactComponent as PenIcon } from "../icons/Pen.svg";
+import { ReactComponent as CameraIcon } from "../icons/Camera.svg";
+import { ReactComponent as GIFIcon } from "../icons/GIF.svg";
+import { ReactComponent as ObjectIcon } from "../icons/Object.svg";
+import { ReactComponent as UploadIcon } from "../icons/Upload.svg";
+import { ObjectUrlModalContainer } from "./ObjectUrlModalContainer";
+import configs from "../../utils/configs";
+import { anyEntityWith } from "../../utils/bit-utils";
+import { MyCameraTool } from "../../bit-components";
 
 const chatSidebarMessages = defineMessages({
   emmptyRoom: {
@@ -57,7 +67,11 @@ export function ChatSidebarContainer({
   occupantCount,
   initialValue,
   autoFocus,
-  onClose
+  onClose,
+  chatExpanded,
+  hubChannel,
+  mediaSearchStore,
+  showNonHistoriedDialog
 }) {
   const { messageGroups, sendMessage, setMessagesRead } = useContext(ChatContext);
   const [onScrollList, listRef, scrolledToBottom] = useMaintainScrollPosition(messageGroups);
@@ -69,6 +83,80 @@ export function ChatSidebarContainer({
   const typingTimeoutRef = useRef();
   const intl = useIntl();
   const inputRef = useRef();
+  const [placeItems, setPlaceItems] = useState([]);
+
+  useEffect(() => {
+    if (!hubChannel) return;
+    function updatePlaceItems() {
+      const hasActiveCamera = !!anyEntityWith(APP.world, MyCameraTool);
+      const hasActivePen = !!scene.systems["pen-tools"].getMyPen();
+
+      let nextItems = [
+        hubChannel.can("spawn_drawing") && {
+          id: "pen",
+          icon: PenIcon,
+          color: "accent5",
+          label: <FormattedMessage id="place-popover.item-type.pen" defaultMessage="Pen" />,
+          onSelect: () => scene.emit("penButtonPressed"),
+          selected: hasActivePen
+        },
+        hubChannel.can("spawn_camera") && {
+          id: "camera",
+          icon: CameraIcon,
+          color: "accent5",
+          label: <FormattedMessage id="place-popover.item-type.camera" defaultMessage="Camera" />,
+          onSelect: () => scene.emit("action_toggle_camera"),
+          selected: hasActiveCamera
+        }
+      ];
+
+      if (hubChannel.can("spawn_and_move_media")) {
+        nextItems = [
+          ...nextItems,
+          configs.integration("tenor") && {
+            id: "gif",
+            icon: GIFIcon,
+            color: "accent2",
+            label: <FormattedMessage id="place-popover.item-type.gif" defaultMessage="GIF" />,
+            onSelect: () => mediaSearchStore.sourceNavigate("gifs")
+          },
+          configs.integration("sketchfab") && {
+            id: "model",
+            icon: ObjectIcon,
+            color: "accent2",
+            label: <FormattedMessage id="place-popover.item-type.model" defaultMessage="3D Model" />,
+            onSelect: () => mediaSearchStore.sourceNavigate("sketchfab")
+          },
+          {
+            id: "upload",
+            icon: UploadIcon,
+            color: "accent3",
+            label: <FormattedMessage id="place-popover.item-type.upload" defaultMessage="Upload" />,
+            onSelect: () => showNonHistoriedDialog(ObjectUrlModalContainer, { scene })
+          }
+        ];
+      }
+
+      setPlaceItems(nextItems);
+    }
+
+    hubChannel.addEventListener("permissions_updated", updatePlaceItems);
+    updatePlaceItems();
+
+    const onSceneStateChange = event => {
+      if (event.detail === "camera" || event.detail === "pen") {
+        updatePlaceItems();
+      }
+    };
+    scene.addEventListener("stateadded", onSceneStateChange);
+    scene.addEventListener("stateremoved", onSceneStateChange);
+
+    return () => {
+      hubChannel.removeEventListener("permissions_updated", updatePlaceItems);
+      scene.removeEventListener("stateadded", onSceneStateChange);
+      scene.removeEventListener("stateremoved", onSceneStateChange);
+    };
+  }, [hubChannel, mediaSearchStore, showNonHistoriedDialog, scene]);
 
   const onKeyDown = useCallback(
     e => {
@@ -171,7 +259,7 @@ export function ChatSidebarContainer({
   const isOverMaxLength = message.length > MAX_MESSAGE_LENGTH;
   const isDisabled = message.length === 0 || isOverMaxLength || !canTextChat;
   return (
-    <ChatSidebar onClose={onClose}>
+    <ChatSidebar onClose={onClose} chatExpanded={chatExpanded}>
       <ChatMessageList ref={listRef} onScroll={onScrollList}>
         {messageGroups.map(entry => {
           const { id, systemMessage, type } = entry;
@@ -206,15 +294,9 @@ export function ChatSidebarContainer({
         afterInput={
           <>
             {!isMobile && <EmojiPickerPopoverButton onSelectEmoji={onSelectEmoji} />}
-            {message.length === 0 && canSpawnMessages ? (
+            {hubChannel && <PlaceChatButton items={placeItems} />}
+            {canSpawnMessages && (
               <MessageAttachmentButton onChange={onUploadAttachments} />
-            ) : (
-              <SendMessageButton
-                onClick={onSendMessage}
-                as={"button"}
-                disabled={isDisabled && !isCommand}
-                title={isDisabled && !isCommand ? intl.formatMessage(chatSidebarMessages["textChatOff"]) : undefined}
-              />
             )}
             {canSpawnMessages && (
               <SpawnMessageButton
@@ -223,6 +305,12 @@ export function ChatSidebarContainer({
                 title={isDisabled ? intl.formatMessage(chatSidebarMessages["textChatOff"]) : undefined}
               />
             )}
+            <SendMessageButton
+              onClick={onSendMessage}
+              as={"button"}
+              disabled={isDisabled && !isCommand}
+              title={isDisabled && !isCommand ? intl.formatMessage(chatSidebarMessages["textChatOff"]) : undefined}
+            />
           </>
         }
       />
@@ -237,5 +325,9 @@ ChatSidebarContainer.propTypes = {
   scene: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
   autoFocus: PropTypes.bool,
-  initialValue: PropTypes.string
+  initialValue: PropTypes.string,
+  chatExpanded: PropTypes.bool,
+  hubChannel: PropTypes.object,
+  mediaSearchStore: PropTypes.object,
+  showNonHistoriedDialog: PropTypes.func
 };

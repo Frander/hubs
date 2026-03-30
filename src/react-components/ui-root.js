@@ -106,6 +106,7 @@ import { ChatContextProvider } from "./room/contexts/ChatContext";
 import ChatToolbarButton from "./room/components/ChatToolbarButton/ChatToolbarButton";
 import AvatarToolbarButton from "./room/components/ChatToolbarButton/AvatarToolbarButton";
 import AccountWPToolbarButton from "./room/components/ChatToolbarButton/AccountWPToolbarButton";
+import FullscreenChatButton from "./room/components/ChatToolbarButton/FullscreenChatButton";
 
 import SeePlansCTA from "./room/components/SeePlansCTA/SeePlansCTA";
 import LeaveIconBtn from "../assets/newSkin/leaveBtn.png";
@@ -222,7 +223,8 @@ class UIRoot extends Component {
     sidebarId: null,
     presenceCount: 0,
     chatPrefix: "",
-    chatAutofocus: false
+    chatAutofocus: false,
+    chatExpanded: false
   };
 
   constructor(props) {
@@ -810,7 +812,7 @@ class UIRoot extends Component {
   pushHistoryState = (k, v) => pushHistoryState(this.props.history, k, v);
 
   setSidebar(sidebarId, otherState) {
-    this.setState({ sidebarId, chatPrefix: "", chatAutofocus: false, selectedUserId: null, ...(otherState || {}) });
+    this.setState({ sidebarId, chatPrefix: "", chatAutofocus: false, selectedUserId: null, chatExpanded: sidebarId === "chat" ? this.state.chatExpanded : false, ...(otherState || {}) });
   }
 
   toggleSidebar(sidebarId, otherState) {
@@ -820,6 +822,7 @@ class UIRoot extends Component {
       return {
         sidebarId: nextSidebarId,
         selectedUserId: null,
+        chatExpanded: nextSidebarId === "chat" ? false : false,
         ...otherState
       };
     });
@@ -1486,6 +1489,7 @@ class UIRoot extends Component {
                 onPersonasClick={() => this.toggleSidebar("people")}
                 personasCount={this.occupantCount()}
                 chatOpen={this.state.sidebarId === "chat"}
+                chatExpanded={this.state.chatExpanded}
                 sidebarClassName={this.state.sidebarId === "chat" ? roomLayoutStyles.chatSidebarHidden : undefined}
                 viewport={
                   <>
@@ -1580,9 +1584,13 @@ class UIRoot extends Component {
                           occupantCount={this.occupantCount()}
                           canSpawnMessages={entered && this.props.hubChannel.can("spawn_and_move_media")}
                           scene={this.props.scene}
+                          hubChannel={this.props.hubChannel}
+                          mediaSearchStore={this.props.mediaSearchStore}
+                          showNonHistoriedDialog={this.showNonHistoriedDialog}
                           onClose={() => this.setSidebar(null)}
                           autoFocus={this.state.chatAutofocus}
                           initialValue={this.state.chatPrefix}
+                          chatExpanded={this.state.chatExpanded}
                         />
                       )}
                       {this.state.sidebarId === "objects" && (
@@ -1801,7 +1809,13 @@ class UIRoot extends Component {
                         onClick={() => this.toggleSidebar("chat", { chatPrefix: "", chatAutofocus: false })}
                         selected={this.state.sidebarId === "chat"}
                       />
-                    )} 
+                    )}
+                    {this.state.sidebarId === "chat" && (
+                      <FullscreenChatButton
+                        expanded={this.state.chatExpanded}
+                        onClick={() => this.setState(prev => ({ chatExpanded: !prev.chatExpanded }))}
+                      />
+                    )}
 
                     <MoreMenuPopoverButton menu={moreMenu} />
    
