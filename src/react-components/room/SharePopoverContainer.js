@@ -59,7 +59,7 @@ function useShare(scene, hubChannel) {
 
     // We currently only support sharing one video stream at the same time
     setSharingSource(
-      mediaDevicesManager.isVideoShared
+      mediaDevicesManager?.isVideoShared
         ? mediaDevicesManager.isWebcamShared
           ? MediaDevices.CAMERA
           : MediaDevices.SCREEN
