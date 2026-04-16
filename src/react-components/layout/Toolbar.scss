@@ -9,6 +9,10 @@
   border-radius: 14px;
   width: 70vw;
   margin: 0 auto;
+
+  @media (max-width: #{theme.$breakpoint-lg - 1}) {
+    width: 90vw;
+  }
 }
 
 // Base para las tres secciones

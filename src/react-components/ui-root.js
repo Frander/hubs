@@ -1718,7 +1718,7 @@ class UIRoot extends Component {
                       <>
                         {!isLockedDownDemo && (
                           <>
-                            <h3>SPACECHAT</h3>
+                            <h3 className={styleUtils.showLg}>SPACECHAT</h3>
                             
                             {/* <PlacePopoverContainer
                               scene={this.props.scene}
