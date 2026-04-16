@@ -792,13 +792,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const scene = document.querySelector("a-scene");
 
-  const onSceneLoaded = () => {
+  const tryInitMediaDevicesManager = () => {
+    if (APP.mediaDevicesManager) return;
     const hubsSystems = scene.systems["hubs-systems"];
-    if (hubsSystems) {
-      hubsSystems.physicsSystem.setDebug(isDebug || hubsSystems.physicsSystem.debug);
-      APP.mediaDevicesManager = new MediaDevicesManager(scene, store, hubsSystems.audioSystem);
-    }
+    if (!hubsSystems || !APP.hubChannel) return; // wait until both deps are ready
+    hubsSystems.physicsSystem.setDebug(isDebug || hubsSystems.physicsSystem.debug);
+    APP.mediaDevicesManager = new MediaDevicesManager(scene, store, hubsSystems.audioSystem);
+    scene.emit("media_devices_manager_ready", APP.mediaDevicesManager);
   };
+  const onSceneLoaded = () => tryInitMediaDevicesManager();
   if (scene.hasLoaded) {
     onSceneLoaded();
   } else {
@@ -814,6 +816,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const authChannel = new AuthChannel(store);
   const hubChannel = new HubChannel(store, hubId);
   window.APP.hubChannel = hubChannel;
+  tryInitMediaDevicesManager();
 
   const entryManager = new SceneEntryManager(hubChannel, authChannel, history);
   window.APP.entryManager = entryManager;

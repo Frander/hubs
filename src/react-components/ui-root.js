@@ -237,7 +237,8 @@ class UIRoot extends Component {
 
     // An exit handler that discards event arguments and can be cleaned up.
     this.exitEventHandler = () => this.props.exitScene();
-    this.mediaDevicesManager = APP.mediaDevicesManager;
+    // APP.mediaDevicesManager may not be ready at construction time; use getter for lazy access
+    Object.defineProperty(this, "mediaDevicesManager", { get: () => APP.mediaDevicesManager });
 
     console.log('[UIRoot CONSTRUCTOR] Constructor completado - NO inicializando WordPress aquí');
   }
@@ -640,7 +641,7 @@ class UIRoot extends Component {
   };
 
   onRequestMicPermission = async () => {
-    if (this.props.canVoiceChat) {
+    if (this.props.canVoiceChat && this.mediaDevicesManager) {
       await this.mediaDevicesManager.startMicShare({});
     }
   };

@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { MediaDevices, MediaDevicesEvents } from "../../../utils/media-devices-utils";
 import { SOUND_TOGGLE_MIC } from "../../../systems/sound-effects-system";
+import { useMediaDevicesManager } from "./useMediaDevicesManager";
 
 export function useMicrophoneStatus(scene) {
-  const mediaDevicesManager = APP.mediaDevicesManager;
+  const mediaDevicesManager = useMediaDevicesManager(scene);
   const [isMicMuted, setIsMicMuted] = useState(!mediaDevicesManager?.isMicEnabled);
-  const [isMicEnabled, setIsMicEnabled] = useState(APP.mediaDevicesManager?.isMicShared);
+  const [isMicEnabled, setIsMicEnabled] = useState(mediaDevicesManager?.isMicShared);
   const [permissionStatus, setPermissionsStatus] = useState(
     mediaDevicesManager?.getPermissionsStatus(MediaDevices.MICROPHONE)
   );

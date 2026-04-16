@@ -1,14 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { MediaDevices, MediaDevicesEvents } from "../../../utils/media-devices-utils";
+import { useMediaDevicesManager } from "./useMediaDevicesManager";
 
 export function useSpeakers() {
-  const mediaDevicesManager = APP.mediaDevicesManager;
+  const mediaDevicesManager = useMediaDevicesManager();
   const [speakerDevices, setSpeakerDevices] = useState({
-    value: mediaDevicesManager.selectedSpeakersDeviceId,
-    options: mediaDevicesManager.outputDevicesOptions
+    value: mediaDevicesManager?.selectedSpeakersDeviceId,
+    options: mediaDevicesManager?.outputDevicesOptions
   });
 
   useEffect(() => {
+    if (!mediaDevicesManager) return;
+
     const onPermissionsChanged = ({ mediaDevice }) => {
       if (mediaDevice === MediaDevices.MICROPHONE) {
         setSpeakerDevices({
@@ -40,6 +43,7 @@ export function useSpeakers() {
 
   const speakerDeviceChanged = useCallback(
     deviceId => {
+      if (!mediaDevicesManager) return;
       mediaDevicesManager.changeAudioOutput(deviceId);
       setSpeakerDevices({
         value: mediaDevicesManager.selectedSpeakersDeviceId,
