@@ -113,6 +113,7 @@ import LeaveIconBtn from "../assets/newSkin/leaveBtn.png";
 import { WebPageUrlModalContainer } from "./room/WebPageUrlModalContainer";
 import { TranslationToolbarButton } from "./translation/TranslationToolbarButton";
 import { TranslationMount } from "./translation/TranslationMount";
+import { TranslationModal } from "./translation/TranslationModal";
 
 const avatarEditorDebug = qsTruthy("avatarEditorDebug");
 
@@ -1692,7 +1693,9 @@ class UIRoot extends Component {
                               store={this.props.store}
                             /> */}
                     <SharePopoverContainer scene={this.props.scene} hubChannel={this.props.hubChannel} />
-                    <TranslationToolbarButton />
+                    <TranslationToolbarButton
+                      onClick={() => this.showNonHistoriedDialog(TranslationModal, { scene: this.props.scene })}
+                    />
                   </>
                 }
                 toolbarCenter={
@@ -1838,7 +1841,7 @@ class UIRoot extends Component {
           )}
 
           {/* WordPress Login Modal - Ahora se renderiza a través de this.state.dialog */}
-          <TranslationMount scene={this.props.scene} />
+          <TranslationMount />
         </ReactAudioContext.Provider>
       </MoreMenuContextProvider>
     );

@@ -13,15 +13,17 @@ const langOptions = SUPPORTED_LANGUAGES.map(l => ({ value: l.code, label: l.labe
 export function TranslationModal({ scene, onClose }) {
   const state = useTranslationStore();
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (state.sourceLang === state.targetLang) {
       return;
     }
-    translationStore.start(scene);
+    await translationStore.start(scene);
+    onClose();
   };
 
   const handleStop = () => {
     translationStore.stop();
+    onClose();
   };
 
   const isStarting = state.status === "connecting";
