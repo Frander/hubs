@@ -14,7 +14,10 @@ const state = {
   targetLang: DEFAULT_TARGET_LANG,
   partial: null,
   finals: [],
-  error: null
+  error: null,
+  startedAt: null,
+  lastTranscriptAt: null,
+  firstTranscriptLatencyMs: null
 };
 
 const listeners = new Set();
@@ -65,6 +68,9 @@ export const translationStore = {
     state.error = null;
     state.partial = null;
     state.finals = [];
+    state.startedAt = Date.now();
+    state.lastTranscriptAt = null;
+    state.firstTranscriptLatencyMs = null;
     emit();
 
     await client.start({
@@ -100,10 +106,19 @@ export const translationStore = {
 };
 
 function handleTranscript(msg) {
+  const now = Date.now();
+  if (state.firstTranscriptLatencyMs === null && state.startedAt) {
+    state.firstTranscriptLatencyMs = now - state.startedAt;
+  }
+  state.lastTranscriptAt = now;
+
   const targetLang = state.targetLang;
   const translated = msg.translations && msg.translations[targetLang];
   const text = translated || msg.original || "";
-  if (!text) return;
+  if (!text) {
+    emit();
+    return;
+  }
 
   const entry = {
     segmentId: msg.segment_id,
