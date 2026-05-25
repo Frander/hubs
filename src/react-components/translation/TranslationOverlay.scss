@@ -1,4 +1,4 @@
-.bar {
+:local(.bar) {
   position: fixed;
   left: 50%;
   bottom: 110px;
@@ -17,7 +17,7 @@
   font-family: inherit;
 }
 
-.header {
+:local(.header) {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -30,19 +30,19 @@
   user-select: none;
 }
 
-.langs {
+:local(.langs) {
   letter-spacing: 0.5px;
   color: #555;
 }
 
-.connecting {
+:local(.connecting) {
   margin-left: auto;
   color: #888;
   font-style: italic;
   font-weight: normal;
 }
 
-.lines {
+:local(.lines) {
   flex: 1 1 auto;
   overflow-y: auto;
   padding: 8px 14px 10px;
@@ -53,42 +53,40 @@
   scrollbar-color: #bbb transparent;
 }
 
-.lines::-webkit-scrollbar {
+:local(.lines)::-webkit-scrollbar {
   width: 6px;
 }
 
-.lines::-webkit-scrollbar-thumb {
+:local(.lines)::-webkit-scrollbar-thumb {
   background: #bbb;
   border-radius: 3px;
 }
 
-.line {
+:local(.line) {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.text {
+:local(.text) {
   font-size: 15px;
   line-height: 1.4;
   color: #000000;
   word-wrap: break-word;
 }
 
-.original {
+:local(.original) {
   font-size: 11px;
   color: #777;
   font-style: italic;
 }
 
-.partial {
-  .text {
-    color: #555;
-    font-style: italic;
-  }
+:local(.partial) :local(.text) {
+  color: #555;
+  font-style: italic;
 }
 
-.placeholder {
+:local(.placeholder) {
   color: #999;
   font-style: italic;
   font-size: 13px;
