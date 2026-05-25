@@ -1841,7 +1841,7 @@ class UIRoot extends Component {
           )}
 
           {/* WordPress Login Modal - Ahora se renderiza a través de this.state.dialog */}
-          <TranslationMount />
+          <TranslationMount chatOpen={this.state.sidebarId === "chat"} />
         </ReactAudioContext.Provider>
       </MoreMenuContextProvider>
     );

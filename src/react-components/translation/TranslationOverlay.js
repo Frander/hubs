@@ -1,36 +1,26 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
 import { useTranslationStore } from "../../utils/translation/translation-store";
 import styles from "./TranslationOverlay.scss";
 
-const STICKY_THRESHOLD_PX = 40;
-
-export function TranslationOverlay() {
+export function TranslationOverlay({ chatOpen }) {
   const state = useTranslationStore();
   const active = state.status !== "idle" && state.status !== "error";
   const listRef = useRef(null);
-  const stickToBottomRef = useRef(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = listRef.current;
     if (!el) return;
-    if (stickToBottomRef.current) {
-      el.scrollTop = el.scrollHeight;
-    }
-  }, [state.finals, state.partial]);
+    el.scrollTop = el.scrollHeight;
+  }, [state.finals, state.partial, active]);
 
   if (!active) return null;
-
-  const handleScroll = () => {
-    const el = listRef.current;
-    if (!el) return;
-    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-    stickToBottomRef.current = distanceFromBottom <= STICKY_THRESHOLD_PX;
-  };
 
   const hasContent = state.finals.length > 0 || state.partial;
 
   return (
-    <div className={styles.bar}>
+    <div className={classNames(styles.bar, { [styles.chatOpen]: chatOpen })}>
       <div className={styles.header}>
         <span>Translation</span>
         <span className={styles.langs}>
@@ -38,7 +28,7 @@ export function TranslationOverlay() {
         </span>
         {state.status === "connecting" && <span className={styles.connecting}>connecting…</span>}
       </div>
-      <div className={styles.lines} ref={listRef} onScroll={handleScroll}>
+      <div className={styles.lines} ref={listRef}>
         {!hasContent && (
           <div className={styles.placeholder}>Esperando audio de la sala…</div>
         )}
@@ -51,7 +41,7 @@ export function TranslationOverlay() {
           </div>
         ))}
         {state.partial && (
-          <div className={`${styles.line} ${styles.partial}`}>
+          <div className={classNames(styles.line, styles.partial)}>
             <div className={styles.text}>{state.partial.text}</div>
             {state.partial.original && state.partial.original !== state.partial.text && (
               <div className={styles.original}>{state.partial.original}</div>
@@ -62,3 +52,7 @@ export function TranslationOverlay() {
     </div>
   );
 }
+
+TranslationOverlay.propTypes = {
+  chatOpen: PropTypes.bool
+};
