@@ -5,7 +5,7 @@ import {
 } from "./translation-config";
 import { TranslationClient } from "./TranslationClient";
 
-const MAX_FINALS = 6;
+const MAX_FINALS = 50;
 
 const state = {
   modalOpen: false,
