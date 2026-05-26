@@ -9,18 +9,25 @@ export const TRANSLATION_LOGIN_CREDENTIALS = {
 export const TRANSLATION_TOKEN_STORAGE_KEY = "translation_token";
 
 export const SUPPORTED_LANGUAGES = [
-  { code: "es", label: "Español" },
-  { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
+  { code: "ar", label: "العربية" },
+  { code: "cs", label: "Čeština" },
   { code: "de", label: "Deutsch" },
+  { code: "es", label: "Español" },
+  { code: "fr", label: "Français" },
+  { code: "id", label: "Bahasa Indonesia" },
   { code: "it", label: "Italiano" },
-  { code: "pt", label: "Português" },
-  { code: "zh", label: "中文" },
   { code: "ja", label: "日本語" },
   { code: "ko", label: "한국어" },
+  { code: "ms", label: "Bahasa Melayu" },
+  { code: "nl", label: "Nederlands" },
+  { code: "pl", label: "Polski" },
+  { code: "pt", label: "Português" },
+  { code: "ro", label: "Română" },
   { code: "ru", label: "Русский" },
-  { code: "ar", label: "العربية" }
+  { code: "th", label: "ไทย" },
+  { code: "tr", label: "Türkçe" },
+  { code: "vi", label: "Tiếng Việt" }
 ];
 
 export const DEFAULT_SOURCE_LANG = "es";
-export const DEFAULT_TARGET_LANG = "en";
+export const DEFAULT_TARGET_LANG = "pt";
