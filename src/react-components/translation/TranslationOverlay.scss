@@ -1,10 +1,10 @@
 :local(.bar) {
   position: fixed;
   left: 50%;
-  bottom: 110px;
+  top: 16px;
   transform: translateX(-50%);
   width: min(720px, 92vw);
-  max-height: 200px;
+  max-height: 220px;
   background: #ffffff;
   color: #000000;
   border-radius: 12px;
@@ -15,21 +15,13 @@
   overflow: hidden;
   pointer-events: auto;
   font-family: inherit;
-  transition: bottom 0.25s ease, width 0.25s ease, left 0.25s ease, transform 0.25s ease;
+  transition: top 0.25s ease, width 0.25s ease, left 0.25s ease, transform 0.25s ease;
 }
 
 :local(.chatOpen) {
   @media (min-width: 1024px) {
     left: calc(50% - 225px);
     width: min(620px, calc(100vw - 480px));
-  }
-
-  @media (max-width: 1023px) {
-    bottom: auto;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(680px, 92vw);
   }
 }
 
