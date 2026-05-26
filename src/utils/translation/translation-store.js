@@ -7,7 +7,7 @@ import { TranslationClient } from "./TranslationClient";
 
 const MAX_FINALS = 50;
 
-const state = {
+let state = {
   modalOpen: false,
   status: "idle",
   sourceLang: DEFAULT_SOURCE_LANG,
@@ -27,6 +27,11 @@ function emit() {
   for (const l of listeners) l();
 }
 
+function update(patch) {
+  state = { ...state, ...patch };
+  emit();
+}
+
 function subscribe(listener) {
   listeners.add(listener);
   return () => listeners.delete(listener);
@@ -41,23 +46,19 @@ export const translationStore = {
   getSnapshot,
 
   openModal() {
-    state.modalOpen = true;
-    emit();
+    update({ modalOpen: true });
   },
 
   closeModal() {
-    state.modalOpen = false;
-    emit();
+    update({ modalOpen: false });
   },
 
   setSourceLang(code) {
-    state.sourceLang = code;
-    emit();
+    update({ sourceLang: code });
   },
 
   setTargetLang(code) {
-    state.targetLang = code;
-    emit();
+    update({ targetLang: code });
   },
 
   isActive() {
@@ -65,27 +66,22 @@ export const translationStore = {
   },
 
   async start(sceneEl) {
-    state.error = null;
-    state.partial = null;
-    state.finals = [];
-    state.startedAt = Date.now();
-    state.lastTranscriptAt = null;
-    state.firstTranscriptLatencyMs = null;
-    emit();
+    update({
+      error: null,
+      partial: null,
+      finals: [],
+      startedAt: Date.now(),
+      lastTranscriptAt: null,
+      firstTranscriptLatencyMs: null
+    });
 
     await client.start({
       sceneEl,
       sourceLang: state.sourceLang,
       targetLang: state.targetLang,
-      onStatus: status => {
-        state.status = status;
-        emit();
-      },
-      onTranscript: msg => handleTranscript(msg),
-      onError: message => {
-        state.error = message;
-        emit();
-      }
+      onStatus: status => update({ status }),
+      onTranscript: handleTranscript,
+      onError: message => update({ error: message })
     });
   },
 
@@ -94,29 +90,26 @@ export const translationStore = {
   },
 
   clearError() {
-    state.error = null;
-    emit();
+    update({ error: null });
   },
 
   clearSubtitles() {
-    state.partial = null;
-    state.finals = [];
-    emit();
+    update({ partial: null, finals: [] });
   }
 };
 
 function handleTranscript(msg) {
   const now = Date.now();
+  const patch = { lastTranscriptAt: now };
   if (state.firstTranscriptLatencyMs === null && state.startedAt) {
-    state.firstTranscriptLatencyMs = now - state.startedAt;
+    patch.firstTranscriptLatencyMs = now - state.startedAt;
   }
-  state.lastTranscriptAt = now;
 
   const targetLang = state.targetLang;
   const translated = msg.translations && msg.translations[targetLang];
   const text = translated || msg.original || "";
   if (!text) {
-    emit();
+    update(patch);
     return;
   }
 
@@ -130,18 +123,21 @@ function handleTranscript(msg) {
 
   if (entry.isFinal) {
     const existingIdx = state.finals.findIndex(f => f.segmentId === entry.segmentId);
+    let newFinals;
     if (existingIdx >= 0) {
-      state.finals[existingIdx] = entry;
+      newFinals = [...state.finals];
+      newFinals[existingIdx] = entry;
     } else {
-      state.finals = [...state.finals, entry].slice(-MAX_FINALS);
+      newFinals = [...state.finals, entry].slice(-MAX_FINALS);
     }
+    patch.finals = newFinals;
     if (state.partial && state.partial.segmentId === entry.segmentId) {
-      state.partial = null;
+      patch.partial = null;
     }
   } else {
-    state.partial = entry;
+    patch.partial = entry;
   }
-  emit();
+  update(patch);
 }
 
 export function useTranslationStore() {

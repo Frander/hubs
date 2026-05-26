@@ -12,6 +12,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: "ar", label: "العربية" },
   { code: "cs", label: "Čeština" },
   { code: "de", label: "Deutsch" },
+  { code: "en", label: "English" },
   { code: "es", label: "Español" },
   { code: "fr", label: "Français" },
   { code: "id", label: "Bahasa Indonesia" },
@@ -26,8 +27,9 @@ export const SUPPORTED_LANGUAGES = [
   { code: "ru", label: "Русский" },
   { code: "th", label: "ไทย" },
   { code: "tr", label: "Türkçe" },
-  { code: "vi", label: "Tiếng Việt" }
+  { code: "vi", label: "Tiếng Việt" },
+  { code: "zh", label: "中文" }
 ];
 
 export const DEFAULT_SOURCE_LANG = "es";
-export const DEFAULT_TARGET_LANG = "pt";
+export const DEFAULT_TARGET_LANG = "en";
